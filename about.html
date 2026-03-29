@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxScale | About Short Circuit Company</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fm-heading: "Anton", sans-serif;
+            --fm-body: "IBM Plex Sans Arabic", sans-serif;
+            --bg-dark: #111111;
+            --white: #ffffff;
+            --muted: #d8d8d8;
+            --accent: #e51d2f;
+            --glass: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: var(--fm-body);
+            color: var(--white);
+            overflow-x: hidden;
+            background: var(--bg-dark);
+        }
+
+        #myVideo {
+            position: fixed;
+            inset: 0;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(17, 17, 17, 0.92) 5%, rgba(17, 17, 17, 0.68) 45%, rgba(17, 17, 17, 0.85) 100%);
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin-inline: auto;
+        }
+
+        header {
+            padding: 22px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 160px;
+            max-width: 45vw;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 0.95rem;
+        }
+
+        .header-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        .header-links a:hover,
+        .header-links a.active {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        main {
+            padding: 56px 0 40px;
+        }
+
+        .hero {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px;
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 999px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 16px;
+            color: var(--muted);
+        }
+
+        h1 {
+            font-family: var(--fm-heading);
+            font-size: clamp(2rem, 4.8vw, 4rem);
+            letter-spacing: 0.02em;
+            line-height: 1.02;
+            margin-bottom: 16px;
+        }
+
+        .lead {
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 90ch;
+            font-size: 1rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--white);
+            border-radius: 12px;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            font-family: var(--fm-body);
+            background: transparent;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        footer {
+            margin-top: 34px;
+            border-top: 1px solid rgba(255, 255, 255, 0.24);
+            padding: 18px 0 30px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        @media (max-width: 920px) {
+            .cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .header-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 24px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="myVideo">
+        <source src="assets/myvideo.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <header>
+        <div class="container header-row">
+            <a href="index2.html" aria-label="Go to homepage">
+                <img class="logo" src="assets/logo.svg" alt="LuxScale Logo">
+            </a>
+            <nav class="header-links" aria-label="Top navigation">
+                <a href="index2.html">Home</a>
+                <a href="#">Products</a>
+                <a href="about.html" class="active">About</a>
+                <a href="mailto:contact@shortcircuitcompany.com">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <span class="eyebrow">About Us</span>
+            <h1>SHORT CIRCUIT COMPANY</h1>
+            <p class="lead">
+                We leads innovation in the lighting industry, we specialized in both civil and industrial lighting, we lead the quality of manufacturing, providing superior products, with long durability, and high efficiency, in addition to reliable technical support. We also offer several services like design, consultancy, and project commissioning. All That happens by a well-trained team of engineers and technicians.
+            </p>
+
+            <div class="cards">
+                <article class="card">
+                    <h3>Innovation Leadership</h3>
+                    <p>Continuous development in civil and industrial lighting with practical, high-performance engineering mindset.</p>
+                </article>
+                <article class="card">
+                    <h3>Manufacturing Quality</h3>
+                    <p>Superior products built for long durability, high efficiency, and reliable operation across use cases.</p>
+                </article>
+                <article class="card">
+                    <h3>Technical Services</h3>
+                    <p>Design, consultancy, and project commissioning delivered by a well-trained team of engineers and technicians.</p>
+                </article>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-primary" href="https://shortcircuit.company/" target="_blank" rel="noopener noreferrer">Visit Official Website</a>
+                <a class="btn" href="index2.html">Back to Home</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 <a href="https://shortcircuit.company/" target="_blank" rel="noopener noreferrer">Short Circuit Company</a>. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

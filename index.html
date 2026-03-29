@@ -80,22 +80,22 @@
                         <div class="inputs">
                             <div class="sides">
                                 <div class="side">
-                                    <label for="side-1">Side 1</label>
+                                    <label for="side-1">wdith 1</label>
                                     <input type="number" id="a">
                                 </div>
     
                                 <div class="side">
-                                    <label for="side-2">Side 2</label>
+                                    <label for="side-2">length 1</label>
                                     <input type="number" id="b">
                                 </div>
     
                                 <div class="side">
-                                    <label for="side-3">Side 3</label>
+                                    <label for="side-3">width 2</label>
                                     <input type="number" id="c">
                                 </div>
     
                                 <div class="side">
-                                    <label for="side-4">Side 4</label>
+                                    <label for="side-4">length 2</label>
                                     <input type="number" id="d">
                                 </div>
                             </div>
@@ -121,59 +121,13 @@
                     </select>
                 </div>
 
-                <button popovertarget="popup">
+                <!-- <button popovertarget="popup">
+                    make lighting study with ai
+                </button> -->
+                <button onclick="calculate()">
                     make lighting study with ai
                 </button>
 
-            </div>
-        </div>
-
-
-        <div popover class="popup" id="popup">
-
-            <img src="assets/logo-Light.svg" alt="">
-            
-            <div class="area">
-                <h3>Finalize your study</h3>
-                <p>Fill up the following fields and click PROCEED <span>* is required</span></p>
-
-                <span class="close" onclick="closePopup()">&times;</span>
-                <form id="popupForm">
-                    <div class="side">
-                        <label for="project-name">Project Name*</label>
-                        <input required type="text" id="project-name" class="popupInput" name="projectName"
-                            pattern="[A-Za-z0-9\s]{3,50}"
-                            title="3-50 letters or numbers only">
-                    </div>
-        
-                    <div class="side">
-                        <label for="client-name">Your Name*</label>
-                        <input required type="text" id="client-name" class="popupInput" name="clientName"
-                            pattern="[A-Za-z\s]{3,50}"
-                            title="3-50 letters only">
-                    </div>
-        
-                    <div class="side">
-                        <label for="company">Your Company</label>
-                        <input type="text" id="company" class="popupInput" name="company"
-                            pattern="[A-Za-z0-9\s]{2,50}"
-                            title="2-50 letters or numbers only">
-                    </div>
-        
-                    <div class="side">
-                        <label for="phone">Phone Number*</label>
-                        <input required type="tel" id="phone" class="popupInput" name="phone"
-                            pattern="^\+?[0-9\s\-]{11,20}$"
-                            title="Enter a valid phone number (11-20 digits)">
-                    </div>
-        
-                    <div class="side">
-                        <label for="email">Email*</label>
-                        <input required type="email" id="email" class="popupInput" name="email">
-                    </div>
-        
-                    <button type="button" class="solid" onclick="calculate()">Proceed</button>
-                </form>
             </div>
         </div>
 
@@ -189,20 +143,17 @@
         </div>
     </footer>
 
-    
-
-
     <script>
 
     async function calculate() {
 
-        const form = document.getElementById('popupForm');
+        // const form = document.getElementById('popupForm');
 
         // Run HTML5 validation first
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
+        // if (!form.checkValidity()) {
+        //     form.reportValidity();
+        //     return;
+        // }
 
         let all_results = await getResults();
         // document.cookie = `results=${JSON.stringify(all_results)}`;
@@ -215,15 +166,32 @@
             spacing_y: result["Spacing Y (m)"],
             avg_lux: result["Average Lux"],
             uniformity: result["Uniformity"],
-            total_power: result["Total Power (W)"]
+            total_power: result["Total Power (W/H)"]
         }));
 
+        // const data = {
+        //     project_name: document.querySelector('[for="project-name"] + input').value,
+        //     name: document.querySelector('[for="client-name"] + input').value,
+        //     company: document.querySelector('[for="company"] + input').value,
+        //     phone: document.querySelector('[for="phone"] + input').value,
+        //     email: document.getElementById("email").value,
+        //     place: document.getElementById("place").value,
+        //     sides: [
+        //         parseFloat(document.getElementById("a").value),
+        //         parseFloat(document.getElementById("b").value),
+        //         parseFloat(document.getElementById("c").value),
+        //         parseFloat(document.getElementById("d").value),
+        //     ],
+        //     height: parseFloat(document.getElementById("height").value),
+        //     results: results // Include the results from the calculation
+        // };
+
         const data = {
-            project_name: document.querySelector('[for="project-name"] + input').value,
-            name: document.querySelector('[for="client-name"] + input').value,
-            company: document.querySelector('[for="company"] + input').value,
-            phone: document.querySelector('[for="phone"] + input').value,
-            email: document.getElementById("email").value,
+            project_name: "SC-LUXSCALE LedEXPO",
+            name: "SC-LUXSCALE developer at" + new Date().toISOString() + "",
+            company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
+            phone: "01711223344",
+            email: "shortcircuitcompany@gmail.com",
             place: document.getElementById("place").value,
             sides: [
                 parseFloat(document.getElementById("a").value),
@@ -235,22 +203,11 @@
             results: results // Include the results from the calculation
         };
 
-        // const data = {
-        //     project_name: "SC-LUXSCALE",
-        //     name: "SC-LUXSCALE developer at" + new Date().toISOString() + "",
-        //     company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
-        //     phone: "01711223344",
-        //     email: "shortcircuitcompany@gmail.com",
-        //     place: document.getElementById("place").value,
-        //     sides: [
-        //         parseFloat(document.getElementById("a").value),
-        //         parseFloat(document.getElementById("b").value),
-        //         parseFloat(document.getElementById("c").value),
-        //         parseFloat(document.getElementById("d").value),
-        //     ],
-        //     height: parseFloat(document.getElementById("height").value),
-        //     results: results // Include the results from the calculation
-        // };
+        // Check for equality
+        if (document.getElementById("a").value != document.getElementById("c").value || document.getElementById("b").value != document.getElementById("d").value) {
+            alert("Width 1 must equal Width 2 and Length 1 must equal Length 2 before proceeding.");
+            return; // stop execution
+        }
 
         console.log("Submitting data:", data);
         // Send the data to the server
@@ -274,24 +231,6 @@
     }
 
     async function getResults() {
-        const data = {
-            place: document.getElementById("place").value,
-            sides: [
-                parseFloat(document.getElementById("a").value),
-                parseFloat(document.getElementById("b").value),
-                parseFloat(document.getElementById("c").value),
-                parseFloat(document.getElementById("d").value),
-            ],
-            height: parseFloat(document.getElementById("height").value),
-            project_info: {
-                project_name: document.querySelector('[for="project-name"] + input').value,
-                name: document.querySelector('[for="client-name"] + input').value,
-                company: document.querySelector('[for="company"] + input').value,
-                phone: document.querySelector('[for="phone"] + input').value,
-                email: document.getElementById("email").value
-            }
-        };
-
         // const data = {
         //     place: document.getElementById("place").value,
         //     sides: [
@@ -302,18 +241,36 @@
         //     ],
         //     height: parseFloat(document.getElementById("height").value),
         //     project_info: {
-        //         project_name: "SC-LUXSCALE",
-        //         name: "SC-LUXSCALE developer at" + new Date().toISOString() + "",
-        //         company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
-        //         phone: "01711223344",
-        //         email: "shortcircuitcompany@gmail.com"
+        //         project_name: document.querySelector('[for="project-name"] + input').value,
+        //         name: document.querySelector('[for="client-name"] + input').value,
+        //         company: document.querySelector('[for="company"] + input').value,
+        //         phone: document.querySelector('[for="phone"] + input').value,
+        //         email: document.getElementById("email").value
         //     }
         // };
 
+        const data = {
+            place: document.getElementById("place").value,
+            sides: [
+                parseFloat(document.getElementById("a").value),
+                parseFloat(document.getElementById("b").value),
+                parseFloat(document.getElementById("c").value),
+                parseFloat(document.getElementById("d").value),
+            ],
+            height: parseFloat(document.getElementById("height").value),
+            project_info: {
+                project_name: "SC-LUXSCALE",
+                name: "SC-LUXSCALE developer at" + new Date().toISOString() + "",
+                company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
+                phone: "01711223344",
+                email: "shortcircuitcompany@gmail.com"
+            }
+        };
+
         console.log("Sending to API:", data);
 
-        const res = await fetch("https://salma-maha.up.railway.app/calculate", {
-        // const res = await fetch("https://mahamonir.pythonanywhere.com/calculate", {
+        const res = await fetch("https://mahamonir.pythonanywhere.com/calculate", {
+        // const res = await fetch("https://salma-maha.up.railway.app/calculate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -323,6 +280,8 @@
             const errText = await res.text();
             console.error("API error:", errText);
             throw new Error(`API returned ${res.status}`);
+            alert("Widthes and heights are not same");
+            return;
         }
 
         const json = await res.json();
@@ -331,7 +290,6 @@
         document.cookie = `results=${JSON.stringify(json.results)}`;
         return json.results;
     }
-
 
     </script>
 

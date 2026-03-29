@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxScale | Next Design</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fm-heading: "Anton", sans-serif;
+            --fm-body: "IBM Plex Sans Arabic", sans-serif;
+            --bg-dark: #111111;
+            --white: #ffffff;
+            --muted: #d8d8d8;
+            --accent: #e51d2f;
+            --glass: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: var(--fm-body);
+            color: var(--white);
+            overflow-x: hidden;
+            background: var(--bg-dark);
+        }
+
+        /* Same background logic from the original page */
+        #myVideo {
+            position: fixed;
+            inset: 0;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(17, 17, 17, 0.92) 5%, rgba(17, 17, 17, 0.68) 45%, rgba(17, 17, 17, 0.85) 100%);
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin-inline: auto;
+        }
+
+        header {
+            padding: 22px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 160px;
+            max-width: 45vw;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 0.95rem;
+        }
+
+        .header-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        .header-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        main {
+            padding: 56px 0 40px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .hero-left {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px;
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 999px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 16px;
+            color: var(--muted);
+        }
+
+        h1 {
+            font-family: var(--fm-heading);
+            font-size: clamp(2rem, 4.8vw, 4.2rem);
+            letter-spacing: 0.02em;
+            line-height: 1.02;
+            margin-bottom: 18px;
+        }
+
+        .hero-text {
+            color: var(--muted);
+            max-width: 52ch;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--white);
+            border-radius: 12px;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            font-family: var(--fm-body);
+            background: transparent;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .hero-right {
+            display: grid;
+            gap: 14px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 1.05rem;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat .value {
+            font-family: var(--fm-heading);
+            font-size: 1.6rem;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat .label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .section-title {
+            margin: 52px 0 18px;
+            font-family: var(--fm-heading);
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            text-align: center;
+            letter-spacing: 0.03em;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .feature h4 {
+            color: var(--white);
+            margin-bottom: 8px;
+            font-size: 1.04rem;
+        }
+
+        .feature p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.92rem;
+        }
+
+        .study-form-section {
+            margin-top: 0;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: max-height 0.45s ease, opacity 0.3s ease, margin-top 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+        }
+
+        .study-form-section.is-open {
+            margin-top: 28px;
+            max-height: 1200px;
+            opacity: 1;
+            pointer-events: auto;
+            border-color: var(--border);
+            padding: 24px;
+        }
+
+        .study-form-head h3 {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            color: var(--white);
+        }
+
+        .study-form-head p {
+            color: var(--muted);
+            margin-bottom: 18px;
+            font-size: 0.93rem;
+        }
+
+        .study-form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.09);
+            color: var(--white);
+            padding: 11px 12px;
+            font-size: 0.92rem;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #e9e9e9;
+            opacity: 0.55;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group select option {
+            color: #111111;
+        }
+
+        .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        footer {
+            margin-top: 34px;
+            border-top: 1px solid rgba(255, 255, 255, 0.24);
+            padding: 18px 0 30px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        @media (max-width: 920px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .study-form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .header-links {
+                display: none;
+            }
+
+            .hero-left {
+                padding: 24px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .study-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="myVideo">
+        <source src="assets/myvideo.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <header>
+        <div class="container header-row">
+            <a href="index.html" aria-label="Go to homepage">
+                <img class="logo" src="assets/logo.svg" alt="LuxScale Logo">
+            </a>
+            <nav class="header-links" aria-label="Top navigation">
+                <a href="#">Projects</a>
+                <a href="#">Solutions</a>
+                <a href="about.html">About</a>
+                <a href="mailto:contact@shortcircuitcompany.com">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-grid">
+            <div class="hero-left">
+                <span class="eyebrow">New Luxury Layout</span>
+                <h1>LIGHTING DESIGN, REDEFINED.</h1>
+                <p class="hero-text">
+                    LuxScale is an AI-powered lighting design system that streamlines project setup,
+                    delivers code-aligned recommendations, and enables faster, more confident decisions.
+                </p>
+                <div class="actions">
+                    <button class="btn btn-primary" id="openStudyForm" type="button">Start New Study</button>
+                    <button class="btn" id="viewLastResultBtn" type="button">View Last Result</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="value">98%</div>
+                        <div class="label">Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="value">12s</div>
+                        <div class="label">Average Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="value">24/7</div>
+                        <div class="label">Availability</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <article class="card">
+                    <h3>Smart Calculations</h3>
+                    <p>
+                        Configure dimensions and purpose, then receive AI-powered lighting proposals
+                        aligned with practical engineering needs.
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>Visual Clarity</h3>
+                    <p>
+                        Cleaner hierarchy and modern glass panels improve readability while keeping
+                        your brand character and background atmosphere.
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>Fast Handover</h3>
+                    <p>
+                        Ready to connect with your existing result flow and submit endpoint whenever
+                        you decide to plug in the form logic.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="study-form-section" id="studyFormSection" hidden>
+            <div class="study-form-head">
+                <h3>Create New Study From Dimensions</h3>
+                <p>Enter room dimensions and function, then continue to calculation flow.</p>
+            </div>
+
+            <form id="studyForm" novalidate>
+                <div class="study-form-grid">
+                    <div class="form-group">
+                        <label for="dimA">Width 1 (m)</label>
+                        <input id="dimA" name="a" type="number" min="0" step="any" required placeholder="e.g. 5.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="dimB">Length 1 (m)</label>
+                        <input id="dimB" name="b" type="number" min="0" step="any" required placeholder="e.g. 8">
+                    </div>
+                    <div class="form-group">
+                        <label for="dimC">Width 2 (m)</label>
+                        <input id="dimC" name="c" type="number" min="0" step="any" required placeholder="e.g. 5.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="dimD">Length 2 (m)</label>
+                        <input id="dimD" name="d" type="number" min="0" step="any" required placeholder="e.g. 8">
+                    </div>
+                    <div class="form-group">
+                        <label for="dimHeight">Height (m)</label>
+                        <input id="dimHeight" name="height" type="number" min="0" step="any" required placeholder="e.g. 3">
+                    </div>
+                    <div class="form-group">
+                        <label for="dimPlace">Room Function</label>
+                        <select id="dimPlace" name="place" required>
+                            <option value="" selected disabled>Select room function</option>
+                            <option value="Room">Room (Residential)</option>
+                            <option value="Office">Office</option>
+                            <option value="Cafe">Cafe / Restaurant</option>
+                            <option value="Factory production line">Factory - Production line</option>
+                            <option value="Factory warehouse">Factory - Warehouse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="createStudyBtn" type="submit">Create Study</button>
+                    <button class="btn" id="cancelStudyForm" type="button">Cancel</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 <a href="https://shortcircuit.company/" target="_blank" rel="noopener noreferrer">Short Circuit Company</a>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const openStudyFormBtn = document.getElementById("openStudyForm");
+        const viewLastResultBtn = document.getElementById("viewLastResultBtn");
+        const cancelStudyFormBtn = document.getElementById("cancelStudyForm");
+        const studyFormSection = document.getElementById("studyFormSection");
+        const studyForm = document.getElementById("studyForm");
+        const firstDimensionInput = document.getElementById("dimA");
+        const createStudyBtn = document.getElementById("createStudyBtn");
+        const RESULT_LINKS_KEY = "luxscale_result_links";
+        const RESULT_LINK_TTL_MS = 60 * 60 * 1000; // 1 hour
+        const RESULT_PAGE_PATH = "result.html";
+        const SUBMIT_ENDPOINTS = (() => {
+            const fromCurrentPage = new URL("./api/submit.php", window.location.href).toString();
+            const sameOriginRoot = new URL("/api/submit.php", window.location.origin).toString();
+            const projectRoot = new URL("/LuxSCaleAI/api/submit.php", window.location.origin).toString();
+            const endpoints = [fromCurrentPage, sameOriginRoot, projectRoot];
+
+            // Keep localhost endpoint for local development only.
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+                endpoints.unshift("http://localhost/sc-luxscaleai/api/submit.php");
+            }
+
+            return [...new Set(endpoints)];
+        })();
+
+        async function submitStudy(payload) {
+            let lastError = "Submit API request failed.";
+
+            for (const endpoint of SUBMIT_ENDPOINTS) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const responseText = await response.text();
+                    let json = null;
+                    try {
+                        json = JSON.parse(responseText);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON response from ${endpoint}`);
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(json?.error || json?.message || `Submit failed on ${endpoint}`);
+                    }
+
+                    return json;
+                } catch (error) {
+                    lastError = error.message || lastError;
+                }
+            }
+
+            throw new Error(lastError);
+        }
+
+        function getStoredLinksRaw() {
+            try {
+                const raw = JSON.parse(localStorage.getItem(RESULT_LINKS_KEY) || "[]");
+                return Array.isArray(raw) ? raw.filter((item) => typeof item === "string" && item.length > 0) : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function getStoredAtFromLink(link) {
+            try {
+                const parsed = new URL(link, window.location.origin);
+                const storedAtValue = Number(parsed.searchParams.get("stored_at"));
+                return Number.isFinite(storedAtValue) ? storedAtValue : 0;
+            } catch (error) {
+                return 0;
+            }
+        }
+
+        function getValidResultLinks() {
+            const now = Date.now();
+            const validLinks = getStoredLinksRaw()
+                .filter((link) => now - getStoredAtFromLink(link) <= RESULT_LINK_TTL_MS)
+                .sort((a, b) => getStoredAtFromLink(b) - getStoredAtFromLink(a));
+
+            localStorage.setItem(RESULT_LINKS_KEY, JSON.stringify(validLinks));
+            return validLinks;
+        }
+
+        function createStoredResultLink(token) {
+            const linkUrl = new URL(RESULT_PAGE_PATH, window.location.href);
+            linkUrl.searchParams.set("token", token);
+            linkUrl.searchParams.set("stored_at", String(Date.now()));
+            return linkUrl.pathname + linkUrl.search;
+        }
+
+        function saveResultLink(link) {
+            const currentLinks = getValidResultLinks();
+            const deduplicatedLinks = currentLinks.filter((item) => item !== link);
+            deduplicatedLinks.unshift(link);
+            localStorage.setItem(RESULT_LINKS_KEY, JSON.stringify(deduplicatedLinks.slice(0, 20)));
+        }
+
+        function updateViewLastResultState() {
+            const latestLink = getValidResultLinks()[0];
+            viewLastResultBtn.disabled = !latestLink;
+            viewLastResultBtn.title = latestLink ? "Open the latest result from the last hour" : "No saved results from the last hour";
+        }
+
+        function openStudyForm() {
+            studyFormSection.hidden = false;
+            studyFormSection.classList.add("is-open");
+            studyFormSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            setTimeout(() => firstDimensionInput.focus(), 220);
+        }
+
+        function closeStudyForm() {
+            studyFormSection.classList.remove("is-open");
+            window.setTimeout(() => {
+                studyFormSection.hidden = true;
+            }, 320);
+        }
+
+        openStudyFormBtn.addEventListener("click", openStudyForm);
+        viewLastResultBtn.addEventListener("click", function () {
+            const latestLink = getValidResultLinks()[0];
+            if (!latestLink) {
+                alert("No saved result found in the last hour.");
+                updateViewLastResultState();
+                return;
+            }
+            window.location.href = latestLink;
+        });
+        cancelStudyFormBtn.addEventListener("click", closeStudyForm);
+        updateViewLastResultState();
+
+        studyForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!studyForm.checkValidity()) {
+                studyForm.reportValidity();
+                return;
+            }
+
+            const width1 = Number(document.getElementById("dimA").value);
+            const length1 = Number(document.getElementById("dimB").value);
+            const width2 = Number(document.getElementById("dimC").value);
+            const length2 = Number(document.getElementById("dimD").value);
+            const height = Number(document.getElementById("dimHeight").value);
+            const place = document.getElementById("dimPlace").value;
+
+            if (width1 !== width2 || length1 !== length2) {
+                alert("Width 1 must equal Width 2 and Length 1 must equal Length 2 before continuing.");
+                return;
+            }
+
+            if (width1 <= 0 || length1 <= 0 || width2 <= 0 || length2 <= 0 || height <= 0) {
+                alert("Please enter valid positive dimensions.");
+                return;
+            }
+
+            createStudyBtn.disabled = true;
+            createStudyBtn.textContent = "Creating...";
+
+            try {
+                const sides = [width1, length1, width2, length2];
+                const allResults = await getResults(place, sides, height);
+                const formattedResults = allResults.map((result) => ({
+                    luminaire: result["Luminaire"],
+                    power: result["Power (W)"],
+                    efficacy: result["Efficacy (lm/W)"],
+                    fixtures: result["Fixtures"],
+                    spacing_x: result["Spacing X (m)"],
+                    spacing_y: result["Spacing Y (m)"],
+                    avg_lux: result["Average Lux"],
+                    uniformity: result["Uniformity"],
+                    total_power: result["Total Power (W)"]
+                }));
+
+                const submitData = {
+                    project_name: "SC-LUXSCALE LedEXPO",
+                    name: "SC-LUXSCALE developer at " + new Date().toISOString(),
+                    company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
+                    phone: "01711223344",
+                    email: "shortcircuitcompany@gmail.com",
+                    place,
+                    sides,
+                    height,
+                    results: formattedResults
+                };
+
+                const submitJson = await submitStudy(submitData);
+                if (!submitJson.token) {
+                    throw new Error(submitJson.error || "No token returned from submit API.");
+                }
+
+                localStorage.setItem("user_token", submitJson.token);
+                const resultLink = createStoredResultLink(submitJson.token);
+                saveResultLink(resultLink);
+                window.location.href = resultLink;
+            } catch (error) {
+                console.error(error);
+                alert("Failed to create study: " + error.message);
+            } finally {
+                createStudyBtn.disabled = false;
+                createStudyBtn.textContent = "Create Study";
+            }
+        });
+
+        async function getResults(place, sides, height) {
+            const payload = {
+                place,
+                sides,
+                height,
+                project_info: {
+                    project_name: "SC-LUXSCALE",
+                    name: "SC-LUXSCALE developer at " + new Date().toISOString(),
+                    company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
+                    phone: "01711223344",
+                    email: "shortcircuitcompany@gmail.com"
+                }
+            };
+
+            // const res = await fetch("https://mahamonir.pythonanywhere.com/calculate", {
+            const response = await fetch("https://mahamonir.pythonanywhere.com/calculate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error("Calculation API error: " + errorText);
+            }
+
+            const json = await response.json();
+            if (!json.results) {
+                throw new Error("No results returned from calculation API.");
+            }
+
+            document.cookie = "results=" + JSON.stringify(json.results);
+            return json.results;
+        }
+    </script>
+</body>
+</html>
