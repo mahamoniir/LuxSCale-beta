@@ -8,8 +8,9 @@ import os
 import csv
 import json
 import datetime
+import openai
 
-
+openai.api_key = "chatgbt"
 
 results_global = []
 project_info_global = {}
@@ -25,18 +26,18 @@ luminaire_shapes = {
 
 
 define_places = {
-    "Room": {"lux": 450, "uniformity": 0.53},
-    "Office": {"lux": 450, "uniformity": 0.58},
-    "Cafe": {"lux": 450, "uniformity": 0.56},
-    "Factory production line": {"lux": 350, "uniformity": 0.54},
-    "Factory warehouse": {"lux": 150, "uniformity": 0.56}
+    "Room": {"lux": 450, "uniformity": 0.5},
+    "Office": {"lux": 450, "uniformity": 0.5},
+    "Cafe": {"lux": 450, "uniformity": 0.5},
+    "Factory production line": {"lux": 350, "uniformity": 0.5},
+    "Factory warehouse": {"lux": 150, "uniformity": 0.5}
 }
 
 
 interior_luminaires = {
     "SC downlight": [9],
     "SC triproof": [36],
-    "SC backlight": [42, 48]
+    "SC backlight": [36, 48]
 }
 
 
@@ -53,7 +54,7 @@ led_efficacy = {
 
 
 beam_angle = 120
-maintenance_factor = 0.63
+maintenance_factor = 0.60
 
 
 
@@ -86,22 +87,14 @@ def determine_zone(height):
 
 def determine_luminaire(height):
     if height < 5:
-        return [
-            ("SC downlight", interior_luminaires["SC downlight"]),
-            ("SC triproof", interior_luminaires["SC triproof"]),
-            ("SC backlight", interior_luminaires["SC backlight"])
-        ]
-    elif 5 <= height <= 9:
-        return [("SC highbay", [100])]
-    elif 10 <= height <= 12:
-        return [("SC highbay", [150])]
+        return [(k, v) for k, v in interior_luminaires.items()]
     else:
-        return [("SC highbay", [200])]
+        return [("SC highbay", [100, 150]) if height <= 12 else ("SC highbay", [200])]
+
 
     
-    
 def get_spacing_constraints(zone):
-    return (2, 4, 4, 4) if zone == "interior" else (4, 6, 7, 12)
+    return (2, 4, 2, 4) if zone == "interior" else (4, 7, 7, 12)
 
 
 
@@ -148,8 +141,6 @@ def calculate_lighting(place, sides, height):
                 spacing_x = max(min(spacing_x, max_x), min_x)
                 spacing_y = max(min(spacing_y, max_y), min_y)
 
-
-
                 avg_lux = (num_fixtures * lumens * maintenance_factor) / area
                 total_power = num_fixtures * power
 
@@ -163,7 +154,7 @@ def calculate_lighting(place, sides, height):
                         "Spacing Y (m)": round(spacing_y, 2),
                         "Average Lux": round(avg_lux, 2),
                         "Uniformity": required_uniformity,
-                        "Total Power (W/H)": total_power,
+                        "Total Power (W)": total_power,
                         "Beam Angle (°)": beam_angle
                     })
     return results, length, width
@@ -213,10 +204,6 @@ def draw_heatmap(length, width, num_x, num_y):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
         fig.savefig(tmpfile.name, bbox_inches='tight')
         return tmpfile.name
-
-
-
-
    
 def export_csv(results, project_info):
     file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
@@ -232,10 +219,6 @@ def export_csv(results, project_info):
         for res in results:
             writer.writerow(res.values())
     messagebox.showinfo("Success", "CSV exported successfully!")
-
-
-
-
     
 
 def export_pdf(results, project_info, length, width): # عاوزة افتكر اظبط ترقيم الاوبشن بكرة  
