@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI_PIPELINE_DOCUMENTATION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-color: var(--vscode-editor-background, #ffffff);
+            --text-color: var(--vscode-editor-foreground, #1a1a1b);
+            --heading-color: var(--vscode-editor-foreground, #0f172a);
+            --secondary-text: var(--vscode-descriptionForeground, #64748b);
+            --accent-color: var(--vscode-textLink-foreground, #3b82f6);
+            --code-bg: var(--vscode-textCodeBlock-background, rgba(241, 245, 249, 0.4));
+            --border-color: var(--vscode-widget-border, #e2e8f0);
+            --header-bg: var(--vscode-editor-background, #ffffff);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.75;
+            color: var(--text-color);
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 5rem 2rem 3rem;
+            background-color: var(--bg-color);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .export-header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 0.75rem 2rem; background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: flex-end; gap: 0.75rem;
+            backdrop-filter: blur(8px); display: none;
+        }
+
+        .btn {
+            background: var(--accent-color); color: white; border: none;
+            padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem;
+            font-weight: 500; cursor: pointer; transition: opacity 0.2s;
+            font-family: 'Outfit', sans-serif;
+        }
+        .btn:hover { opacity: 0.9; }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; color: var(--heading-color); font-weight: 700; margin-top: 2rem; }
+        h1 { font-size: 2.25rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        
+        pre { background: var(--code-bg); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color); overflow-x: auto; margin: 1.5rem 0; }
+        code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; padding: 0.2rem 0.4rem; border-radius: 6px; background-color: var(--code-bg); }
+        
+        .mermaid { background: white; padding: 1rem; border-radius: 12px; margin: 1.5rem 0; display: flex; justify-content: center; border: 1px solid var(--border-color); }
+        svg { max-width: 100% !important; height: auto !important; }
+
+        @media print { .export-header { display: none; } body { padding: 0; } }
+    </style>
+</head>
+<body>
+    <div class="export-header">
+        <button class="btn" onclick="exportFile('html')">Export HTML</button>
+        <button class="btn" onclick="exportFile('pdf')">Export PDF</button>
+        <button class="btn" onclick="exportFile('docx')">Export DOCX</button>
+    </div>
+    <div class="content"><h1>AI Quality Pipeline — Architecture, Flow, and Impact</h1>
+<h2>Overview</h2>
+<p>The AI pipeline is a post-calculation analysis layer that takes completed lighting design results from LuxScaleAI and applies AI reasoning to detect issues, score quality, and suggest improvements. It runs <strong>after</strong> the core calculation engine — it does not change how fixtures are calculated, but helps interpret and improve those results over time.</p>
+<hr>
+<h2>Part 1 — Pipeline Architecture</h2>
+<h3>Components</h3>
+<pre><code>luxscale/
+├── gemini_manager.py     — Main orchestrator: accounts, waterfall, config
+├── ollama_manager.py     — Local model interface (Ollama REST API)
+├── ai_routes.py          — Flask endpoints (/api/ai/analyze, /approve-fix, /status, /account)
+└── gemini_config.json    — Live config: keys, model, priority, quota counters
+</code></pre>
+<h3>Configuration file: <code>gemini_config.json</code></h3>
+<p>All behavior is controlled by this single file — no code changes needed to switch models, accounts, or priority:</p>
+<pre><code class="language-json">{
+  &quot;accounts&quot;: [
+    { &quot;name&quot;: &quot;account_1_free&quot;, &quot;api_key&quot;: &quot;AIzaSy...&quot;, &quot;daily_limit&quot;: 15, &quot;used_today&quot;: 3, &quot;enabled&quot;: true },
+    { &quot;name&quot;: &quot;account_2_free&quot;, &quot;api_key&quot;: &quot;AIzaSy...&quot;, &quot;daily_limit&quot;: 15, &quot;used_today&quot;: 0, &quot;enabled&quot;: true },
+    { &quot;name&quot;: &quot;account_3_free&quot;, &quot;api_key&quot;: &quot;&quot;, &quot;daily_limit&quot;: 15, &quot;enabled&quot;: false },
+    { &quot;name&quot;: &quot;account_5_paid&quot;, &quot;api_key&quot;: &quot;&quot;, &quot;daily_limit&quot;: 800, &quot;enabled&quot;: false }
+  ],
+  &quot;model&quot;: &quot;gemini-3.1-flash-lite-preview&quot;,
+  &quot;ollama_priority&quot;: true,
+  &quot;min_confidence&quot;: 0.6,
+  &quot;timeout_seconds&quot;: 15
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>model</code></td>
+<td>Which Gemini model to use across all accounts</td>
+</tr>
+<tr>
+<td><code>ollama_priority</code></td>
+<td><code>true</code> = Ollama first (saves tokens), <code>false</code> = Gemini first (better quality)</td>
+</tr>
+<tr>
+<td><code>min_confidence</code></td>
+<td>Minimum confidence score to accept a result (0.0–1.0)</td>
+</tr>
+<tr>
+<td><code>daily_limit</code></td>
+<td>Max requests per day per account (auto-resets at midnight)</td>
+</tr>
+<tr>
+<td><code>used_today</code></td>
+<td>Auto-incremented counter, never manually edit</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Part 2 — Waterfall Logic</h2>
+<h3>Priority modes</h3>
+<p><strong><code>ollama_priority: true</code></strong> (recommended while all accounts are free tier):</p>
+<pre><code>Request → Ollama (local, free, unlimited) → Gemini acc 1 → Gemini acc 2 → ... → Snapshot → Default
+</code></pre>
+<p><strong><code>ollama_priority: false</code></strong> (recommended with paid Gemini account):</p>
+<pre><code>Request → Gemini acc 1 → Gemini acc 2 → ... → Ollama (local backup) → Snapshot → Default
+</code></pre>
+<h3>Waterfall decision tree</h3>
+<pre><code>analyze_lighting_result(payload)
+│
+├─ ollama_priority=true?
+│   ├─ YES → try Ollama
+│   │         ├─ available + valid JSON → return (source: ollama:local)
+│   │         └─ unavailable/failed → fall through to Gemini
+│   └─ NO  → skip to Gemini first
+│
+├─ Try Gemini accounts in order
+│   ├─ Account has quota + valid key?
+│   │   ├─ YES → call API
+│   │   │         ├─ 429 rate limit → SKIP KEY → next account
+│   │   │         ├─ 400/401/403 bad key → SKIP KEY → next account
+│   │   │         ├─ Valid JSON, confidence ≥ min_confidence → return (source: gemini:account_name)
+│   │   │         └─ Low confidence / parse error → next account
+│   │   └─ NO → skip (log reason)
+│   └─ All accounts exhausted
+│
+├─ [if ollama_priority=false] try Ollama as backup
+│
+├─ Load snapshot (last approved analysis)
+│   ├─ Exists → return (source: snapshot, snapshot_saved_at: ...)
+│   └─ Not found → fall through
+│
+└─ Return safe default (source: default)
+    quality_score: 50, confidence: 0, issues: []
+</code></pre>
+<h3>Quota protection</h3>
+<p>Each account tracks daily usage in <code>gemini_config.json</code>:</p>
+<ul>
+<li><code>used_today</code> increments after every successful call</li>
+<li><code>reset_date</code> stores the last reset date — auto-resets to 0 on a new calendar day</li>
+<li><code>daily_limit</code> is set conservatively (15 for free tier with 20 RPD limit = 25% buffer)</li>
+<li>Account 5 (paid) has <code>daily_limit: 800</code> = 80% of a typical paid plan</li>
+</ul>
+<hr>
+<h2>Part 3 — What the AI Analyzes</h2>
+<h3>Input to the AI</h3>
+<p>The prompt is built from the study payload — specifically the first result row:</p>
+<pre><code>Space: Office  Sides: [10, 8, 10, 8]m  H: 3.2m
+Required: Em=500lx  Uo=0.6
+Got: Em=487lx(LOW) U0=0.54(LOW) Fixtures:24
+</code></pre>
+<h3>Expected JSON output</h3>
+<pre><code class="language-json">{
+  &quot;confidence&quot;: 0.9,
+  &quot;quality_score&quot;: 65,
+  &quot;issues&quot;: [
+    {
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;field&quot;: &quot;Average Illuminance (Em)&quot;,
+      &quot;description&quot;: &quot;Calculated lux is 2.6% below required 500 lux&quot;,
+      &quot;suggested_fix&quot;: &quot;Increase fixture count to 26 or use higher efficacy&quot;
+    },
+    {
+      &quot;severity&quot;: &quot;medium&quot;,
+      &quot;field&quot;: &quot;Uniformity (U0)&quot;,
+      &quot;description&quot;: &quot;U0=0.54 is below required 0.6&quot;,
+      &quot;suggested_fix&quot;: &quot;Adjust spacing or use wider beam angle fixtures&quot;
+    }
+  ],
+  &quot;suggestions&quot;: [
+    &quot;Consider SC triproof for better uniformity in this room size&quot;,
+    &quot;Increase mounting height if ceiling allows&quot;
+  ],
+  &quot;summary&quot;: &quot;Design narrowly misses both lux and uniformity targets. Minor adjustments to fixture count or type will achieve compliance.&quot;
+}
+</code></pre>
+<h3>Validation before accepting</h3>
+<p>Before any result is used:</p>
+<ol>
+<li>Must be parseable JSON (three-attempt parser: strip fences → find <code>{...}</code> block → extract outermost braces)</li>
+<li><code>confidence</code> field must be ≥ <code>min_confidence</code> (default 0.6)</li>
+<li>Missing fields are auto-filled with safe defaults (empty arrays, 50 score, etc.) rather than rejected</li>
+</ol>
+<hr>
+<h2>Part 4 — Snapshot System (Fallback Safety)</h2>
+<p>When the user clicks &quot;Approve &amp; Save as Baseline&quot; in the UI, the current analysis is written to <code>gemini_snapshot.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;saved_at&quot;: &quot;2026-04-04T16:50:32Z&quot;,
+  &quot;analysis&quot;: {
+    &quot;confidence&quot;: 0.9,
+    &quot;quality_score&quot;: 70,
+    &quot;issues&quot;: [...],
+    &quot;suggestions&quot;: [...],
+    &quot;summary&quot;: &quot;...&quot;
+  }
+}
+</code></pre>
+<p>If all AI sources fail in future requests, this snapshot is returned with <code>source: snapshot</code>. This ensures the system always has a meaningful response even with zero connectivity — it falls back to the last known-good analysis rather than an empty default.</p>
+<hr>
+<h2>Part 5 — Before and After the AI Pipeline</h2>
+<h3>Before: Raw calculation output only</h3>
+<p>Without the AI pipeline, a user receiving results sees only the raw numbers:</p>
+<pre><code>Average Lux: 487.3
+U0_calculated: 0.5421
+Standard margin (lux %): 2.54
+Standard margin (U0 %): 9.65
+Fixtures: 24
+Spacing X: 2.5m, Spacing Y: 2.67m
+</code></pre>
+<p><strong>Problems with raw output alone:</strong></p>
+<ul>
+<li>A user who is not a lighting engineer cannot interpret what these numbers mean</li>
+<li>&quot;Standard margin (lux %): 2.54&quot; — is that bad? Good? Critical?</li>
+<li>No guidance on what to change to fix a failing result</li>
+<li>All options are presented equally with no quality ranking beyond pass/fail</li>
+<li>No cross-option comparison (is option 3 better than option 1 in ways beyond compliance?)</li>
+<li>No context: &quot;this room type typically needs X&quot; — the standard row tells you the minimum but not the engineering judgment</li>
+</ul>
+<h3>After: AI pipeline adds interpretation layer</h3>
+<p>The same result, after AI analysis:</p>
+<pre><code>Quality Score: 65 / 100   (Confidence: 90%)
+Source: Gemini — account_1_free
+
+Issues (2):
+  HIGH   Average Illuminance (Em)
+         Calculated lux is 2.6% below required 500 lux
+         → Increase fixture count to 26 or use higher efficacy lamps
+
+  MEDIUM Uniformity (U0)
+         U0=0.54 is below required minimum of 0.60
+         → Adjust fixture spacing or switch to wider-beam luminaire
+
+Suggestions:
+  • Consider SC triproof for better uniformity in this room footprint
+  • Review mounting height — increasing from 3.2m to 3.5m would improve beam overlap
+
+Summary:
+  Design narrowly misses both lux and uniformity targets. Minor adjustments
+  to fixture count or type will achieve full compliance with minimal cost impact.
+</code></pre>
+<h3>Comparison table</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Before AI pipeline</th>
+<th>After AI pipeline</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Compliance signal</td>
+<td>Pass/fail numbers</td>
+<td>Scored 0–100 with color coding</td>
+</tr>
+<tr>
+<td>Issue identification</td>
+<td>None — user must interpret margins</td>
+<td>Explicit issues with severity (HIGH/MEDIUM/LOW)</td>
+</tr>
+<tr>
+<td>Fix guidance</td>
+<td>None</td>
+<td>Specific actionable suggestions per issue</td>
+</tr>
+<tr>
+<td>Engineering context</td>
+<td>None</td>
+<td>AI applies domain knowledge about space types</td>
+</tr>
+<tr>
+<td>Non-expert usability</td>
+<td>Requires lighting knowledge to interpret</td>
+<td>Self-explanatory for any user</td>
+</tr>
+<tr>
+<td>Multi-option comparison</td>
+<td>Side-by-side numbers only</td>
+<td>Quality score enables ranking</td>
+</tr>
+<tr>
+<td>Improvement over time</td>
+<td>None — static results</td>
+<td>Snapshot system tracks approved baselines</td>
+</tr>
+<tr>
+<td>Calculation improvement feedback</td>
+<td>None</td>
+<td>Approved fixes become training examples</td>
+</tr>
+</tbody></table>
+<h3>Where AI adds most value</h3>
+<p><strong>High-value scenarios:</strong></p>
+<ol>
+<li><p><strong>Narrowly failing designs</strong> — margins of 2–5% where the fix is simple (add 2 fixtures, change wattage). Raw output shows the gap; AI says what to do about it.</p>
+</li>
+<li><p><strong>Multiple failing criteria</strong> — when both lux and U₀ fail, the AI prioritizes which to address first (high severity = fix this first).</p>
+</li>
+<li><p><strong>Non-standard room types</strong> — a space with unusual dimensions where the standard reference provides the lux target but no practical guidance on achieving it.</p>
+</li>
+<li><p><strong>Client-facing reports</strong> — the quality score and summary are directly quotable in a report without requiring the client to understand photometric notation.</p>
+</li>
+<li><p><strong>Batch analysis</strong> — running the AI on all saved studies to identify which past projects had marginal compliance that might benefit from redesign.</p>
+</li>
+</ol>
+<p><strong>Lower-value scenarios:</strong></p>
+<ol>
+<li>Clearly passing designs (quality score ≥ 85) — the AI confirmation is useful but adds less new information</li>
+<li>Very simple single-room calculations with a single fixture option</li>
+</ol>
+<hr>
+<h2>Part 6 — How the Pipeline Improves Results Over Time</h2>
+<h3>Current mechanism: snapshot baseline</h3>
+<p>Every approved AI analysis is saved as the snapshot. When Gemini is unavailable, the system returns the last approved analysis rather than an empty default. This means:</p>
+<ul>
+<li>Day 1: No snapshot → generic default response</li>
+<li>Day 5: After several approved analyses → snapshot reflects real project patterns</li>
+<li>Day 30: Snapshot captures common issues for your building type and fixture catalog</li>
+</ul>
+<h3>Future mechanism: local model fine-tuning</h3>
+<p>The architecture is designed to support this workflow:</p>
+<ol>
+<li>Gemini analyzes a result → user approves the fix</li>
+<li>The (payload, analysis) pair is stored as a training example</li>
+<li>When enough examples accumulate, the local Ollama model can be fine-tuned on this data</li>
+<li>The fine-tuned model learns patterns specific to your fixture catalog, room types, and standards</li>
+<li>Over time, Ollama local quality approaches Gemini quality for your specific domain</li>
+</ol>
+<p>This is possible because all the data stays local — the study JSONs, the approved analyses, and the model are all on your server.</p>
+<hr>
+<h2>Part 7 — API Reference</h2>
+<h3>POST <code>/api/ai/analyze</code></h3>
+<p>Analyze a saved study or inline payload.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{ &quot;token&quot;: &quot;bca62ed6b65842ca4efd0e2f527d1246&quot; }
+</code></pre>
+<p>or inline:</p>
+<pre><code class="language-json">{ &quot;sides&quot;: [...], &quot;height&quot;: 3.2, &quot;results&quot;: [...], &quot;standard_lighting&quot;: {...} }
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;source&quot;: &quot;gemini:account_1_free&quot;,
+  &quot;confidence&quot;: 0.9,
+  &quot;quality_score&quot;: 70,
+  &quot;issues&quot;: [...],
+  &quot;suggestions&quot;: [...],
+  &quot;summary&quot;: &quot;...&quot;
+}
+</code></pre>
+<h3>POST <code>/api/ai/approve-fix</code></h3>
+<p>Save the current analysis as the fallback snapshot.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{ &quot;analysis&quot;: { ...the analysis object... }, &quot;token&quot;: &quot;optional_study_token&quot; }
+</code></pre>
+<h3>GET <code>/api/ai/status</code> <em>(admin only)</em></h3>
+<p>Returns quota status for all configured accounts plus snapshot info.</p>
+<h3>PUT <code>/api/ai/account</code> <em>(admin only)</em></h3>
+<p>Update an account key at runtime without restarting Flask.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{ &quot;name&quot;: &quot;account_2_free&quot;, &quot;api_key&quot;: &quot;AIzaSy...&quot;, &quot;enabled&quot;: true }
+</code></pre>
+<hr>
+<h2>Part 8 — Model Comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Type</th>
+<th>RPD (free)</th>
+<th>Output quality</th>
+<th>Speed</th>
+<th>Token limit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>gemini-2.5-flash</code></td>
+<td>Gemini online</td>
+<td>20</td>
+<td>High</td>
+<td>~5s</td>
+<td>~40 tokens (truncates)</td>
+</tr>
+<tr>
+<td><code>gemini-3.1-flash-lite-preview</code></td>
+<td>Gemini online</td>
+<td>500</td>
+<td>High</td>
+<td>~3s</td>
+<td>Full response ✓</td>
+</tr>
+<tr>
+<td><code>llama3.2:3b</code></td>
+<td>Ollama local</td>
+<td>Unlimited</td>
+<td>Medium</td>
+<td>~8s</td>
+<td>Full response ✓</td>
+</tr>
+<tr>
+<td><code>gemma3:27b</code></td>
+<td>Ollama local</td>
+<td>Unlimited</td>
+<td>High</td>
+<td>~45s</td>
+<td>Full response ✓</td>
+</tr>
+</tbody></table>
+<p><strong>Current recommended setup:</strong></p>
+<ul>
+<li><code>ollama_priority: true</code> — use Ollama (gemma3:27b) for all local development</li>
+<li><code>model: gemini-3.1-flash-lite-preview</code> — used when Ollama unavailable or deployed online</li>
+<li>Free accounts as backup chain (accounts 1–4)</li>
+<li>Paid account (account 5) for production deployment</li>
+</ul>
+<hr>
+<h2>Part 9 — Security Notes</h2>
+<ul>
+<li><code>gemini_config.json</code> must be in <code>.gitignore</code> — it contains live API keys</li>
+<li><code>gemini_snapshot.json</code> must be in <code>.gitignore</code> — may contain project data</li>
+<li><code>/api/ai/status</code> and <code>/api/ai/account</code> are protected by <code>_admin_session_ok()</code> — same auth as admin dashboard</li>
+<li><code>/api/ai/analyze</code> is public (same as <code>/calculate</code>) — it only returns analysis, never exposes keys</li>
+<li>Study token is validated against <code>[a-f0-9]{32}</code> pattern before file access</li>
+<li>Only lighting metrics are sent to Gemini — customer name, email, phone are never included in the prompt</li>
+</ul>
+</div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        function exportFile(format) { vscode.postMessage({ command: 'export', format: format }); }
+        mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+        // Help Puppeteer know when we are done
+        window.addEventListener('load', () => {
+            mermaid.run().then(() => {
+                document.body.classList.add('mermaid-rendered');
+            });
+        });
+    </script>
+</body>
+</html>

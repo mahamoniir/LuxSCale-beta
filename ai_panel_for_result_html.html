@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxScaleAI — AI Analysis Test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f2f8; min-height: 100vh; padding: 32px 16px; }
+  .card { background: #fff; border-radius: 16px; padding: 28px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
+  label { font-size: 13px; font-weight: 500; color: #444; display: block; margin-bottom: 6px; }
+  input[type=text] { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 10px;
+    font-size: 13px; font-family: monospace; color: #333; background: #fafafa; outline: none;
+    transition: border-color .2s; }
+  input[type=text]:focus { border-color: #534AB7; background: #fff; }
+  .flask-url-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .flask-pill { padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    border: 1.5px solid #ddd; background: #fafafa; color: #555; transition: all .15s; }
+  .flask-pill.active { background: #534AB7; color: #fff; border-color: #534AB7; }
+  button.run-btn { width: 100%; margin-top: 18px; background: #534AB7; color: #fff;
+    border: none; border-radius: 10px; padding: 13px; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background .2s; }
+  button.run-btn:hover { background: #3C3489; }
+  button.run-btn:disabled { background: #aaa; cursor: not-allowed; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 24px 0; }
+  #result-area { display: none; }
+  .score-box { border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 18px; }
+  .score-num { font-size: 52px; font-weight: 700; }
+  .score-label { font-size: 13px; color: #777; margin-top: 4px; }
+  .meta-row { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 16px; }
+  .summary-box { font-size: 13px; color: #444; line-height: 1.6; padding: 12px; background: #f8f8ff;
+    border-radius: 10px; margin-bottom: 18px; }
+  .section-title { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 10px; }
+  .issue-card { border-left: 3px solid #ccc; padding: 10px 12px; margin-bottom: 8px;
+    background: #fafafa; border-radius: 0 8px 8px 0; }
+  .issue-field { font-weight: 600; font-size: 13px; color: #222; }
+  .issue-sev { font-size: 11px; font-weight: 600; margin-left: 8px; padding: 2px 7px;
+    border-radius: 20px; vertical-align: middle; }
+  .sev-high { background: #fdecea; color: #c0392b; }
+  .sev-medium { background: #fef9e7; color: #d68910; }
+  .sev-low { background: #eaf4fb; color: #2471a3; }
+  .issue-desc { font-size: 12px; color: #555; margin-top: 4px; }
+  .issue-fix { font-size: 12px; color: #27ae60; margin-top: 5px; }
+  .suggestion-item { font-size: 13px; color: #555; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
+  .no-issues { font-size: 13px; color: #27ae60; padding: 8px 0; }
+  .approve-btn { width: 100%; margin-top: 18px; background: #27ae60; color: #fff;
+    border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600;
+    cursor: pointer; }
+  .approve-btn:hover { background: #1e8449; }
+  .error-box { background: #fdecea; border-radius: 10px; padding: 14px; color: #922b21; font-size: 13px; }
+  .loading-box { text-align: center; padding: 32px; color: #534AB7; }
+  .spinner { font-size: 28px; animation: spin 1.2s linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .source-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px;
+    font-weight: 600; background: #EEEDFE; color: #3C3489; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>&#9733; LuxScaleAI — AI Analysis</h1>
+  <div class="subtitle">Standalone test page — paste a study token to analyze</div>
+
+  <label>Study Token</label>
+  <input type="text" id="token-input" placeholder="e.g. bca62ed6b65842ca4efd0e2f527d1246"
+    onkeydown="if(event.key==='Enter') runAnalysis()" />
+
+  <div style="margin-top:16px;">
+    <label>Flask Server</label>
+    <div class="flask-url-row" id="url-pills">
+      <div class="flask-pill active" onclick="selectUrl(this, 'http://127.0.0.1:5000')">127.0.0.1:5000</div>
+      <div class="flask-pill" onclick="selectUrl(this, 'http://localhost:5000')">localhost:5000</div>
+      <div class="flask-pill" onclick="selectUrl(this, 'https://mahamonir.pythonanywhere.com')">pythonanywhere</div>
+    </div>
+    <input type="text" id="custom-url" style="margin-top:8px;"
+      placeholder="or type custom URL e.g. http://192.168.1.8:5000" />
+  </div>
+
+  <button class="run-btn" id="run-btn" onclick="runAnalysis()">Run Analysis</button>
+
+  <hr class="divider">
+
+  <div id="result-area">
+    <div id="result-content"></div>
+  </div>
+</div>
+
+<script>
+let selectedBaseUrl = "http://127.0.0.1:5000";
+let lastAnalysis = null;
+
+function selectUrl(el, url) {
+  document.querySelectorAll(".flask-pill").forEach(p => p.classList.remove("active"));
+  el.classList.add("active");
+  selectedBaseUrl = url;
+  document.getElementById("custom-url").value = "";
+}
+
+function getBaseUrl() {
+  const custom = document.getElementById("custom-url").value.trim();
+  return custom || selectedBaseUrl;
+}
+
+async function runAnalysis() {
+  const token = document.getElementById("token-input").value.trim();
+  if (!token) {
+    document.getElementById("token-input").focus();
+    document.getElementById("token-input").style.borderColor = "#e74c3c";
+    return;
+  }
+  document.getElementById("token-input").style.borderColor = "#ddd";
+
+  const btn = document.getElementById("run-btn");
+  btn.disabled = true;
+  btn.textContent = "Analyzing...";
+
+  const area = document.getElementById("result-area");
+  const content = document.getElementById("result-content");
+  area.style.display = "block";
+  content.innerHTML = `
+    <div class="loading-box">
+      <div class="spinner">&#8987;</div>
+      <div style="margin-top:12px; font-size:14px;">Sending to AI...</div>
+      <div style="margin-top:6px; font-size:12px; color:#999;">Trying accounts in order — may take a few seconds</div>
+    </div>`;
+
+  const url = getBaseUrl().replace(/\/$/, "") + "/api/ai/analyze";
+
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok || data.status === "error") {
+      throw new Error(data.message || `HTTP ${resp.status}`);
+    }
+
+    lastAnalysis = data;
+    renderResult(data);
+
+  } catch (e) {
+    content.innerHTML = `
+      <div class="error-box">
+        <strong>Error:</strong> ${e.message}<br><br>
+        <span style="font-size:12px;">
+          Make sure Flask is running at <code>${getBaseUrl()}</code>
+          and the token exists in <code>api/data/studies/</code>
+        </span>
+      </div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Run Again";
+}
+
+function renderResult(data) {
+  const score = data.quality_score ?? 50;
+  const source = data.source ?? "unknown";
+  const issues = data.issues ?? [];
+  const suggestions = data.suggestions ?? [];
+  const summary = data.summary ?? "";
+  const confidence = Math.round((data.confidence ?? 0) * 100);
+
+  const scoreColor = score >= 80 ? "#27ae60" : score >= 60 ? "#e67e22" : "#e74c3c";
+  const scoreBg    = score >= 80 ? "#eafaf1" : score >= 60 ? "#fef6e4" : "#fdedec";
+
+  const sourceLabel = source.startsWith("gemini") ? "&#127968; " + source.replace("gemini:", "Gemini — ")
+                    : source === "ollama:local"    ? "&#128187; Ollama (local)"
+                    : source === "snapshot"        ? "&#128190; Snapshot fallback"
+                    :                               "&#9888; Default (no AI reached)";
+
+  const issueColors = { high: "#e74c3c", medium: "#e67e22", low: "#3498db" };
+
+  const issuesHtml = issues.length === 0
+    ? `<div class="no-issues">&#10003; No issues found — design looks good</div>`
+    : issues.map(i => `
+        <div class="issue-card" style="border-left-color:${issueColors[i.severity]||'#ccc'}">
+          <div class="issue-field">${i.field ?? "Issue"}
+            <span class="issue-sev sev-${i.severity??'low'}">${(i.severity??'').toUpperCase()}</span>
+          </div>
+          <div class="issue-desc">${i.description ?? ""}</div>
+          ${i.current_value ? `<div class="issue-desc" style="color:#888;">Current: ${i.current_value}</div>` : ""}
+          ${i.suggested_fix ? `<div class="issue-fix">&#8594; ${i.suggested_fix}</div>` : ""}
+        </div>`).join("");
+
+  const suggestionsHtml = suggestions.map(s =>
+    `<div class="suggestion-item">&#8226; ${s}</div>`).join("");
+
+  document.getElementById("result-content").innerHTML = `
+    <div class="score-box" style="background:${scoreBg}">
+      <div class="score-num" style="color:${scoreColor}">${score}</div>
+      <div class="score-label">Quality Score / 100</div>
+    </div>
+
+    <div class="meta-row">
+      <span class="source-badge">${sourceLabel}</span>
+      <span>Confidence: ${confidence}%</span>
+    </div>
+
+    ${summary ? `<div class="summary-box">${summary}</div>` : ""}
+
+    <div class="section-title">Issues (${issues.length})</div>
+    ${issuesHtml}
+
+    ${suggestions.length > 0 ? `
+      <div class="section-title" style="margin-top:18px;">Suggestions</div>
+      ${suggestionsHtml}` : ""}
+
+    ${issues.length > 0 ? `
+      <button class="approve-btn" onclick="approveAnalysis()">
+        &#10003; Approve &amp; Save as Baseline Snapshot
+      </button>` : ""}
+
+    <div style="margin-top:16px; font-size:11px; color:#bbb; text-align:center;">
+      Raw response: <a href="#" onclick="showRaw(); return false;">show JSON</a>
+    </div>
+    <pre id="raw-json" style="display:none; font-size:11px; background:#f5f5f5;
+      padding:12px; border-radius:8px; overflow-x:auto; margin-top:8px; color:#333;">
+${JSON.stringify(lastAnalysis, null, 2)}</pre>
+  `;
+}
+
+async function approveAnalysis() {
+  if (!lastAnalysis) return;
+  const token = document.getElementById("token-input").value.trim();
+  const url = getBaseUrl().replace(/\/$/, "") + "/api/ai/approve-fix";
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ analysis: lastAnalysis, token })
+    });
+    const data = await resp.json();
+    if (data.status === "success") {
+      alert("Saved as baseline snapshot successfully.");
+    } else {
+      alert("Error: " + (data.message || "unknown"));
+    }
+  } catch(e) {
+    alert("Could not reach Flask: " + e.message);
+  }
+}
+
+function showRaw() {
+  const el = document.getElementById("raw-json");
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+
+// Auto-fill token from URL if present
+const urlToken = new URLSearchParams(window.location.search).get("token");
+if (urlToken) {
+  document.getElementById("token-input").value = urlToken;
+}
+</script>
+
+</body>
+</html>

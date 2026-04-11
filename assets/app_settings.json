@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "ui": {
+    "results_initial_count": 3,
+    "results_batch_size": 3,
+    "show_compliance_margin_fields": true
+  },
+  "calc": {
+    "max_solutions_total": 9,
+    "interior_height_min_m": 2,
+    "interior_height_max_m": 5,
+    "exterior_height_min_m": 5,
+    "exterior_height_max_m": 20,
+    "maintenance_factor": 0.8,
+    "room_reflectance_preset": "medium"
+  }
+}

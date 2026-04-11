@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LuxScale | Admin</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fm-heading: "Anton", sans-serif;
+      --fm-body: "IBM Plex Sans Arabic", sans-serif;
+      --bg-dark: #111111;
+      --white: #ffffff;
+      --muted: #d8d8d8;
+      --accent: #e51d2f;
+      --glass: rgba(255, 255, 255, 0.12);
+      --border: rgba(255, 255, 255, 0.2);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      font-family: var(--fm-body);
+      color: var(--white);
+      overflow-x: hidden;
+      background: var(--bg-dark);
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(180deg, rgba(17, 17, 17, 0.92) 5%, rgba(17, 17, 17, 0.68) 45%, rgba(17, 17, 17, 0.88) 100%);
+    }
+    .container {
+      width: min(1120px, 92%);
+      margin-inline: auto;
+    }
+    header {
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .logo { width: 160px; max-width: 45vw; }
+    .header-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .header-links a:hover { color: var(--accent); opacity: 1; }
+    main { padding: 40px 0 56px; }
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+    h1 {
+      font-family: var(--fm-heading);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      max-width: 70ch;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      font-family: var(--fm-heading);
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--white);
+      padding: 11px 12px;
+      font-size: 0.92rem;
+      outline: none;
+      font-family: var(--fm-body);
+    }
+    .form-group textarea { min-height: 56px; resize: vertical; }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .form-grid .form-group--wide { grid-column: 1 / -1; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--white);
+      border-radius: 12px;
+      padding: 11px 18px;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.92rem;
+      font-family: var(--fm-body);
+      background: transparent;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-ghost {
+      border-color: var(--border);
+      background: rgba(255,255,255,0.06);
+      font-weight: 500;
+      font-size: 0.85rem;
+      padding: 8px 14px;
+    }
+    .dash-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: var(--fm-body);
+      font-size: 0.9rem;
+    }
+    .tab-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(229, 29, 47, 0.12);
+    }
+    .tab-panel[hidden] { display: none !important; }
+    .msg { font-size: 0.88rem; margin-top: 10px; }
+    .msg.ok { color: #7dffb3; }
+    .msg.err { color: #ff8a8a; }
+    .fixture-card {
+      margin-bottom: 12px;
+      padding: 0;
+      overflow: hidden;
+    }
+    .fixture-card summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255,255,255,0.05);
+      font-weight: 600;
+    }
+    .fixture-card summary::-webkit-details-marker { display: none; }
+    .fixture-summary-title {
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+    .fixture-body { padding: 16px 18px 18px; border-top: 1px solid var(--border); }
+    .name-map-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      align-items: end;
+      margin-bottom: 8px;
+    }
+    .scroll-list {
+      max-height: min(70vh, 920px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .signed-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    code { font-size: 0.85em; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <!-- Background video omitted: no ``assets/myvideo.mp4`` in repo; add file + optional <video> if you want motion like index3. -->
+  <div class="overlay"></div>
+
+  <header>
+    <div class="container header-row">
+      <a href="../index3.html" aria-label="Home"><img class="logo" src="../assets/logo.svg" alt="LuxScale"></a>
+      <nav class="header-links">
+        <a href="../index3.html">Study</a>
+        <a href="../result.html">Results</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="eyebrow">Administration</p>
+    <h1>LuxScale dashboard</h1>
+    <p class="lead">API URL is read from <code>.env</code> (<code>LUXSCALE_DASHBOARD_API_BASE</code>) when Flask starts and written to <code>assets/dashboard_config.json</code> for XAMPP. Default login: <code>luxscale</code> / <code>LuxScaleAdmin2026</code>.</p>
+
+    <div id="loginPanel" class="card">
+      <h2>Sign in</h2>
+      <div class="form-group">
+        <label for="apiBase">Flask API URL</label>
+        <input type="url" id="apiBase" placeholder="http://127.0.0.1:5000" autocomplete="off">
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="user">Username</label>
+          <input type="text" id="user" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="pass">Password</label>
+          <input type="password" id="pass" autocomplete="current-password">
+        </div>
+        <div class="form-group" style="justify-content: flex-end;">
+          <label>&nbsp;</label>
+          <button type="button" class="btn btn-primary" id="btnLogin">Login</button>
+        </div>
+      </div>
+      <p id="loginMsg" class="msg err" style="display:none;"></p>
+    </div>
+
+    <div id="dashPanel" hidden>
+      <div class="signed-bar">
+        <span style="color:#7dffb3;font-size:0.9rem;">Signed in</span>
+        <button type="button" class="btn btn-ghost" id="btnLogout">Logout</button>
+      </div>
+
+      <div class="dash-tabs" role="tablist">
+        <button type="button" class="tab-btn active" data-tab="settings">App settings</button>
+        <button type="button" class="tab-btn" data-tab="fixtures">Fixture catalog</button>
+      </div>
+
+      <div id="panelSettings" class="tab-panel card">
+        <p class="lead" style="margin-bottom:16px;">Interior/exterior split uses <strong>interior_height_max_m</strong>. <code>exterior_height_min_m</code> is stored for future use.</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="interiorMax">Interior height max (m)</label>
+            <input type="number" step="0.1" id="interiorMax">
+          </div>
+          <div class="form-group">
+            <label for="exteriorMin">Exterior height min (m)</label>
+            <input type="number" step="0.1" id="exteriorMin">
+          </div>
+          <div class="form-group">
+            <label for="maxSol">Max compliant options (stop after this many pass lux + U0)</label>
+            <input type="number" min="1" max="1000" id="maxSol" title="Search stops once this many compliant layouts are found (order follows luminaire/power sweep).">
+          </div>
+          <div class="form-group">
+            <label for="initialBatch">First batch (result page)</label>
+            <input type="number" min="1" id="initialBatch">
+          </div>
+          <div class="form-group">
+            <label for="batchSize">“View more” batch size</label>
+            <input type="number" min="1" id="batchSize">
+          </div>
+          <div class="form-group">
+            <label for="maintFactor">Maintenance factor (MF)</label>
+            <input type="number" step="0.01" min="0.35" max="1" id="maintFactor" title="Applied to emitted flux for maintained illuminance (typical 0.8–0.9).">
+          </div>
+          <div class="form-group">
+            <label for="roomPreset">Room reflectance (inter-reflection estimate)</label>
+            <select id="roomPreset" title="Scales direct grid illuminance by (1+f); not full radiosity.">
+              <option value="direct_only">Direct only</option>
+              <option value="dark">Dark room</option>
+              <option value="medium">Medium</option>
+              <option value="light">Light room</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="saveSettings">Save settings</button>
+        <p id="settingsMsg" class="msg" style="display:none;"></p>
+      </div>
+
+      <div id="panelFixtures" class="tab-panel card" hidden>
+        <div class="form-group form-group--wide">
+          <label for="fixturesBaseUrl">Fixtures image base URL</label>
+          <input type="url" id="fixturesBaseUrl" placeholder="https://…/products/">
+        </div>
+        <h2 style="font-size:1.05rem;margin:18px 0 10px;">API name → image base</h2>
+        <p class="lead" style="font-size:0.88rem;margin-bottom:10px;">Lowercase API luminaire name → filename prefix (e.g. <code>sc flood light exterior</code> → <code>SC-Flood</code>).</p>
+        <div id="nameMapBody"></div>
+        <button type="button" class="btn btn-ghost" id="btnAddNameMap" style="margin-bottom:18px;">+ Add mapping</button>
+
+        <div class="toolbar">
+          <button type="button" class="btn btn-primary" id="btnAddFixture">+ Add fixture row</button>
+          <button type="button" class="btn btn-primary" id="saveFixtures">Save fixture map</button>
+        </div>
+        <p id="fixtureMsg" class="msg" style="display:none;"></p>
+        <div id="fixtureEntries" class="scroll-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const LS_API = "luxscale_flask_api_base";
+    const LS_TOKEN = "luxscale_admin_token";
+    let fixtureMapData = null;
+
+    function escapeHtml(s) {
+      if (s == null || s === undefined) return "";
+      const d = document.createElement("div");
+      d.textContent = String(s);
+      return d.innerHTML;
+    }
+
+    async function initApiBaseFromConfig() {
+      const input = document.getElementById("apiBase");
+      try {
+        const saved = localStorage.getItem(LS_API);
+        if (saved) {
+          input.value = saved;
+          return;
+        }
+      } catch (e) { /* ignore */ }
+      try {
+        const r = await fetch(new URL("../assets/dashboard_config.json", window.location.href), { cache: "no-store" });
+        if (r.ok) {
+          const j = await r.json();
+          if (j && j.api_base) {
+            input.value = j.api_base;
+            return;
+          }
+        }
+      } catch (e) { /* ignore */ }
+      input.value = "http://127.0.0.1:5000";
+    }
+
+    function apiUrl(p) {
+      if (p.startsWith("http")) return p;
+      const path = p.startsWith("/") ? p : "/" + p;
+      let base = "";
+      try {
+        base = (document.getElementById("apiBase").value || "").trim().replace(/\/$/, "");
+      } catch (e) { /* ignore */ }
+      if (base) return new URL(path, base + "/").href;
+      const prefix = window.location.pathname.replace(/\/admin\/[^/]+$/, "").replace(/\/$/, "") || "";
+      return new URL((prefix || "") + path, window.location.origin).href;
+    }
+
+    function credentialsForApiFetch() {
+      try {
+        const apiOrigin = new URL(apiUrl("/api/admin/login")).origin;
+        return apiOrigin === window.location.origin ? "include" : "omit";
+      } catch (e) {
+        return "omit";
+      }
+    }
+
+    async function req(path, opts = {}) {
+      const headers = { ...(opts.headers || {}) };
+      try {
+        const t = sessionStorage.getItem(LS_TOKEN);
+        if (t) headers["X-Admin-Token"] = t;
+      } catch (e) { /* ignore */ }
+      return fetch(apiUrl(path), { credentials: credentialsForApiFetch(), ...opts, headers });
+    }
+
+    function tabSwitch(name) {
+      document.querySelectorAll(".tab-btn").forEach((b) => {
+        b.classList.toggle("active", b.getAttribute("data-tab") === name);
+      });
+      document.getElementById("panelSettings").hidden = name !== "settings";
+      document.getElementById("panelFixtures").hidden = name !== "fixtures";
+    }
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => tabSwitch(btn.getAttribute("data-tab")));
+    });
+
+    function emptyEntry() {
+      return {
+        api_luminaire_name: "",
+        power_w: 0,
+        relative_ies_path: "",
+        photometry_json: "",
+        ies_file_exists: true,
+        image_file_base: "",
+        image_extension: "webp",
+        image_urls: ["", "", "", ""],
+        online: {
+          product_id: "",
+          product_url: "",
+          product_title: "",
+          category_id: "",
+          match_note: null,
+        },
+      };
+    }
+
+    function buildFixtureCardHtml(e, index) {
+      const urls = (e.image_urls || ["", "", "", ""]).slice(0, 4);
+      while (urls.length < 4) urls.push("");
+      const on = e.online || {};
+      const note = on.match_note == null || on.match_note === undefined ? "" : String(on.match_note);
+      const title = `${e.api_luminaire_name || "New fixture"} · ${e.power_w != null ? e.power_w : "?"}W`;
+      return `
+<details class="fixture-card card" data-entry-index="${index}" ${index < 3 ? "open" : ""}>
+  <summary class="fixture-summary">
+    <span class="fixture-summary-title">${escapeHtml(title)}</span>
+    <button type="button" class="btn btn-ghost" data-remove-idx="${index}">Remove</button>
+  </summary>
+  <div class="fixture-body">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Luminaire name (API)</label>
+        <input class="js-luminaire" type="text" value="${escapeHtml(e.api_luminaire_name || "")}">
+      </div>
+      <div class="form-group">
+        <label>Power (W)</label>
+        <input class="js-power" type="number" step="any" value="${escapeHtml(e.power_w != null ? e.power_w : "")}">
+      </div>
+      <div class="form-group form-group--wide">
+        <label>Relative IES path</label>
+        <input class="js-rel-ies" type="text" value="${escapeHtml(e.relative_ies_path || "")}">
+      </div>
+      <div class="form-group form-group--wide">
+        <label>Photometry JSON path</label>
+        <input class="js-photo-json" type="text" value="${escapeHtml(e.photometry_json || "")}">
+      </div>
+      <div class="form-group">
+        <label>Image file base</label>
+        <input class="js-img-base" type="text" value="${escapeHtml(e.image_file_base || "")}">
+      </div>
+      <div class="form-group">
+        <label>Image extension</label>
+        <input class="js-img-ext" type="text" value="${escapeHtml(e.image_extension || "webp")}">
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input class="js-ies-exists" type="checkbox" ${e.ies_file_exists !== false ? "checked" : ""}>
+          <span>IES file exists</span>
+        </label>
+      </div>
+    </div>
+    <p style="margin:12px 0 6px;font-size:0.86rem;color:var(--muted);">Image URLs (4 frames)</p>
+    <div class="form-grid">
+      ${[0, 1, 2, 3].map((i) => `
+        <div class="form-group">
+          <label>URL ${i + 1}</label>
+          <input class="js-url-${i}" type="url" value="${escapeHtml(urls[i] || "")}">
+        </div>`).join("")}
+    </div>
+    <p style="margin:14px 0 6px;font-size:0.86rem;color:var(--muted);">Online / storefront (optional)</p>
+    <div class="form-grid">
+      <div class="form-group"><label>Product ID</label><input class="js-oid" type="text" value="${escapeHtml(on.product_id || "")}"></div>
+      <div class="form-group"><label>Product URL</label><input class="js-ourl" type="url" value="${escapeHtml(on.product_url || "")}"></div>
+      <div class="form-group form-group--wide"><label>Product title</label><input class="js-otitle" type="text" value="${escapeHtml(on.product_title || "")}"></div>
+      <div class="form-group"><label>Category ID</label><input class="js-ocat" type="text" value="${escapeHtml(on.category_id || "")}"></div>
+      <div class="form-group form-group--wide"><label>Match note</label><textarea class="js-onote">${escapeHtml(note)}</textarea></div>
+    </div>
+  </div>
+</details>`;
+    }
+
+    function renderFixtures() {
+      const wrap = document.getElementById("fixtureEntries");
+      if (!fixtureMapData || !Array.isArray(fixtureMapData.entries)) {
+        wrap.innerHTML = "";
+        return;
+      }
+      wrap.innerHTML = fixtureMapData.entries.map((e, i) => buildFixtureCardHtml(e, i)).join("");
+      wrap.querySelectorAll("[data-remove-idx]").forEach((btn) => {
+        btn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          const i = Number(btn.getAttribute("data-remove-idx"));
+          fixtureMapData.entries.splice(i, 1);
+          renderFixtures();
+        });
+      });
+    }
+
+    function renderNameMap(map) {
+      const body = document.getElementById("nameMapBody");
+      body.innerHTML = "";
+      const entries = Object.entries(map || {});
+      if (!entries.length) {
+        body.innerHTML = "<p class=\"lead\" style=\"font-size:0.88rem;\">No mappings yet — add one below.</p>";
+        return;
+      }
+      entries.forEach(([k, v]) => {
+        const row = document.createElement("div");
+        row.className = "name-map-row";
+        row.innerHTML = `
+          <div class="form-group"><label>API name (lowercase)</label><input class="js-nm-key" type="text" value="${escapeHtml(k)}"></div>
+          <div class="form-group"><label>Image base</label><input class="js-nm-val" type="text" value="${escapeHtml(v)}"></div>
+          <button type="button" class="btn btn-ghost rm-nm">×</button>`;
+        row.querySelector(".rm-nm").onclick = () => { row.remove(); };
+        body.appendChild(row);
+      });
+    }
+
+    function collectNameMap() {
+      const out = {};
+      document.querySelectorAll("#nameMapBody .name-map-row").forEach((row) => {
+        const k = (row.querySelector(".js-nm-key")?.value || "").trim().toLowerCase().replace(/\s+/g, " ");
+        const v = (row.querySelector(".js-nm-val")?.value || "").trim();
+        if (k && v) out[k] = v;
+      });
+      return out;
+    }
+
+    function collectEntryFromCard(details) {
+      const q = (sel) => details.querySelector(sel);
+      const urls = [0, 1, 2, 3].map((i) => (q(`.js-url-${i}`)?.value || "").trim());
+      const noteRaw = (q(".js-onote")?.value || "").trim();
+      return {
+        api_luminaire_name: (q(".js-luminaire")?.value || "").trim(),
+        power_w: Number(q(".js-power")?.value) || 0,
+        relative_ies_path: (q(".js-rel-ies")?.value || "").trim(),
+        photometry_json: (q(".js-photo-json")?.value || "").trim(),
+        ies_file_exists: !!q(".js-ies-exists")?.checked,
+        image_file_base: (q(".js-img-base")?.value || "").trim(),
+        image_extension: (q(".js-img-ext")?.value || "").trim() || "webp",
+        image_urls: urls,
+        online: {
+          product_id: (q(".js-oid")?.value || "").trim(),
+          product_url: (q(".js-ourl")?.value || "").trim(),
+          product_title: (q(".js-otitle")?.value || "").trim(),
+          category_id: (q(".js-ocat")?.value || "").trim(),
+          match_note: noteRaw === "" ? null : noteRaw,
+        },
+      };
+    }
+
+    function collectFixtureMap() {
+      const out = JSON.parse(JSON.stringify(fixtureMapData));
+      out.fixtures_base_url = (document.getElementById("fixturesBaseUrl").value || "").trim() || out.fixtures_base_url;
+      out.api_name_to_image_base = collectNameMap();
+      out.entries = [];
+      document.querySelectorAll("#fixtureEntries details[data-entry-index]").forEach((details) => {
+        out.entries.push(collectEntryFromCard(details));
+      });
+      return out;
+    }
+
+    document.getElementById("btnAddNameMap").onclick = () => {
+      const body = document.getElementById("nameMapBody");
+      if (body.querySelector("p.lead")) body.innerHTML = "";
+      const row = document.createElement("div");
+      row.className = "name-map-row";
+      row.innerHTML = `
+        <div class="form-group"><label>API name (lowercase)</label><input class="js-nm-key" type="text" value=""></div>
+        <div class="form-group"><label>Image base</label><input class="js-nm-val" type="text" value=""></div>
+        <button type="button" class="btn btn-ghost rm-nm">×</button>`;
+      row.querySelector(".rm-nm").onclick = () => { row.remove(); };
+      body.appendChild(row);
+    };
+
+    document.getElementById("btnAddFixture").onclick = () => {
+      if (!fixtureMapData.entries) fixtureMapData.entries = [];
+      fixtureMapData.entries.push(emptyEntry());
+      renderFixtures();
+    };
+
+    document.getElementById("btnLogin").onclick = async () => {
+      const msg = document.getElementById("loginMsg");
+      msg.style.display = "none";
+      try { sessionStorage.removeItem(LS_TOKEN); } catch (e) { /* ignore */ }
+      const r = await req("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("user").value,
+          password: document.getElementById("pass").value,
+        }),
+      });
+      const raw = await r.text();
+      let d = {};
+      try { d = JSON.parse(raw); } catch (e) { d = {}; }
+      if (!r.ok) {
+        msg.style.display = "block";
+        msg.textContent = r.status === 404
+          ? "API not found (404). Set Flask API URL and start the app, or open this page from Flask."
+          : (d.message || "Login failed");
+        return;
+      }
+      if (d.token) {
+        try { sessionStorage.setItem(LS_TOKEN, d.token); } catch (e) { /* ignore */ }
+      }
+      const b = document.getElementById("apiBase").value.trim().replace(/\/$/, "");
+      if (b) {
+        try { localStorage.setItem(LS_API, b); } catch (e) { /* ignore */ }
+      }
+      document.getElementById("loginPanel").hidden = true;
+      document.getElementById("dashPanel").hidden = false;
+      loadSettings();
+      loadFixtures();
+    };
+
+    document.getElementById("btnLogout").onclick = async () => {
+      await req("/api/admin/logout", { method: "POST" });
+      try { sessionStorage.removeItem(LS_TOKEN); } catch (e) { /* ignore */ }
+      document.getElementById("dashPanel").hidden = true;
+      document.getElementById("loginPanel").hidden = false;
+    };
+
+    async function loadSettings() {
+      const r = await req("/api/admin/settings");
+      if (!r.ok) return;
+      const s = await r.json();
+      document.getElementById("interiorMax").value = s.calc?.interior_height_max_m ?? 5;
+      document.getElementById("exteriorMin").value = s.calc?.exterior_height_min_m ?? 5;
+      document.getElementById("maxSol").value = s.calc?.max_solutions_total ?? 80;
+      document.getElementById("initialBatch").value = s.ui?.results_initial_count ?? 3;
+      document.getElementById("batchSize").value = s.ui?.results_batch_size ?? 3;
+      document.getElementById("maintFactor").value = s.calc?.maintenance_factor ?? 0.8;
+      const rp = s.calc?.room_reflectance_preset ?? "medium";
+      const sel = document.getElementById("roomPreset");
+      if (sel && [...sel.options].some((o) => o.value === rp)) sel.value = rp;
+    }
+
+    document.getElementById("saveSettings").onclick = async () => {
+      const msg = document.getElementById("settingsMsg");
+      msg.style.display = "block";
+      msg.textContent = "Saving…";
+      const body = {
+        ui: {
+          results_initial_count: Number(document.getElementById("initialBatch").value),
+          results_batch_size: Number(document.getElementById("batchSize").value),
+          show_compliance_margin_fields: true,
+        },
+        calc: {
+          max_solutions_total: Number(document.getElementById("maxSol").value),
+          interior_height_max_m: Number(document.getElementById("interiorMax").value),
+          exterior_height_min_m: Number(document.getElementById("exteriorMin").value),
+          maintenance_factor: Number(document.getElementById("maintFactor").value),
+          room_reflectance_preset: String(document.getElementById("roomPreset").value || "medium"),
+        },
+      };
+      const r = await req("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const d = await r.json().catch(() => ({}));
+      msg.className = "msg " + (r.ok ? "ok" : "err");
+      msg.textContent = r.ok ? "Saved." : (d.message || "Save failed");
+    };
+
+    async function loadFixtures() {
+      const r = await req("/api/admin/fixture-map");
+      const msg = document.getElementById("fixtureMsg");
+      if (!r.ok) {
+        msg.style.display = "block";
+        msg.className = "msg err";
+        msg.textContent = "Could not load fixture map.";
+        return;
+      }
+      fixtureMapData = await r.json();
+      document.getElementById("fixturesBaseUrl").value = fixtureMapData.fixtures_base_url || "";
+      renderNameMap(fixtureMapData.api_name_to_image_base || {});
+      renderFixtures();
+    }
+
+    document.getElementById("saveFixtures").onclick = async () => {
+      const msg = document.getElementById("fixtureMsg");
+      msg.style.display = "block";
+      let merged;
+      try {
+        merged = collectFixtureMap();
+      } catch (e) {
+        msg.className = "msg err";
+        msg.textContent = "Error building data: " + e.message;
+        return;
+      }
+      const r = await req("/api/admin/fixture-map", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(merged),
+      });
+      const d = await r.json().catch(() => ({}));
+      msg.className = "msg " + (r.ok ? "ok" : "err");
+      msg.textContent = r.ok ? "Saved fixture_map.json" : (d.message || "Save failed");
+      if (r.ok) fixtureMapData = merged;
+    };
+
+    (async function boot() {
+      await initApiBaseFromConfig();
+    })();
+  </script>
+</body>
+</html>

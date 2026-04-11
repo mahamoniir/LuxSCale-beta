@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "generated_note": "examples/SC_FIXED snapshot; runtime uses merged_ies_relative_map().",
+  "entries": [
+    {
+      "api_luminaire_name": "SC backlight",
+      "power_w": 32,
+      "relative_ies": "examples/SC_FIXED/SC_PANEL_32W_60x60cm_4000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC backlight",
+      "power_w": 35,
+      "relative_ies": "examples/SC_FIXED/SC_PANEL_35W_62x62cm_CCT.IES"
+    },
+    {
+      "api_luminaire_name": "SC downlight",
+      "power_w": 9,
+      "relative_ies": "examples/SC_FIXED/SC_SPOT_10W_IP65_CCT.IES"
+    },
+    {
+      "api_luminaire_name": "SC downlight",
+      "power_w": 10,
+      "relative_ies": "examples/SC_FIXED/SC_SPOT_10W_IP65_CCT.IES"
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 100,
+      "relative_ies": "examples/SC_FIXED/GL-FL-AC27-101520W-345K-D-S_100W_4000K_IESNA2002 (1).IES"
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 150,
+      "relative_ies": "examples/SC_FIXED/GL-FL-AC27-101520W-345K-D-S_150W_4000K_IESNA2002 (1).IES"
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 200,
+      "relative_ies": "examples/SC_FIXED/GL-FL-AC27-101520W-345K-D-S_200W_4000K_IESNA2002 (1).IES"
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 100,
+      "relative_ies": "examples/SC_FIXED/SC_ECO_HIGHBAY_100W_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 150,
+      "relative_ies": "examples/SC_FIXED/SC_ECO_HIGHBAY_150W_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 200,
+      "relative_ies": "examples/SC_FIXED/SC_ECO_HIGHBAY_200W_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC street",
+      "power_w": 30,
+      "relative_ies": "examples/SC_FIXED/SC_STREETLIGHT_30W_4000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC street",
+      "power_w": 60,
+      "relative_ies": "examples/SC_FIXED/SC_STREETLIGHT_60W_4000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC triproof",
+      "power_w": 30,
+      "relative_ies": "examples/SC_FIXED/SC_TRIPROOF_30W_120cm_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SC triproof",
+      "power_w": 40,
+      "relative_ies": "examples/SC_FIXED/SC_TRIPROOF_40W_150cm_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 100,
+      "relative_ies": "examples/SC_FIXED/SC_SV_FLOOD_100W_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 150,
+      "relative_ies": "examples/SC_FIXED/SC_SV_FLOOD_150W_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 200,
+      "relative_ies": "examples/SC_FIXED/SC_SV_FLOOD_200W_5000K.IES"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 300,
+      "relative_ies": "examples/SC_FIXED/SC_SV_FLOOD_300W_5000K.IES"
+    }
+  ]
+}

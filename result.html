@@ -22,9 +22,7 @@
       --border: rgba(255, 255, 255, 0.2);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       min-height: 100vh;
@@ -47,7 +45,7 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      background: linear-gradient(180deg, rgba(17, 17, 17, 0.92) 5%, rgba(17, 17, 17, 0.68) 45%, rgba(17, 17, 17, 0.85) 100%);
+      background: linear-gradient(180deg, rgba(17,17,17,0.92) 5%, rgba(17,17,17,0.68) 45%, rgba(17,17,17,0.85) 100%);
     }
 
     .page-shell {
@@ -57,7 +55,7 @@
 
     .topbar {
       padding: 20px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+      border-bottom: 1px solid rgba(255,255,255,0.22);
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
       margin-bottom: 28px;
@@ -70,14 +68,9 @@
       gap: 12px;
     }
 
-    .logo {
-      width: 160px;
-      max-width: 48vw;
-    }
+    .logo { width: 160px; max-width: 48vw; }
 
-    .content-wrap {
-      padding-bottom: 40px;
-    }
+    .content-wrap { padding-bottom: 40px; }
 
     .title-row {
       display: flex;
@@ -91,7 +84,7 @@
     .eyebrow {
       display: inline-block;
       padding: 6px 11px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255,255,255,0.4);
       border-radius: 999px;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -109,9 +102,7 @@
       line-height: 1.03;
     }
 
-    #projectSummary {
-      margin-bottom: 16px !important;
-    }
+    #projectSummary { margin-bottom: 16px !important; }
 
     .summary-card {
       background: var(--glass);
@@ -122,9 +113,7 @@
       color: var(--white);
     }
 
-    .summary-card .text-muted {
-      color: var(--muted) !important;
-    }
+    .summary-card .text-muted { color: var(--muted) !important; }
 
     .summary-card .card-title {
       font-family: var(--fm-heading);
@@ -148,7 +137,7 @@
       overflow: hidden;
       position: relative;
       cursor: grab;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.06);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -164,9 +153,8 @@
       pointer-events: none;
       -webkit-user-drag: none;
     }
-    .card .card-body {
-      padding-bottom: 1rem;
-    }
+
+    .card .card-body { padding-bottom: 1rem; }
 
     .card .card-title {
       color: var(--white);
@@ -178,20 +166,17 @@
     .list-group.list-group-flush {
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255,255,255,0.12);
     }
 
     .list-group-item {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.06);
       color: var(--white);
-      border-color: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255,255,255,0.12);
       font-size: 0.92rem;
     }
 
-    .list-group-item strong {
-      color: #ffffff;
-      font-weight: 600;
-    }
+    .list-group-item strong { color: #ffffff; font-weight: 600; }
 
     .card .controls {
       gap: .55rem;
@@ -207,9 +192,7 @@
       transition: 0.2s ease !important;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-    }
+    .btn:hover { transform: translateY(-1px); }
 
     .btn-success,
     .btn-primary {
@@ -220,43 +203,64 @@
 
     .btn-outline-primary,
     .btn-warning {
-      background: rgba(255, 255, 255, 0.08) !important;
-      border-color: rgba(255, 255, 255, 0.35) !important;
+      background: rgba(255,255,255,0.08) !important;
+      border-color: rgba(255,255,255,0.35) !important;
       color: #fff !important;
     }
 
     .btn-danger {
-      background: rgba(229, 29, 47, 0.15) !important;
-      border-color: rgba(229, 29, 47, 0.9) !important;
+      background: rgba(229,29,47,0.15) !important;
+      border-color: rgba(229,29,47,0.9) !important;
       color: #fff !important;
     }
 
-    #resultsContainer .col-md-4 {
-      display: flex;
+    .btn-polar {
+      background: rgba(229,29,47,0.18) !important;
+      border-color: var(--accent) !important;
+      color: #fff !important;
+    }
+    .btn-polar:hover {
+      background: rgba(229,29,47,0.38) !important;
     }
 
-    #resultsContainer .col-md-4 > .card {
-      width: 100%;
+    /* PDF loading spinner overlay */
+    #pdfLoadingOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+    }
+    #pdfLoadingOverlay.active { display: flex; }
+    .pdf-spinner {
+      width: 52px; height: 52px;
+      border: 4px solid rgba(255,255,255,0.15);
+      border-top-color: #e51d2f;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pdf-loading-text {
+      color: #fff;
+      font-family: var(--fm-body);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
     }
 
-    @media (max-width: 767px) {
-      .viewer {
-        height: 180px;
-      }
-    }
+    #resultsContainer .col-md-4 { display: flex; }
+    #resultsContainer .col-md-4 > .card { width: 100%; }
+
+    @media (max-width: 767px) { .viewer { height: 180px; } }
 
     @media (max-width: 620px) {
-      .controls .btn {
-        width: 100%;
-      }
-
-      .topbar {
-        margin-bottom: 20px;
-      }
-
-      .page-title {
-        font-size: clamp(1.6rem, 8vw, 2.2rem);
-      }
+      .controls .btn { width: 100%; }
+      .topbar { margin-bottom: 20px; }
+      .page-title { font-size: clamp(1.6rem, 8vw, 2.2rem); }
     }
   </style>
 </head>
@@ -266,10 +270,16 @@
   </video>
   <div class="overlay"></div>
 
+  <!-- PDF loading overlay -->
+  <div id="pdfLoadingOverlay">
+    <div class="pdf-spinner"></div>
+    <div class="pdf-loading-text" id="pdfLoadingText">Generating PDF report…</div>
+  </div>
+
   <header class="topbar">
     <div class="page-shell topbar-inner">
       <a href="index2.html" aria-label="Go to homepage">
-        <img class="logo" src="assets/logo.svg" alt="LuxScale Logo">
+        <img class="logo" src="assets/logo.svg" alt="Short Circuit Logo">
       </a>
       <a class="btn btn-outline-primary" href="index2.html">New Study</a>
     </div>
@@ -283,46 +293,159 @@
       </div>
       <div class="d-flex gap-2">
         <button id="downloadBtn" class="btn btn-success">Download CSV</button>
-        <button id="pdfBtn" class="btn btn-primary">Download PDF</button>
+        <button id="pdfBtn" class="btn btn-primary">Download Full PDF</button>
       </div>
     </div>
 
     <div id="projectSummary" class="mb-3"></div>
 
-    <div id="resultsContainer" class="row g-4">
-      <!-- Cards will be injected here -->
+    <div id="resultsAnalysis" class="alert alert-info py-2 px-3 small mb-3" style="display:none;" role="status"></div>
+    <div id="noCompliantBanner" class="alert alert-warning py-2 px-3 mb-3" style="display:none;" role="alert"></div>
+    <div id="fixtureFamilyShortfall" class="alert alert-warning py-2 px-3 mb-3 small" style="display:none;" role="status"></div>
+
+    <div id="resultsContainer" class="row g-4"></div>
+
+    <div id="viewMoreWrap" class="text-center my-4" style="display:none;">
+      <button type="button" class="btn btn-outline-primary btn-lg" id="viewMoreBtn">View more options</button>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="assets/standard-display.js"></script>
 
 <script>
-/* === CONFIG === */
+/* ================================================================
+   CONFIG
+================================================================ */
 const API_ENDPOINTS = (() => {
   const fromCurrentPage = new URL("./api/get.php", window.location.href).toString();
-  const sameOriginRoot = new URL("/api/get.php", window.location.origin).toString();
-  const projectRoot = new URL("/LuxSCaleAI/api/get.php", window.location.origin).toString();
-  const endpoints = [fromCurrentPage, sameOriginRoot, projectRoot];
-
-  // Keep localhost endpoint only for local development.
-  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-    endpoints.unshift("http://localhost/sc-luxscaleai/api/get.php");
+  const sameOriginRoot  = new URL("/api/get.php", window.location.origin).toString();
+  const projectRoot     = new URL("/LuxScaleAI/api/get.php", window.location.origin).toString();
+  const endpoints = [fromCurrentPage, projectRoot, sameOriginRoot];
+  const h = window.location.hostname;
+  if (h === "localhost" || h === "127.0.0.1") {
+    endpoints.push("http://127.0.0.1:5000/api/get");
+    endpoints.push("http://localhost:5000/api/get");
+    endpoints.push("http://localhost/sc-luxscaleai/api/get.php");
   }
-
   return [...new Set(endpoints)];
 })();
+
+const FLASK_BASE = (() => {
+  const h = window.location.hostname;
+  if (h === "localhost" || h === "127.0.0.1") return "http://127.0.0.1:5000";
+  return "";
+})();
+
 const FIXTURES_BASE = "https://shortcircuit.company/assets/img/products/";
-const PLACEHOLDER = FIXTURES_BASE + "placeholder.png"; // provide a placeholder image
-const COMPANY_WHATSAPP_NUMBER = "201000948297"; // wa.me format: country code + number, no + or spaces
-/* ============ */
+const PLACEHOLDER   = FIXTURES_BASE + "placeholder.png";
+const COMPANY_WHATSAPP_NUMBER = "201000948297";
+const FIXTURE_MAP_ASSET = "assets/fixture_map_SC_IES_Fixed_v3.json";
 
 let results = [];
-let request = {};
+let allResults = [];
+let resultsDisplayed = 0;
+let uiPaging = { initial: 3, batch: 3 };
+let calculationMeta = {};
+let fixtureMapDoc = undefined;
+let request  = {};
 let customer = {};
-const RESULT_LINKS_KEY = "luxscale_result_links";
-const RESULT_LINK_TTL_MS = 60 * 60 * 1000; // 1 hour
 
-// Helpers to read token
+const RESULT_LINKS_KEY  = "luxscale_result_links";
+const RESULT_LINK_TTL_MS = 60 * 60 * 1000;
+
+/* ================================================================
+   PDF HELPERS — route through Flask backend (generate_report.py)
+   No pdf-lib / Unicode issues.
+================================================================ */
+
+function showPdfLoading(msg) {
+  const overlay = document.getElementById("pdfLoadingOverlay");
+  const text    = document.getElementById("pdfLoadingText");
+  if (text) text.textContent = msg || "Generating PDF report…";
+  if (overlay) overlay.classList.add("active");
+}
+
+function hidePdfLoading() {
+  const overlay = document.getElementById("pdfLoadingOverlay");
+  if (overlay) overlay.classList.remove("active");
+}
+
+/**
+ * Download a PDF from the Flask backend and trigger browser save-dialog.
+ * @param {string} url        - Flask endpoint URL
+ * @param {string} filename   - suggested download filename
+ */
+async function downloadPdfFromFlask(url, filename) {
+  showPdfLoading("Generating PDF report…");
+  try {
+    const res = await fetch(url, { method: "GET" });
+    if (!res.ok) {
+      let errMsg = `Server error ${res.status}`;
+      try {
+        const ct = res.headers.get("content-type") || "";
+        if (ct.includes("application/json")) {
+          const j = await res.json();
+          errMsg = j.error || j.message || errMsg;
+        } else {
+          errMsg = (await res.text()).slice(0, 200) || errMsg;
+        }
+      } catch (_) {}
+      throw new Error(errMsg);
+    }
+    const blob = await res.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(link.href);
+  } finally {
+    hidePdfLoading();
+  }
+}
+
+/**
+ * Full-report PDF — all solutions.
+ */
+async function downloadFullReportPdf() {
+  const token = getToken();
+  if (!token) { alert("No token found."); return; }
+  const url = `${FLASK_BASE}/api/report/${encodeURIComponent(token)}/full`;
+  const filename = `SC_LuxScale_Report_${token.slice(0, 8)}.pdf`;
+  try {
+    await downloadPdfFromFlask(url, filename);
+  } catch (err) {
+    console.error("Full PDF error:", err);
+    alert("Failed to generate full PDF report.\n" + err.message);
+  }
+}
+
+/**
+ * Single-solution PDF — one option.
+ * @param {number} index - 0-based solution index
+ * @param {HTMLElement} [btn] - the button that was clicked (for spinner state)
+ */
+async function downloadSolutionPdf(index, btn) {
+  const token = getToken();
+  if (!token) { alert("No token found."); return; }
+  const url = `${FLASK_BASE}/api/report/${encodeURIComponent(token)}/solution/${index}`;
+  const filename = `SC_LuxScale_Solution_${index + 1}_${token.slice(0, 8)}.pdf`;
+  const origText = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "Generating…"; }
+  try {
+    await downloadPdfFromFlask(url, filename);
+  } catch (err) {
+    console.error("Solution PDF error:", err);
+    alert(`Failed to generate PDF for Solution ${index + 1}.\n` + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText || "PDF"; }
+  }
+}
+
+/* ================================================================
+   TOKEN / LOCAL-STORAGE
+================================================================ */
 function getToken() {
   return new URLSearchParams(window.location.search).get("token");
 }
@@ -330,26 +453,22 @@ function getToken() {
 function getStoredLinksRaw() {
   try {
     const raw = JSON.parse(localStorage.getItem(RESULT_LINKS_KEY) || "[]");
-    return Array.isArray(raw) ? raw.filter((item) => typeof item === "string" && item.length > 0) : [];
-  } catch (error) {
-    return [];
-  }
+    return Array.isArray(raw) ? raw.filter(item => typeof item === "string" && item.length > 0) : [];
+  } catch { return []; }
 }
 
 function getStoredAtFromLink(link) {
   try {
     const parsed = new URL(link, window.location.origin);
-    const storedAtValue = Number(parsed.searchParams.get("stored_at"));
-    return Number.isFinite(storedAtValue) ? storedAtValue : 0;
-  } catch (error) {
-    return 0;
-  }
+    const v = Number(parsed.searchParams.get("stored_at"));
+    return Number.isFinite(v) ? v : 0;
+  } catch { return 0; }
 }
 
 function getValidResultLinks() {
   const now = Date.now();
   const validLinks = getStoredLinksRaw()
-    .filter((link) => now - getStoredAtFromLink(link) <= RESULT_LINK_TTL_MS)
+    .filter(link => now - getStoredAtFromLink(link) <= RESULT_LINK_TTL_MS)
     .sort((a, b) => getStoredAtFromLink(b) - getStoredAtFromLink(a));
   localStorage.setItem(RESULT_LINKS_KEY, JSON.stringify(validLinks));
   return validLinks;
@@ -362,776 +481,827 @@ function saveCurrentResultLink() {
   linkUrl.searchParams.set("token", token);
   linkUrl.searchParams.set("stored_at", String(Date.now()));
   const currentLink = linkUrl.pathname + linkUrl.search;
-
-  const existing = getValidResultLinks().filter((item) => item !== currentLink);
+  const existing = getValidResultLinks().filter(item => item !== currentLink);
   existing.unshift(currentLink);
   localStorage.setItem(RESULT_LINKS_KEY, JSON.stringify(existing.slice(0, 20)));
 }
 
-// CSV generator (single implementation)
-function generateCSV(data) {
-  if (!data || !data.length) return "";
-  const headers = [
-    "Luminaire", "Power (W)", "Efficacy (lm/W)", "Fixtures",
-    "Spacing X (m)", "Spacing Y (m)", "Average Lux", "Uniformity", "Total Power (W)"
-  ];
+/* ================================================================
+   CSV
+================================================================ */
+function standardLightingCsvRows(requestObj) {
+  if (!requestObj?.standard_lighting) return [];
+  const sl = requestObj.standard_lighting;
+  const L = typeof LuxStandardDisplay !== "undefined" ? LuxStandardDisplay : null;
+  const aliases = L ? L.getAliases() : null;
+  const lines = ["Section,Standard key,Label (aliases_upgraded),Value"];
+  const entries = L ? L.standardEntriesInOrder(sl) : [];
+  const esc = s => String(s).replace(/"/g, '""');
+  if (entries.length) {
+    entries.forEach(({ key, value }) => {
+      if (value === undefined || value === null) return;
+      const label = L ? L.labelForStandardField(key, aliases) : key;
+      const val   = L ? L.valueToDisplayString(value) : String(value);
+      lines.push(`Standard,${esc(key)},"${esc(label)}","${esc(val)}"`);
+    });
+  } else {
+    Object.keys(sl).forEach(k => {
+      const value = sl[k];
+      if (value === undefined || value === null) return;
+      lines.push(`Standard,${esc(k)},"${esc(k)}","${esc(String(value))}"`);
+    });
+  }
+  return lines;
+}
+
+const BEAM_ANGLE_KEY = "Beam Angle (deg)";
+
+function coerceBeamDeg(v) {
+  if (v === undefined || v === null || v === "") return undefined;
+  const n = typeof v === "number" ? v : Number(String(v).replace(",", "."));
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function beamAngleValueFromRow(r) {
+  if (!r || typeof r !== "object") return undefined;
+  const degKey = "Beam Angle (\u00B0)";
   const keys = [
-    "luminaire", "power", "efficacy", "fixtures",
-    "spacing_x", "spacing_y", "avg_lux", "uniformity", "total_power"
+    r.beam_angle_deg, r[BEAM_ANGLE_KEY], r["Beam angle (deg)"],
+    r[degKey], r["Beam Angle (Â°)"], r.beam_angle, r["Beam Angle"],
   ];
-  const csv = [headers.join(",")];
-  data.forEach(row => {
-    csv.push(keys.map(k => `"${row[k] ?? ""}"`).join(","));
-  });
-  return csv.join("\n");
+  for (let i = 0; i < keys.length; i++) {
+    const n = coerceBeamDeg(keys[i]);
+    if (n !== undefined) return Math.abs(n);
+  }
+  return undefined;
+}
+
+const CALC_RESULT_KEY_ORDER = [
+  "Luminaire","Power (W)","Efficacy (lm/W)","Fixtures",
+  "Spacing X (m)","Spacing Y (m)","Average Lux","Uniformity",
+  "U0_calculated","U1_calculated","E_min_grid_lx","E_avg_grid_lx","E_max_grid_lx",
+  "Total Power (W/H)", BEAM_ANGLE_KEY, "Beam angle note","Compliance note"
+];
+
+const CALC_RESULT_LEGACY_KEYS = new Set([
+  "luminaire","power","efficacy","fixtures","spacing_x","spacing_y",
+  "avg_lux","uniformity","total_power","beam_angle"
+]);
+
+const CALC_FIELD_VERBOSE_LABEL = {
+  _room_width_m:"Room width (m)", _room_length_m:"Room length (m)",
+  _room_height_m:"Ceiling height (m)", _standard_ref:"Standard reference (ref. no.)",
+  _standard_em_r_lx:"Standard Em,r (lx)", _standard_uo:"Standard Uo (ratio)",
+  _standard_ra:"CRI (Ra)", _standard_rugl:"Standard RUGL / UGR",
+  Luminaire:"Luminaire type", "Power (W)":"Luminaire power (W)",
+  "Efficacy (lm/W)":"Luminous efficacy (lm/W)", Fixtures:"Number of fixtures",
+  "Spacing X (m)":"Spacing along room width (m)",
+  "Spacing Y (m)":"Spacing along room length (m)",
+  "Average Lux":"Achieved average illuminance (lx)",
+  Uniformity:"Standard Uo (required)", U0_calculated:"Calculated Uo (IES grid)",
+  U1_calculated:"Calculated U1 (E_min/E_max)", E_min_grid_lx:"E_min on grid (lx)",
+  E_avg_grid_lx:"E_avg on grid (lx)", E_max_grid_lx:"E_max on grid (lx)",
+  "Total Power (W/H)":"Total installed power (W)",
+  [BEAM_ANGLE_KEY]:"Beam angle (deg)",
+  "Beam angle note":"Beam angle note (IES convention)",
+  Selection:"How this option was chosen",
+  "Compliance note":"Compliance note (best effort in this room)"
+};
+
+const CALC_OPTION_SECTIONS = [
+  { title:"Room & study",       keys:["_room_width_m","_room_length_m","_room_height_m","_standard_ref","_standard_em_r_lx","_standard_uo","_standard_ra","_standard_rugl"] },
+  { title:"Luminaire & layout", keys:["Luminaire","Power (W)","Fixtures","Spacing X (m)","Spacing Y (m)",BEAM_ANGLE_KEY] },
+  { title:"Performance",        keys:["Efficacy (lm/W)","Average Lux","Uniformity","U0_calculated","U1_calculated","E_min_grid_lx","E_avg_grid_lx","E_max_grid_lx","Total Power (W/H)","Beam angle note"] },
+  { title:"Record",             keys:["Selection","created_at","updated_at","id"] }
+];
+
+function normalizeCalcResultRow(r) {
+  if (!r || typeof r !== "object") return r;
+  const base = {
+    "Luminaire":        r["Luminaire"]        ?? r.luminaire,
+    "Power (W)":        r["Power (W)"]        ?? r.power,
+    "Efficacy (lm/W)":  r["Efficacy (lm/W)"]  ?? r.efficacy,
+    "Fixtures":         r["Fixtures"]         ?? r.fixtures,
+    "Spacing X (m)":    r["Spacing X (m)"]    ?? r.spacing_x,
+    "Spacing Y (m)":    r["Spacing Y (m)"]    ?? r.spacing_y,
+    "Average Lux":      r["Average Lux"]      ?? r.avg_lux,
+    "Uniformity":       r["Uniformity"]       ?? r.uniformity,
+    "U0_calculated":    r["U0_calculated"]    ?? r.u0_calculated,
+    "U1_calculated":    r["U1_calculated"]    ?? r.u1_calculated,
+    "E_min_grid_lx":    r["E_min_grid_lx"]    ?? r.e_min_grid_lx,
+    "E_avg_grid_lx":    r["E_avg_grid_lx"]    ?? r.e_avg_grid_lx,
+    "E_max_grid_lx":    r["E_max_grid_lx"]    ?? r.e_max_grid_lx,
+    "Total Power (W/H)":r["Total Power (W/H)"]?? r.total_power,
+    [BEAM_ANGLE_KEY]:   beamAngleValueFromRow(r),
+    "Beam angle note":  r["Beam angle note"]  ?? r.beam_angle_note,
+    "Compliance note":  r["Compliance note"]  ?? r.compliance_note
+  };
+  const out = {};
+  CALC_RESULT_KEY_ORDER.forEach(k => { const v = base[k]; if (v !== undefined && v !== null) out[k] = v; });
+  ["created_at","updated_at","id"].forEach(k => { if (r[k] !== undefined && r[k] !== null) out[k] = r[k]; });
+  if (r.Selection != null && String(r.Selection).trim() !== "") out.Selection = r.Selection;
+  return out;
+}
+
+function enrichOptionCardRow(r, req) {
+  const out = { ...r };
+  const sides = req?.sides;
+  if (Array.isArray(sides) && sides.length >= 2) { out._room_width_m = sides[0]; out._room_length_m = sides[1]; }
+  if (req?.height !== undefined && req.height !== null && req.height !== "") out._room_height_m = req.height;
+  const sl  = req?.standard_lighting;
+  const ref = sl?.ref_no ?? req?.standard_ref_no;
+  if (ref != null && String(ref).trim() !== "") out._standard_ref = String(ref).trim();
+  if (sl && typeof sl === "object") {
+    const setNum = (key, outKey) => { const v = sl[key]; if (v === undefined || v === null || v === "") return; out[outKey] = v; };
+    setNum("Em_r_lx","_standard_em_r_lx"); setNum("Uo","_standard_uo");
+    setNum("Ra","_standard_ra"); setNum("RUGL","_standard_rugl");
+  }
+  return out;
+}
+
+function csvHeadersForCalcResults(rows) {
+  const extra = new Set();
+  rows.forEach(r => { Object.keys(r).forEach(k => { if (CALC_RESULT_LEGACY_KEYS.has(k)) return; if (!CALC_RESULT_KEY_ORDER.includes(k) && !["created_at","updated_at","id"].includes(k)) extra.add(k); }); });
+  const meta = ["created_at","updated_at","id"].filter(h => rows.some(r => r[h] !== undefined && r[h] !== null));
+  return [...CALC_RESULT_KEY_ORDER, ...meta, ...Array.from(extra).sort()];
+}
+
+function generateCSV(data, requestObj) {
+  if (!data || !data.length) return "";
+  const out = [];
+  const stdRows = standardLightingCsvRows(requestObj);
+  if (stdRows.length) out.push(...stdRows, "");
+  const headers = csvHeadersForCalcResults(data);
+  out.push(headers.map(h => `"${String(h).replace(/"/g,'""')}"`).join(","));
+  data.forEach(row => { out.push(headers.map(h => { const v = row[h]; if (v === undefined || v === null) return '""'; return `"${String(v).replace(/"/g,'""')}"`;}).join(",")); });
+  return out.join("\n");
 }
 
 function downloadCSV(csv) {
   const blob = new Blob([csv], { type: "text/csv" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  const resDate = new Date();
-  link.download = `lighting_results_${resDate.toISOString().split('T')[0]}.csv`;
+  link.download = `lighting_results_${new Date().toISOString().split("T")[0]}.csv`;
   link.click();
 }
 
-/* ========== image mapping logic ========== 
-We try to auto-build the filenames:
-Files are like: SC-Backlight-36W-transparent0001.png  OR  ECO-HighBay-100W-transparent0001.webp
-This build function will:
- - map some API luminaire names to canonical base filenames (e.g. "SC downlight" -> "SC-Spot")
- - compose: <Base>-<Power>W-transparent000{1..4}.(png|webp)
-If a file doesn't exist in the server folder, the browser will show the placeholder (so keep placeholder.png).
-========================================== */
+/* ================================================================
+   FIXTURE MAP / IMAGES
+================================================================ */
+function normalizeLuminaireKey(s) { if (s == null || s === "") return ""; return String(s).trim().toLowerCase().replace(/\s+/g," "); }
 
-// quick manual mapping for names that differ from filenames
+async function ensureFixtureMapLoaded() {
+  if (fixtureMapDoc !== undefined) return;
+  try { const r = await fetch(new URL(FIXTURE_MAP_ASSET, window.location.href)); fixtureMapDoc = r.ok ? await r.json() : null; }
+  catch { fixtureMapDoc = null; }
+}
+
+function imageUrlsFromFixtureMap(luminaire, power) {
+  const doc = fixtureMapDoc;
+  if (!doc?.entries?.length) return null;
+  const key = normalizeLuminaireKey(luminaire);
+  if (!key) return null;
+  const candidates = doc.entries.filter(e => normalizeLuminaireKey(e.api_luminaire_name) === key);
+  if (!candidates.length) return null;
+  const pw = Number(power);
+  let best = null, bestDist = Infinity;
+  for (const e of candidates) {
+    const ep = Number(e.power_w);
+    if (!Number.isFinite(ep)) continue;
+    if (Number.isFinite(pw) && ep === pw) { best = e; break; }
+    const dist = Number.isFinite(pw) ? Math.abs(ep - pw) : ep;
+    if (dist < bestDist) { bestDist = dist; best = e; }
+  }
+  if (!best && candidates.length) best = candidates.sort((a,b) => Number(a.power_w)-Number(b.power_w))[0];
+  if (best?.image_urls?.length) return best.image_urls;
+  return null;
+}
+
+function iesPathFromFixtureMap(luminaire, power) {
+  const doc = fixtureMapDoc;
+  if (!doc?.entries?.length) return null;
+  const key = normalizeLuminaireKey(luminaire);
+  if (!key) return null;
+  const candidates = doc.entries.filter(e => normalizeLuminaireKey(e.api_luminaire_name) === key);
+  if (!candidates.length) return null;
+  const pw = Number(power);
+  let best = null, bestDist = Infinity;
+  for (const e of candidates) {
+    const ep = Number(e.power_w);
+    if (!Number.isFinite(ep)) continue;
+    if (Number.isFinite(pw) && ep === pw) { best = e; break; }
+    const dist = Number.isFinite(pw) ? Math.abs(ep - pw) : ep;
+    if (dist < bestDist) { bestDist = dist; best = e; }
+  }
+  if (!best && candidates.length) best = candidates.sort((a,b) => Number(a.power_w)-Number(b.power_w))[0];
+  return best?.relative_ies_path || null;
+}
+
 const NAME_TO_BASE = {
-  // API value (lowercase trimmed) : base filename (exact capitalization in your file list)
-  "sc downlight": "SC-Spot",
-  "sc triproof": "SC-Triproof",
-  "sc backlight": "SC-Backlight",
-  "sc flood": "SC-Flood",
-  "sc highbay": "SC-HighBay",
-  "sc street": "SC-Street",
-  "sc solar aio street": "SC-Solar-AIO-Street",
-  "eco highbay": "ECO-HighBay",
-  "eco street": "ECO-Street",
-  "sv flood": "SV-Flood"
+  "sc downlight":"SC-Spot","sc triproof":"SC-Triproof","sc backlight":"SC-Backlight",
+  "sc flood":"SC-Flood","sc flood light exterior":"SC-Flood","sc highbay":"SC-HighBay",
+  "sc street":"SC-Street","sc solar aio street":"SC-Solar-AIO-Street",
+  "eco highbay":"ECO-HighBay","eco street":"ECO-Street","sv flood":"SV-Flood"
 };
 
-// Determine extension based on base name
 function extForBase(base) {
-  // your backlight/triproof/solar/spot are PNG in the list; others webp
-  const pngKeywords = ["Backlight", "Triproof", "Solar-AIO-Street", "Spot"];
+  const pngKeywords = ["Backlight","Triproof","Solar-AIO-Street","Spot"];
   for (const k of pngKeywords) if (base.includes(k)) return "png";
   return "webp";
 }
 
-// Build array of 4 image urls for a luminaire + power
+function imageWattForUrl(luminaire, power) {
+  const key = normalizeLuminaireKey(luminaire);
+  const pw  = Number(power);
+  if (key === "eco highbay"  && pw === 138) return 100;
+  if (key === "sc highbay"   && pw === 138) return 100;
+  if (key === "sc street"    && (pw === 50 || pw === 90)) return 100;
+  if (key === "sc backlight" && (pw === 42 || pw === 32 || pw === 35)) return 36;
+  if (key === "sc triproof"  && (pw === 30 || pw === 40)) return 36;
+  return pw;
+}
+
 function buildFixtureImages(luminaire, power) {
   if (!luminaire) return [PLACEHOLDER];
-  const key = luminaire.toString().trim().toLowerCase();
+  const fromMap = imageUrlsFromFixtureMap(luminaire, power);
+  if (fromMap?.length) return fromMap;
+  const key = normalizeLuminaireKey(luminaire);
   let base = NAME_TO_BASE[key];
-
-  // fallback: try to convert name to a reasonable base (capitalize words and join with hyphen)
-  if (!base) {
-    // e.g. "SC downlight" -> "SC-Downlight"
-    base = luminaire
-      .trim()
-      .split(/\s+/)
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-      .join("-");
-  }
-
-  // Some fixtures in API might not exactly match wattage sets (like 42W) — we'll use the given power.
-  const watt = power ? `${power}W` : "";
-
+  if (!base) { base = luminaire.trim().split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join("-"); }
   const ext = extForBase(base);
   const images = [];
+  if (key === "sc downlight" || base === "SC-Spot") {
+    for (let i = 1; i <= 4; i++) images.push(FIXTURES_BASE + `${base}000${i}.${ext}`);
+    return images;
+  }
+  const wNum = imageWattForUrl(luminaire, power);
+  const watt = wNum != null && wNum !== "" && !Number.isNaN(wNum) ? `${wNum}W` : "";
   for (let i = 1; i <= 4; i++) {
-    // compose filename like: SC-Backlight-36W-transparent0001.png
     const filename = watt ? `${base}-${watt}-transparent000${i}.${ext}` : `${base}-transparent000${i}.${ext}`;
     images.push(FIXTURES_BASE + filename);
   }
   return images;
 }
 
-/* ========== viewer setup ========== */
 function setupViewer(viewerEl, imgEl, frames) {
   if (!viewerEl || !imgEl || !frames || !frames.length) return;
-  let current = 0;
-  let startX = 0;
-  let isDown = false;
-
-  // Preload frames (let browser cache)
-  frames.forEach(src => {
-    const im = new Image();
-    im.src = src;
-  });
-
-  const setFrame = (idx) => {
-    current = ((idx % frames.length) + frames.length) % frames.length;
-    imgEl.src = frames[current];
+  let current = 0, startX = 0, isDown = false;
+  frames.forEach(src => { const im = new Image(); im.src = src; });
+  const setFrame = idx => { current = ((idx % frames.length) + frames.length) % frames.length; imgEl.src = frames[current]; };
+  viewerEl.addEventListener("mousedown", e => { isDown = true; startX = e.pageX; viewerEl.style.cursor = "grabbing"; });
+  window.addEventListener("mouseup", () => { isDown = false; viewerEl.style.cursor = "grab"; });
+  viewerEl.addEventListener("mouseleave", () => { isDown = false; viewerEl.style.cursor = "grab"; });
+  viewerEl.addEventListener("mousemove", e => { if (!isDown) return; const delta = e.pageX - startX; if (Math.abs(delta) >= 12) { setFrame(current + (delta > 0 ? -1 : 1)); startX = e.pageX; } });
+  viewerEl.addEventListener("touchstart", e => { if (e.touches?.[0]) startX = e.touches[0].pageX; }, { passive:true });
+  viewerEl.addEventListener("touchmove", e => { if (!e.touches?.[0]) return; const x = e.touches[0].pageX; const delta = x - startX; if (Math.abs(delta) >= 12) { setFrame(current + (delta > 0 ? -1 : 1)); startX = x; } }, { passive:true });
+  viewerEl.addEventListener("click", () => setFrame(current + 1));
+  imgEl.onerror = () => {
+    const cur = imgEl.src;
+    try { if (cur && !String(cur).includes("placeholder")) { const name = new URL(cur, window.location.href).pathname.split("/").pop(); if (name && !String(cur).includes("/assets/img/products/")) { imgEl.onerror = () => { imgEl.src = PLACEHOLDER; imgEl.onerror = null; }; imgEl.src = new URL("assets/img/products/" + name, window.location.href).href; return; } } } catch {}
+    imgEl.src = PLACEHOLDER; imgEl.onerror = null;
   };
-
-  // mouse
-  viewerEl.addEventListener("mousedown", (e) => {
-    isDown = true;
-    startX = e.pageX;
-    viewerEl.style.cursor = "grabbing";
-  });
-  window.addEventListener("mouseup", () => {
-    isDown = false;
-    viewerEl.style.cursor = "grab";
-  });
-  viewerEl.addEventListener("mouseleave", () => {
-    isDown = false;
-    viewerEl.style.cursor = "grab";
-  });
-  viewerEl.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    const delta = e.pageX - startX;
-    if (Math.abs(delta) >= 12) {
-      const step = delta > 0 ? -1 : 1; // drag right -> previous frame visually better
-      setFrame(current + step);
-      startX = e.pageX;
-    }
-  });
-
-  // touch (mobile)
-  viewerEl.addEventListener("touchstart", (e) => {
-    if (e.touches && e.touches[0]) startX = e.touches[0].pageX;
-  }, { passive: true });
-
-  viewerEl.addEventListener("touchmove", (e) => {
-    if (!e.touches || !e.touches[0]) return;
-    const x = e.touches[0].pageX;
-    const delta = x - startX;
-    if (Math.abs(delta) >= 12) {
-      const step = delta > 0 ? -1 : 1;
-      setFrame(current + step);
-      startX = x;
-    }
-  }, { passive: true });
-
-  // click/tap advance (optional)
-  viewerEl.addEventListener("click", (e) => {
-    // For small devices a short tap cycles forward one frame
-    setFrame(current + 1);
-  });
-
-  // Ensure initial frame loaded (fallback to placeholder if missing)
-  imgEl.onerror = () => { imgEl.src = PLACEHOLDER; };
   setFrame(0);
 }
 
-/* ========== display results & project info ========== */
+/* ================================================================
+   HTML HELPERS
+================================================================ */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
+}
+
+function standardLightingSummaryHtml(sl) {
+  if (!sl || typeof sl !== "object") return "";
+  const L = typeof LuxStandardDisplay !== "undefined" ? LuxStandardDisplay : null;
+  const aliases = L ? L.getAliases() : null;
+  const entries = L ? L.standardEntriesInOrder(sl) : [];
+  const parts = [];
+  (entries.length ? entries : Object.keys(sl).map(key => ({ key, value: sl[key] }))).forEach(({ key, value }) => {
+    if (value === undefined || value === null) return;
+    const label = L ? L.labelForStandardField(key, aliases) : key;
+    const txt   = L ? L.valueToDisplayString(value) : String(value);
+    if (key === "specific_requirements") { parts.push(`<dt class="col-12 text-muted mt-2">${escapeHtml(label)}</dt><dd class="col-12 small">${escapeHtml(txt)}</dd>`); return; }
+    parts.push(`<dt class="col-sm-4 text-muted">${escapeHtml(label)}</dt><dd class="col-sm-8 mb-1">${escapeHtml(txt)}</dd>`);
+  });
+  return `<div class="mt-3 pt-3 border-top"><h6 class="mb-2">Standard reference (from standards_cleaned; labels from aliases_upgraded)</h6><dl class="row small mb-0">${parts.join("")}</dl></div>`;
+}
+
 function displayProjectSummary(requestObj, customerObj) {
   const container = document.getElementById("projectSummary");
   if (!requestObj && !customerObj) { container.innerHTML = ""; return; }
-  const projectName = requestObj?.project_name || requestObj?.project || (requestObj?.place ? requestObj.place : "");
-  const roomSize = requestObj?.sides ? `${requestObj.sides[0] ?? ""} x ${requestObj.sides[1] ?? ""} m` : "";
-  const submitted = requestObj?.submitted_at || "";
-
+  const projectName = requestObj?.project_name || requestObj?.project || (requestObj?.place ? requestObj.place : "") || (requestObj?.standard_lighting?.ref_no ? `Ref ${requestObj.standard_lighting.ref_no}` : "");
+  const roomSize   = requestObj?.sides ? `${requestObj.sides[0] ?? ""} x ${requestObj.sides[1] ?? ""} m` : "";
+  const submitted  = requestObj?.submitted_at || "";
+  const placeLine  = requestObj?.place ? `<p class="mb-0"><strong>Place (preset):</strong> ${escapeHtml(requestObj.place)}</p>` : "";
+  const stdBlock   = standardLightingSummaryHtml(requestObj?.standard_lighting);
   container.innerHTML = `
     <div class="summary-card card mb-3">
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
-            <h5 class="card-title mb-1">${projectName || "Project"}</h5>
-            <p class="mb-1"><strong>Client:</strong> ${customerObj?.name || requestObj?.name || ""}</p>
-            <p class="mb-0"><strong>Company:</strong> ${customerObj?.company || requestObj?.company || ""}</p>
+            <h5 class="card-title mb-1">${escapeHtml(projectName || "Project")}</h5>
+            <p class="mb-1"><strong>Client:</strong> ${escapeHtml(customerObj?.name || requestObj?.name || "")}</p>
+            <p class="mb-0"><strong>Company:</strong> ${escapeHtml(customerObj?.company || requestObj?.company || "")}</p>
+            ${placeLine}
           </div>
           <div class="col-md-6 text-md-end">
-            <p class="mb-1"><strong>Phone:</strong> ${customerObj?.phone || ""}</p>
-            <p class="mb-0"><strong>Room:</strong> ${roomSize}</p>
-            <p class="mb-0"><small class="text-muted">${submitted}</small></p>
+            <p class="mb-1"><strong>Phone:</strong> ${escapeHtml(customerObj?.phone || "")}</p>
+            <p class="mb-0"><strong>Room:</strong> ${escapeHtml(roomSize)}</p>
+            <p class="mb-0"><small class="text-muted">${escapeHtml(submitted)}</small></p>
           </div>
         </div>
+        ${stdBlock}
       </div>
     </div>`;
 }
 
-function displayResults(resultArray) {
+function calcOptionListItemsHtml(r) {
+  const parts = [];
+  const labelFor = k => CALC_FIELD_VERBOSE_LABEL[k] || k;
+  const rowLine  = (k, v) => `<li class="list-group-item py-2 border-secondary"><strong>${escapeHtml(labelFor(k))}</strong><br><span class="text-white">${escapeHtml(String(v))}</span></li>`;
+  CALC_OPTION_SECTIONS.forEach(({ title, keys }) => {
+    const lines = [];
+    keys.forEach(k => { if (!Object.prototype.hasOwnProperty.call(r, k)) return; const v = r[k]; if (v === undefined || v === null) return; lines.push(rowLine(k, v)); });
+    if (!lines.length) return;
+    parts.push(`<li class="list-group-item py-2 px-3 small text-uppercase border-0 border-bottom-0" style="background:rgba(255,255,255,0.07);color:var(--muted);letter-spacing:0.04em;">${escapeHtml(title)}</li>`);
+    parts.push(...lines);
+  });
+  const covered = new Set();
+  CALC_OPTION_SECTIONS.forEach(s => s.keys.forEach(k => covered.add(k)));
+  if (Object.prototype.hasOwnProperty.call(r,"Compliance note") && r["Compliance note"] != null && String(r["Compliance note"]).trim() !== "") {
+    covered.add("Compliance note");
+    parts.push(`<li class="list-group-item py-2 border-warning" style="background:rgba(255,193,7,0.28);color:#1a1a1a;"><strong>${escapeHtml(CALC_FIELD_VERBOSE_LABEL["Compliance note"] || "Compliance note")}</strong><br><span>${escapeHtml(String(r["Compliance note"]))}</span></li>`);
+  }
+  const other = [];
+  Object.keys(r).forEach(k => { if (covered.has(k) || CALC_RESULT_LEGACY_KEYS.has(k)) return; if (k.startsWith("_")) return; const v = r[k]; if (v === undefined || v === null) return; other.push(rowLine(k, v)); });
+  if (other.length) { parts.push(`<li class="list-group-item py-2 px-3 small text-uppercase border-0 border-bottom-0" style="background:rgba(255,255,255,0.07);color:var(--muted);letter-spacing:0.04em;">Other</li>`); parts.push(...other); }
+  return parts.join("");
+}
+
+/* ================================================================
+   RESULTS RENDERING
+================================================================ */
+function appendResultCards(startIdx, count) {
   const container = document.getElementById("resultsContainer");
-  container.innerHTML = "";
-  let counter = 1;
-  resultArray.forEach((r, idx) => {
-    // normalize keys from API: map API property names to our internal names
-    const result = {
-      luminaire: r["Luminaire"] || r.luminaire || "",
-      power: r["Power (W)"] ?? r.power ?? "",
-      efficacy: r["Efficacy (lm/W)"] ?? r.efficacy ?? "",
-      fixtures: r["Fixtures"] ?? r.fixtures ?? "",
-      spacing_x: r["Spacing X (m)"] ?? r.spacing_x ?? "",
-      spacing_y: r["Spacing Y (m)"] ?? r.spacing_y ?? "",
-      avg_lux: r["Average Lux"] ?? r.avg_lux ?? "",
-      uniformity: r["Uniformity"] ?? r.uniformity ?? "",
-      total_power: r["Total Power (W/H)"] ?? r.total_power ?? ""
-    };
-
-    const frames = buildFixtureImages(result.luminaire, result.power);
-
-    const viewerId = `viewer-${idx}`;
-    const imgId = `img-${idx}`;
-
+  const endIdx = Math.min(startIdx + count, allResults.length);
+  for (let idx = startIdx; idx < endIdx; idx++) {
+    const r = allResults[idx];
+    const luminaire = r["Luminaire"] || r.luminaire || "";
+    const power     = r["Power (W)"] ?? r.power ?? "";
+    const frames    = buildFixtureImages(luminaire, power);
+    const viewerId  = `viewer-${idx}`;
+    const imgId     = `img-${idx}`;
     const col = document.createElement("div");
     col.className = "col-md-4 col-12";
     col.innerHTML = `
       <div class="card h-100">
         <div class="viewer" id="${viewerId}">
-          <img id="${imgId}" src="${frames[0]}" alt="${escapeHtml(result.luminaire)}">
+          <img id="${imgId}" src="${frames[0]}" alt="${escapeHtml(luminaire)}">
         </div>
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title">Option ${counter++}</h5>
-
+          <h5 class="card-title">Option ${idx + 1}</h5>
           <ul class="list-group list-group-flush mb-3">
-            <li class="list-group-item"><strong>Luminaire:</strong> ${escapeHtml(result.luminaire)}</li>
-            <li class="list-group-item"><strong>Power (W):</strong> ${escapeHtml(result.power)}</li>
-            <li class="list-group-item"><strong>Efficacy (lm/W):</strong> ${escapeHtml(result.efficacy)}</li>
-            <li class="list-group-item"><strong>Fixtures:</strong> ${escapeHtml(result.fixtures)}</li>
-            <li class="list-group-item"><strong>Spacing:</strong> ${escapeHtml(result.spacing_x)}m × ${escapeHtml(result.spacing_y)}m</li>
-            <li class="list-group-item"><strong>Average Lux:</strong> ${escapeHtml(result.avg_lux)}</li>
-            <li class="list-group-item"><strong>Uniformity:</strong> ${escapeHtml(result.uniformity)}</li>
-            <li class="list-group-item"><strong>Total Power (W):</strong> ${escapeHtml(result.total_power)}</li>
+            ${calcOptionListItemsHtml(enrichOptionCardRow(r, request))}
           </ul>
-
           <div class="controls mt-auto">
             <button class="btn btn-outline-primary" onclick="goToLayout(${idx})">View Layout</button>
-            <button class="btn btn-success" onclick="downloadCSV(generateCSV([results[${idx}]]))">CSV</button>
-            <button class="btn btn-danger" onclick="generatePDF([results[${idx}]], request, customer)">PDF</button>
+            <button class="btn btn-success" onclick="downloadCSV(generateCSV([allResults[${idx}]], request))">CSV</button>
+            <button class="btn btn-danger" id="pdfSolBtn-${idx}" onclick="downloadSolutionPdf(${idx}, this)">PDF</button>
             <button class="btn btn-warning" onclick="displayPriceRequest(${idx}, this)">Request Price</button>
+            <button class="btn btn-polar" onclick="openPolarCurve(${idx})">&#128202; IES Viewer</button>
             <button class="btn btn-warning" onclick="handleDownloadDXF(${idx})">Download DXF</button>
             <button class="btn btn-warning" onclick="handleDownloadSTL(${idx})">Download STL</button>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
     container.appendChild(col);
-
-    // Setup the interactive viewer for this card
-    // Use a small timeout to ensure element is in DOM
-    setTimeout(() => {
-      const viewerEl = document.getElementById(viewerId);
-      const imgEl = document.getElementById(imgId);
-      setupViewer(viewerEl, imgEl, frames);
-    }, 0);
-  });
+    setTimeout(() => { setupViewer(document.getElementById(viewerId), document.getElementById(imgId), frames); }, 0);
+  }
+  resultsDisplayed = endIdx;
+  const wrap = document.getElementById("viewMoreWrap");
+  const btn  = document.getElementById("viewMoreBtn");
+  if (wrap && btn) {
+    const left = allResults.length - resultsDisplayed;
+    if (left > 0) { wrap.style.display = "block"; btn.textContent = `View more (${left} more)`; }
+    else wrap.style.display = "none";
+  }
 }
 
-/* escape HTML for safety when inserting text */
-function escapeHtml(str) {
-  if (str === null || str === undefined) return "";
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+function updateResultsAnalysis() {
+  const el = document.getElementById("resultsAnalysis");
+  if (!el) return;
+  const n    = allResults.length;
+  const meta = calculationMeta || {};
+  const cap  = meta.max_solutions_cap;
+  const capped = meta.capped_at_max;
+  const th   = meta.interior_height_threshold_m;
+  if (!n && !capped && !cap && !meta.no_compliant_options) { el.style.display = "none"; return; }
+  let html = `<strong>Analysis:</strong> ${n} solution${n === 1 ? "" : "s"} shown for this run`;
+  if (typeof meta.total_solutions_returned === "number" && meta.total_solutions_returned !== n) html += ` (API reported <strong>${meta.total_solutions_returned}</strong> total)`;
+  if (meta.used_uniformity_sweep_fallback && n > 0) html += " \u2014 <span class='text-muted'>includes best-effort layouts with extra fixtures to improve U0 (still below standard)</span>";
+  if (meta.calc_mode === "fast") html += " \u2014 <span class='text-muted'>fast mode (fixture count step 2, max 3 compliant options, coarser fallback)</span>";
+  if (typeof th === "number") html += `. Interior/exterior split uses <strong>${th}</strong> m ceiling height`;
+  if (capped && cap) html += ` \u2014 stopped at server cap of <strong>${cap}</strong> (<a href="admin/dashboard.html" target="_blank" rel="noopener">admin</a>)`;
+  html += ".";
+  el.innerHTML = html;
+  el.style.display = "block";
 }
 
-/* ========== layout/navigation helpers ========== */
+function updateFixtureFamilyShortfall() {
+  const el = document.getElementById("fixtureFamilyShortfall");
+  if (!el) return;
+  const meta = calculationMeta || {};
+  const rows = meta.fixture_family_shortfall;
+  if (!Array.isArray(rows) || rows.length === 0) { el.style.display = "none"; el.innerHTML = ""; return; }
+  const prio = meta.prioritized_weatherproof_triproof === true
+    ? `<p class="mb-2 small mb-0 text-dark">For this compact interior plan, <strong>weatherproof linear (SC triproof)</strong> was searched first.</p>` : "";
+  const issueLabel = code => { const c = code != null ? String(code) : ""; const map = { lux:"average illuminance", uniformity:"uniformity (U0)", lux_and_uniformity:"illuminance and uniformity", not_evaluated:"search / IES availability" }; return map[c] || c; };
+  const blocks = rows.map(x => { const lum = x.luminaire != null ? String(x.luminaire) : ""; const sum = x.summary != null ? String(x.summary) : ""; const rec = x.recommendation != null && String(x.recommendation).trim() !== "" ? `<div class="small mt-1 text-dark"><em>${escapeHtml(String(x.recommendation))}</em></div>` : ""; const iss = escapeHtml(issueLabel(x.issue)); const n = x.attempts != null ? escapeHtml(String(x.attempts)) : "0"; return `<div class="mb-2 pb-2 border-bottom border-dark border-opacity-10"><strong>${escapeHtml(lum)}</strong> <span class="text-muted">(${n} line(s) \u00B7 main limit: ${iss})</span><br><span>${escapeHtml(sum)}</span>${rec}</div>`; });
+  el.innerHTML = `${prio}<div class="fw-semibold mb-1">Families that did not reach the standard in this run</div>${blocks.join("")}`;
+  el.style.display = "block";
+}
+
+function updateNoCompliantBanner() {
+  const el = document.getElementById("noCompliantBanner");
+  if (!el) return;
+  const meta = calculationMeta || {};
+  const n = Array.isArray(allResults) ? allResults.length : 0;
+  const showFallbackInfo  = n > 0 && meta.no_compliant_options && meta.used_uniformity_sweep_fallback;
+  const showEmpty         = n === 0 && meta.no_compliant_options;
+  const showGenericEmpty  = n === 0 && !meta.no_compliant_options;
+  if (!showFallbackInfo && !showEmpty && !showGenericEmpty) { el.style.display = "none"; return; }
+  el.style.display = "block";
+  el.className = showFallbackInfo ? "alert alert-info py-2 px-3 mb-3" : "alert alert-warning py-2 px-3 mb-3";
+  if (showFallbackInfo) { el.textContent = "These options do not yet meet the standard U0. They are alternate layouts with more fixtures (per luminaire type) chosen to move uniformity toward the target; average illuminance still meets the required Em,r. Verify U0 and lux before specifying."; return; }
+  if (showEmpty) { let msg = "No design options met both the required average illuminance and uniformity (U0) on the IES work-plane grid."; if (meta.had_non_compliant_closest) msg += " The calculator could not improve layouts enough with extra fixtures in the search range; try a different luminaire family, larger room, or lower target U0 if appropriate."; else msg += " Check room inputs and that IES files exist for the luminaires in the catalog."; el.textContent = msg; return; }
+  el.textContent = "No result options were returned for this run.";
+}
+
+function displayResults(resultArray) {
+  allResults = Array.isArray(resultArray) ? resultArray.slice() : [];
+  results    = allResults;
+  const container = document.getElementById("resultsContainer");
+  container.innerHTML = "";
+  resultsDisplayed = 0;
+  updateNoCompliantBanner();
+  updateResultsAnalysis();
+  updateFixtureFamilyShortfall();
+  const first = Math.min(uiPaging.initial, allResults.length);
+  if (first > 0) appendResultCards(0, first);
+  else { const wrap = document.getElementById("viewMoreWrap"); if (wrap) wrap.style.display = "none"; }
+}
+
+/* ================================================================
+   LAYOUT / DXF / STL
+================================================================ */
 function goToLayout(index) {
   const r = results[index];
-  const data = {
-    fixtures: r["Fixtures"] ?? r.fixtures,
-    spacingX: r["Spacing X (m)"] ?? r.spacing_x,
-    spacingY: r["Spacing Y (m)"] ?? r.spacing_y,
-    roomLength: request.sides?.[0],
-    roomWidth: request.sides?.[1]
-  };
-  localStorage.setItem('lightingModelData', JSON.stringify(data));
-  window.location.href = 'maha/3d_model.html';
+  const data = { fixtures: r["Fixtures"] ?? r.fixtures, spacingX: r["Spacing X (m)"] ?? r.spacing_x, spacingY: r["Spacing Y (m)"] ?? r.spacing_y, roomLength: request.sides?.[0], roomWidth: request.sides?.[1] };
+  localStorage.setItem("lightingModelData", JSON.stringify(data));
+  window.location.href = "maha/3d_model.html";
 }
 
-/* ========== PDF generator (kept from your page) ========== */
-async function generatePDF(resultsArr, req, cust) {
-  try {
-    const { PDFDocument, rgb, StandardFonts } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    let bgImage = null;
-    try {
-      const bgImageBytes = await fetch("assets/pdfBG.png").then(r => r.arrayBuffer());
-      bgImage = await pdfDoc.embedPng(bgImageBytes);
-    } catch (e) { /* ignore missing bg */ }
-
-    // First page - project/customer
-    const firstPage = pdfDoc.addPage([595.28, 841.89]);
-    if (bgImage) firstPage.drawImage(bgImage, { x: 0, y: 0, width: firstPage.getWidth(), height: firstPage.getHeight() });
-    let y = firstPage.getHeight() - 95;
-    const marginX = 70;
-    const title = "Lighting Simulation Report";
-    const fontSize = 20;
-    const textWidth = font.widthOfTextAtSize(title, fontSize);
-    const centerX = (firstPage.getWidth() - textWidth) / 2;
-    firstPage.drawText(title, { x: centerX, y: y, size: fontSize, font: font, color: rgb(0.1, 0.1, 0.1) });
-    y -= 40;
-
-    const customerFields = [
-      ["Customer Name", cust?.name],
-      ["Email", cust?.email],
-      ["Phone", cust?.phone],
-      ["Company", cust?.company],
-      ["Project Name", req?.project_name],
-      ["Place", req?.place],
-      ["Room Size (m)", req?.sides ? `${req.sides[0]} x ${req.sides[1]}` : ""],
-      ["Height (m)", req?.height],
-      ["Submitted At", req?.submitted_at]
-    ];
-    customerFields.forEach(([label, value]) => {
-      firstPage.drawText(`${label}: ${value ?? ''}`, { x: marginX, y: y, size: 12, font: font, color: rgb(0, 0, 0) });
-      y -= 18;
-    });
-
-    // Result pages (simple textual pages + layout image from canvas - omitted heavy visuals for brevity)
-    for (let i = 0; i < resultsArr.length; i++) {
-      const page = pdfDoc.addPage([595.28, 841.89]);
-      if (bgImage) page.drawImage(bgImage, { x: 0, y: 0, width: page.getWidth(), height: page.getHeight() });
-      let yPos = page.getHeight() - 95;
-      page.drawText(`Option ${i+1}`, { x: marginX, y: yPos, size: 18, font: font, color: rgb(0.2,0.2,0.2) });
-      yPos -= 26;
-      const r = resultsArr[i];
-      const fields = [
-        ["Luminaire", r["Luminaire"] ?? r.luminaire],
-        ["Power (W)", r["Power (W)"] ?? r.power],
-        ["Efficacy (lm/W)", r["Efficacy (lm/W)"] ?? r.efficacy],
-        ["Fixtures", r["Fixtures"] ?? r.fixtures],
-        ["Spacing X (m)", r["Spacing X (m)"] ?? r.spacing_x],
-        ["Spacing Y (m)", r["Spacing Y (m)"] ?? r.spacing_y],
-        ["Average Lux", r["Average Lux"] ?? r.avg_lux],
-        ["Uniformity", r["Uniformity"] ?? r.uniformity],
-        ["Total Power (W)", r["Total Power (W)"] ?? r.total_power],
-      ];
-      fields.forEach(([label, value]) => {
-        page.drawText(`${label}: ${value ?? ''}`, { x: marginX, y: yPos, size: 12, font: font, color: rgb(0,0,0) });
-        yPos -= 18;
-      });
-    }
-
-    // Save & trigger download
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `lighting_results_${new Date().toISOString().split('T')[0]}.pdf`;
-    link.click();
-  } catch (err) {
-    console.error("PDF generation error:", err);
-    alert("Failed to generate PDF.");
-  }
-}
-
-/* ========== price request helper (kept) ========== */
-async function copyTextToClipboard(text) {
-  if (navigator.clipboard && window.isSecureContext) {
-    await navigator.clipboard.writeText(text);
-    return;
-  }
-
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.style.position = "fixed";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
-  document.execCommand("copy");
-  textarea.remove();
-}
-
-/* ========== CAD export helpers ========== */
 function normalizeResult(result) {
-  return {
-    luminaire: result["Luminaire"] ?? result.luminaire ?? "",
-    power: Number(result["Power (W)"] ?? result.power ?? 0),
-    fixtures: Math.max(1, Math.floor(Number(result["Fixtures"] ?? result.fixtures ?? 1))),
-    spacingX: Math.max(0.01, Number(result["Spacing X (m)"] ?? result.spacing_x ?? 4) || 4),
-    spacingY: Math.max(0.01, Number(result["Spacing Y (m)"] ?? result.spacing_y ?? 7) || 7)
-  };
+  return { luminaire: result["Luminaire"] ?? result.luminaire ?? "", power: Number(result["Power (W)"] ?? result.power ?? 0), fixtures: Math.max(1, Math.floor(Number(result["Fixtures"] ?? result.fixtures ?? 1))), spacingX: Math.max(0.01, Number(result["Spacing X (m)"] ?? result.spacing_x ?? 4) || 4), spacingY: Math.max(0.01, Number(result["Spacing Y (m)"] ?? result.spacing_y ?? 7) || 7) };
 }
 
 function buildModelData(result) {
   const normalized = normalizeResult(result);
-  // Keep same mapping used in goToLayout() so exports match the 3D page.
-  const roomLength = Math.max(1, Number(request?.sides?.[0] ?? 270) || 270);
-  const roomWidth = Math.max(1, Number(request?.sides?.[1] ?? 15) || 15);
-
-  return {
-    fixtures: normalized.fixtures,
-    spacingX: normalized.spacingX,
-    spacingY: normalized.spacingY,
-    roomLength,
-    roomWidth
-  };
+  return { fixtures:normalized.fixtures, spacingX:normalized.spacingX, spacingY:normalized.spacingY, roomLength:Math.max(1,Number(request?.sides?.[0]??270)||270), roomWidth:Math.max(1,Number(request?.sides?.[1]??15)||15) };
 }
 
 function computeLayoutGrid(modelData) {
-  const fixtures = modelData.fixtures;
-  const spacingX = modelData.spacingX;
-  const spacingY = modelData.spacingY;
-  const roomLength = modelData.roomLength;
-  const roomWidth = modelData.roomWidth;
-
-  const maxCols = Math.floor(roomWidth / spacingX);
-  const maxRows = Math.floor(roomLength / spacingY);
-
-  let cols = maxCols > 0 ? maxCols : 1;
-  let rows = maxRows > 0 ? maxRows : 1;
-
-  // Exact same fixture grid logic as maha/3d_model.html
-  if (cols * rows < fixtures) {
-    rows = Math.ceil(fixtures / cols);
-    if (maxRows > 0 && rows > maxRows) {
-      rows = maxRows;
-      cols = Math.ceil(fixtures / rows);
-      if (maxCols > 0 && cols > maxCols) {
-        cols = maxCols;
-      }
-    }
-  }
-
-  cols = Math.max(1, cols);
-  rows = Math.max(1, rows);
-
-  const gridWidth = (cols - 1) * spacingX;
-  const gridLength = (rows - 1) * spacingY;
-  const startX = -gridWidth / 2;
-  const startZ = -gridLength / 2;
-  const points = [];
-  let placed = 0;
-
-  for (let r = 0; r < rows && placed < fixtures; r++) {
-    for (let c = 0; c < cols && placed < fixtures; c++) {
-      const x = startX + c * spacingX;
-      const z = startZ + r * spacingY;
-      points.push({ x, z });
-      placed++;
-    }
-  }
-
+  const { fixtures, spacingX, spacingY, roomLength, roomWidth } = modelData;
+  const maxCols = Math.floor(roomWidth / spacingX); const maxRows = Math.floor(roomLength / spacingY);
+  let cols = maxCols > 0 ? maxCols : 1; let rows = maxRows > 0 ? maxRows : 1;
+  if (cols * rows < fixtures) { rows = Math.ceil(fixtures / cols); if (maxRows > 0 && rows > maxRows) { rows = maxRows; cols = Math.ceil(fixtures / rows); if (maxCols > 0 && cols > maxCols) cols = maxCols; } }
+  cols = Math.max(1, cols); rows = Math.max(1, rows);
+  const gridWidth = (cols-1) * spacingX; const gridLength = (rows-1) * spacingY;
+  const startX = -gridWidth / 2; const startZ = -gridLength / 2;
+  const points = []; let placed = 0;
+  for (let r = 0; r < rows && placed < fixtures; r++) for (let c = 0; c < cols && placed < fixtures; c++) { points.push({ x: startX + c*spacingX, z: startZ + r*spacingY }); placed++; }
   return { cols, rows, gridWidth, gridLength, points };
 }
 
 function downloadTextFile(filename, content, mimeType) {
-  const blob = new Blob([content], { type: mimeType });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(link.href);
+  const blob = new Blob([content], { type:mimeType }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; link.click(); URL.revokeObjectURL(link.href);
 }
 
-function dxfLine(x1, y1, x2, y2) {
-  return `0
-LINE
-8
-0
-10
-${x1}
-20
-${y1}
-30
-0
-11
-${x2}
-21
-${y2}
-31
-0
-`;
-}
-
-function dxfCircle(x, y, radius) {
-  return `0
-CIRCLE
-8
-0
-10
-${x}
-20
-${y}
-30
-0
-40
-${radius}
-`;
-}
+function dxfLine(x1,y1,x2,y2){ return `0\nLINE\n8\n0\n10\n${x1}\n20\n${y1}\n30\n0\n11\n${x2}\n21\n${y2}\n31\n0\n`; }
+function dxfCircle(x,y,radius){ return `0\nCIRCLE\n8\n0\n10\n${x}\n20\n${y}\n30\n0\n40\n${radius}\n`; }
 
 function buildDXFContent(modelData, layout) {
-  const roomLength = modelData.roomLength;
-  const roomWidth = modelData.roomWidth;
-  const xMin = -roomWidth / 2;
-  const xMax = roomWidth / 2;
-  const zMin = -roomLength / 2;
-  const zMax = roomLength / 2;
-
+  const { roomLength, roomWidth } = modelData;
+  const xMin=-roomWidth/2, xMax=roomWidth/2, zMin=-roomLength/2, zMax=roomLength/2;
   let entities = "";
-  // Room perimeter (same centered coordinates used by 3D model)
-  entities += dxfLine(xMin, zMin, xMax, zMin);
-  entities += dxfLine(xMax, zMin, xMax, zMax);
-  entities += dxfLine(xMax, zMax, xMin, zMax);
-  entities += dxfLine(xMin, zMax, xMin, zMin);
-
-  // Distribution outline like the yellow rectangle in 3D view
-  const outlinePad = 0.25;
-  const oxMin = -layout.gridWidth / 2 - outlinePad;
-  const oxMax = layout.gridWidth / 2 + outlinePad;
-  const ozMin = -layout.gridLength / 2 - outlinePad;
-  const ozMax = layout.gridLength / 2 + outlinePad;
-  entities += dxfLine(oxMin, ozMin, oxMax, ozMin);
-  entities += dxfLine(oxMax, ozMin, oxMax, ozMax);
-  entities += dxfLine(oxMax, ozMax, oxMin, ozMax);
-  entities += dxfLine(oxMin, ozMax, oxMin, ozMin);
-
-  layout.points.forEach((p) => {
-    entities += dxfCircle(p.x.toFixed(3), p.z.toFixed(3), 0.08);
-  });
-
-  return `0
-SECTION
-2
-HEADER
-0
-ENDSEC
-0
-SECTION
-2
-ENTITIES
-${entities}0
-ENDSEC
-0
-EOF
-`;
+  entities += dxfLine(xMin,zMin,xMax,zMin); entities += dxfLine(xMax,zMin,xMax,zMax); entities += dxfLine(xMax,zMax,xMin,zMax); entities += dxfLine(xMin,zMax,xMin,zMin);
+  const op=0.25, oxMin=-layout.gridWidth/2-op, oxMax=layout.gridWidth/2+op, ozMin=-layout.gridLength/2-op, ozMax=layout.gridLength/2+op;
+  entities += dxfLine(oxMin,ozMin,oxMax,ozMin); entities += dxfLine(oxMax,ozMin,oxMax,ozMax); entities += dxfLine(oxMax,ozMax,oxMin,ozMax); entities += dxfLine(oxMin,ozMax,oxMin,ozMin);
+  layout.points.forEach(p => { entities += dxfCircle(p.x.toFixed(3),p.z.toFixed(3),0.08); });
+  return `0\nSECTION\n2\nHEADER\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities}0\nENDSEC\n0\nEOF\n`;
 }
 
-function stlFacet(ax, ay, az, bx, by, bz, cx, cy, cz) {
-  return `  facet normal 0 0 0
-    outer loop
-      vertex ${ax} ${ay} ${az}
-      vertex ${bx} ${by} ${bz}
-      vertex ${cx} ${cy} ${cz}
-    endloop
-  endfacet
-`;
-}
+function stlFacet(ax,ay,az,bx,by,bz,cx,cy,cz){ return `  facet normal 0 0 0\n    outer loop\n      vertex ${ax} ${ay} ${az}\n      vertex ${bx} ${by} ${bz}\n      vertex ${cx} ${cy} ${cz}\n    endloop\n  endfacet\n`; }
 
 function buildSTLContent(modelData, layout) {
-  const roomLength = modelData.roomLength;
-  const roomWidth = modelData.roomWidth;
-  const wallHeight = Math.max(4, Math.min(30, Math.round(Math.max(6, roomWidth / 1.2))));
+  const { roomLength, roomWidth } = modelData;
+  const wallHeight = Math.max(4, Math.min(30, Math.round(Math.max(6, roomWidth/1.2))));
   const mountY = wallHeight - 0.5;
-  const xMin = -roomWidth / 2;
-  const xMax = roomWidth / 2;
-  const zMin = -roomLength / 2;
-  const zMax = roomLength / 2;
-  const markerHeight = 0.25;
-  const markerHalf = 0.08;
-
-  const addQuad = (a, b, c, d) => stlFacet(...a, ...b, ...c) + stlFacet(...a, ...c, ...d);
-
+  const xMin=-roomWidth/2, xMax=roomWidth/2, zMin=-roomLength/2, zMax=roomLength/2;
+  const mhalf=0.08;
+  const addQuad=(a,b,c,d)=>stlFacet(...a,...b,...c)+stlFacet(...a,...c,...d);
   let body = "";
-
-  // Floor + roof (centered like the 3D page)
-  body += addQuad([xMin, 0, zMin], [xMax, 0, zMin], [xMax, 0, zMax], [xMin, 0, zMax]);
-  body += addQuad([xMin, wallHeight, zMin], [xMax, wallHeight, zMin], [xMax, wallHeight, zMax], [xMin, wallHeight, zMax]);
-
-  // Walls
-  body += addQuad([xMin, 0, zMin], [xMax, 0, zMin], [xMax, wallHeight, zMin], [xMin, wallHeight, zMin]);
-  body += addQuad([xMax, 0, zMin], [xMax, 0, zMax], [xMax, wallHeight, zMax], [xMax, wallHeight, zMin]);
-  body += addQuad([xMax, 0, zMax], [xMin, 0, zMax], [xMin, wallHeight, zMax], [xMax, wallHeight, zMax]);
-  body += addQuad([xMin, 0, zMax], [xMin, 0, zMin], [xMin, wallHeight, zMin], [xMin, wallHeight, zMax]);
-
-  // Fixture markers positioned with same grid logic as 3D page
-  layout.points.forEach((p) => {
-    const x = p.x;
-    const z = p.z;
-    const topX = x;
-    const topY = mountY + markerHeight;
-    const topZ = z;
-    const p1 = [x - markerHalf, mountY, z - markerHalf];
-    const p2 = [x + markerHalf, mountY, z - markerHalf];
-    const p3 = [x + markerHalf, mountY, z + markerHalf];
-    const p4 = [x - markerHalf, mountY, z + markerHalf];
-
-    body += stlFacet(...p1, ...p2, topX, topY, topZ);
-    body += stlFacet(...p2, ...p3, topX, topY, topZ);
-    body += stlFacet(...p3, ...p4, topX, topY, topZ);
-    body += stlFacet(...p4, ...p1, topX, topY, topZ);
-    body += stlFacet(...p1, ...p2, ...p3);
-    body += stlFacet(...p1, ...p3, ...p4);
+  body += addQuad([xMin,0,zMin],[xMax,0,zMin],[xMax,0,zMax],[xMin,0,zMax]);
+  body += addQuad([xMin,wallHeight,zMin],[xMax,wallHeight,zMin],[xMax,wallHeight,zMax],[xMin,wallHeight,zMax]);
+  body += addQuad([xMin,0,zMin],[xMax,0,zMin],[xMax,wallHeight,zMin],[xMin,wallHeight,zMin]);
+  body += addQuad([xMax,0,zMin],[xMax,0,zMax],[xMax,wallHeight,zMax],[xMax,wallHeight,zMin]);
+  body += addQuad([xMax,0,zMax],[xMin,0,zMax],[xMin,wallHeight,zMax],[xMax,wallHeight,zMax]);
+  body += addQuad([xMin,0,zMax],[xMin,0,zMin],[xMin,wallHeight,zMin],[xMin,wallHeight,zMax]);
+  layout.points.forEach(p => {
+    const {x,z}=p, ty=mountY+0.25;
+    const p1=[x-mhalf,mountY,z-mhalf], p2=[x+mhalf,mountY,z-mhalf], p3=[x+mhalf,mountY,z+mhalf], p4=[x-mhalf,mountY,z+mhalf];
+    body += stlFacet(...p1,...p2,x,ty,z); body += stlFacet(...p2,...p3,x,ty,z); body += stlFacet(...p3,...p4,x,ty,z); body += stlFacet(...p4,...p1,x,ty,z);
+    body += stlFacet(...p1,...p2,...p3); body += stlFacet(...p1,...p3,...p4);
   });
-
-  return `solid lighting_layout
-${body}endsolid lighting_layout
-`;
+  return `solid lighting_layout\n${body}endsolid lighting_layout\n`;
 }
 
 function handleDownloadDXF(index) {
-  const selected = results[index];
-  if (!selected) {
-    alert("No result option selected.");
-    return;
-  }
-  const modelData = buildModelData(selected);
-  localStorage.setItem("lightingModelData", JSON.stringify(modelData));
-  const layout = computeLayoutGrid(modelData);
-  const dxf = buildDXFContent(modelData, layout);
-  downloadTextFile(`lighting_layout_option_${index + 1}.dxf`, dxf, "application/dxf");
+  const selected = results[index]; if (!selected) { alert("No result option selected."); return; }
+  const modelData = buildModelData(selected); localStorage.setItem("lightingModelData", JSON.stringify(modelData));
+  downloadTextFile(`lighting_layout_option_${index+1}.dxf`, buildDXFContent(modelData, computeLayoutGrid(modelData)), "application/dxf");
 }
 
 function handleDownloadSTL(index) {
-  const selected = results[index];
-  if (!selected) {
-    alert("No result option selected.");
-    return;
-  }
-  const modelData = buildModelData(selected);
-  localStorage.setItem("lightingModelData", JSON.stringify(modelData));
-  const layout = computeLayoutGrid(modelData);
-  const stl = buildSTLContent(modelData, layout);
-  downloadTextFile(`lighting_layout_option_${index + 1}.stl`, stl, "model/stl");
+  const selected = results[index]; if (!selected) { alert("No result option selected."); return; }
+  const modelData = buildModelData(selected); localStorage.setItem("lightingModelData", JSON.stringify(modelData));
+  downloadTextFile(`lighting_layout_option_${index+1}.stl`, buildSTLContent(modelData, computeLayoutGrid(modelData)), "model/stl");
+}
+
+/* ================================================================
+   PRICE REQUEST
+================================================================ */
+async function copyTextToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); return; }
+  const textarea = document.createElement("textarea"); textarea.value = text; textarea.style.position = "fixed"; textarea.style.left = "-9999px"; document.body.appendChild(textarea); textarea.focus(); textarea.select(); document.execCommand("copy"); textarea.remove();
 }
 
 async function displayPriceRequest(index, buttonEl) {
   const token = getToken();
-  if (!token) {
-    alert("No token found. Please open results using a valid token link.");
-    return;
-  }
-
+  if (!token) { alert("No token found. Please open results using a valid token link."); return; }
   const selectedResult = results[index] || {};
   const resultLink = window.location.href;
-  const roomSize = Array.isArray(request?.sides) ? `${request.sides[0] || ""} x ${request.sides[1] || ""}` : "";
-  const messageText = [
-    "Hello Short Circuit Company,",
-    "I need a price quotation for this lighting result.",
-    "",
-    `Result Option: ${index + 1}`,
-    `Project: ${request?.project_name || ""}`,
-    `Place: ${request?.place || ""}`,
-    `Room Size (m): ${roomSize}`,
-    `Luminaire: ${selectedResult["Luminaire"] || selectedResult.luminaire || ""}`,
-    `Power (W): ${selectedResult["Power (W)"] || selectedResult.power || ""}`,
-    "",
-    `Result Link: ${resultLink}`
-  ].join("\n");
-
+  const roomSize   = Array.isArray(request?.sides) ? `${request.sides[0]||""} x ${request.sides[1]||""}` : "";
+  const std        = request?.standard_lighting;
+  const stdLine    = std?.ref_no ? `Standard ref: ${std.ref_no} | Em,r: ${std.Em_r_lx??""} lx | Uo: ${std.Uo??""}` : `Place: ${request?.place||""}`;
+  const messageText = ["Hello Short Circuit Company,","I need a price quotation for this lighting result.","",
+    `Result Option: ${index+1}`, `Project: ${request?.project_name||""}`, stdLine,
+    `Room Size (m): ${roomSize}`, `Luminaire: ${selectedResult["Luminaire"]||selectedResult.luminaire||""}`,
+    `Power (W): ${selectedResult["Power (W)"]||selectedResult.power||""}`,
+    `Fixtures: ${selectedResult["Fixtures"]??selectedResult.fixtures??""}`,
+    `Spacing X/Y (m): ${selectedResult["Spacing X (m)"]??""} / ${selectedResult["Spacing Y (m)"]??""}`,
+    `Average Lux: ${selectedResult["Average Lux"]??""}`,
+    `Uniformity: ${selectedResult["Uniformity"]??""}`,
+    `Total Power (W/H): ${selectedResult["Total Power (W/H)"]??""}`,
+    `Beam Angle (deg): ${selectedResult[BEAM_ANGLE_KEY]??beamAngleValueFromRow(selectedResult)??""}`,
+    ``, `Result Link: ${resultLink}`].join("\n");
   const originalText = buttonEl ? buttonEl.textContent : "";
-  if (buttonEl) {
-    buttonEl.disabled = true;
-    buttonEl.textContent = "Preparing...";
-  }
-
-  try {
-    await copyTextToClipboard(messageText);
-    alert("Result text and link copied to clipboard. WhatsApp will open now, please paste the message in chat.");
-    const whatsappUrl = `https://wa.me/${COMPANY_WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
-    window.open(whatsappUrl, "_blank");
-  } catch (err) {
-    console.error(err);
-    alert("Could not copy result text. Please allow clipboard access and try again.");
-  } finally {
-    if (buttonEl) {
-      buttonEl.disabled = false;
-      buttonEl.textContent = originalText || "Request Price";
-    }
-  }
+  if (buttonEl) { buttonEl.disabled = true; buttonEl.textContent = "Preparing..."; }
+  try { await copyTextToClipboard(messageText); alert("Result text and link copied to clipboard. WhatsApp will open now, please paste the message in chat."); window.open(`https://wa.me/${COMPANY_WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`, "_blank"); }
+  catch (err) { console.error(err); alert("Could not copy result text. Please allow clipboard access and try again."); }
+  finally { if (buttonEl) { buttonEl.disabled = false; buttonEl.textContent = originalText || "Request Price"; } }
 }
 
-/* ========== load results from API ========== */
+/* ================================================================
+   STANDARD LIGHTING MERGE / FETCH
+================================================================ */
+let cachedStandardsCleanedRows = null;
+
+async function loadStandardsCleanedRows() {
+  if (cachedStandardsCleanedRows) return cachedStandardsCleanedRows;
+  try { const res = await fetch("standards/standards_cleaned.json"); cachedStandardsCleanedRows = res.ok ? await res.json() : []; }
+  catch { cachedStandardsCleanedRows = []; }
+  return cachedStandardsCleanedRows;
+}
+
+function mergeStandardFieldIsMeaningful(v) { if (v === undefined || v === null) return false; if (typeof v === "string" && v.trim() === "") return false; return true; }
+
+function mergeStandardLightingSources(data) {
+  if (!data || typeof data !== "object") return {};
+  const req = data.request || {};
+  const sources = [data.standard_lighting, req.standard_lighting, data.standard_row].filter(s => s && typeof s === "object" && !Array.isArray(s));
+  const out = {};
+  sources.forEach(src => { Object.keys(src).forEach(k => { const v = src[k]; if (!mergeStandardFieldIsMeaningful(v)) return; out[k] = v; }); });
+  const refFromReq = req.standard_ref_no ?? data.standard_ref_no;
+  if ((out.ref_no === undefined || out.ref_no === null || String(out.ref_no).trim() === "") && refFromReq != null && String(refFromReq).trim() !== "") out.ref_no = String(refFromReq).trim();
+  return out;
+}
+
+function mergeWithStashedStandard(token, requestObj) {
+  if (!token || !requestObj) return;
+  let stash = null;
+  try { const raw = localStorage.getItem("luxscale_result_request_" + token); if (!raw) return; stash = JSON.parse(raw); } catch { return; }
+  if (!stash || typeof stash !== "object") return;
+  const stashSl = stash.standard_lighting;
+  const hasStash = (stashSl && typeof stashSl === "object" && Object.keys(stashSl).length > 0) || (stash.standard_ref_no != null && String(stash.standard_ref_no).trim() !== "");
+  if (!hasStash) return;
+  const ref = stash.standard_ref_no;
+  if (ref != null && String(ref).trim() !== "") { if (requestObj.standard_ref_no == null || String(requestObj.standard_ref_no).trim() === "") requestObj.standard_ref_no = String(ref).trim(); }
+  const apiSl = requestObj.standard_lighting || {};
+  const base  = stashSl && typeof stashSl === "object" ? { ...stashSl } : {};
+  Object.keys(apiSl).forEach(k => { const v = apiSl[k]; if (v === undefined || v === null || !mergeStandardFieldIsMeaningful(v)) return; base[k] = v; });
+  const sc = stash.standard_category, st2 = stash.standard_task_or_activity;
+  if (mergeStandardFieldIsMeaningful(sc))  { requestObj.standard_category         = String(sc).trim();  if (!mergeStandardFieldIsMeaningful(base.category))      base.category      = requestObj.standard_category; }
+  if (mergeStandardFieldIsMeaningful(st2)) { requestObj.standard_task_or_activity  = String(st2).trim(); if (!mergeStandardFieldIsMeaningful(base.task_or_activity)) base.task_or_activity = requestObj.standard_task_or_activity; }
+  requestObj.standard_lighting = base;
+}
+
+function mergeWithStashedResults(token, resultRows) {
+  if (!token || !Array.isArray(resultRows)) return resultRows;
+  let stash = null;
+  try { const raw = localStorage.getItem("luxscale_result_rows_" + token); if (!raw) return resultRows; stash = JSON.parse(raw); } catch { return resultRows; }
+  if (!Array.isArray(stash) || stash.length === 0) return resultRows;
+  return resultRows.map((row, idx) => {
+    const st = stash[idx]; if (!st || typeof st !== "object") return row;
+    const out = { ...st, ...row };
+    const beamMerged = beamAngleValueFromRow(out); const beamStash = beamAngleValueFromRow(st);
+    const recoverBeamFromStash = beamStash !== undefined && (beamMerged === undefined || (beamMerged === 120 && beamStash !== 120));
+    if (recoverBeamFromStash) { if (st.beam_angle_deg != null) out.beam_angle_deg = st.beam_angle_deg; if (st["Beam Angle (deg)"] != null) out["Beam Angle (deg)"] = st["Beam Angle (deg)"]; if (st["Beam angle (deg)"] != null) out["Beam angle (deg)"] = st["Beam angle (deg)"]; const dk = "Beam Angle (\u00B0)"; if (st[dk] != null) out[dk] = st[dk]; }
+    ["Beam angle note","Compliance note","IES lumens note"].forEach(k => { const v = out[k]; const missing = v === undefined || v === null || (typeof v === "string" && String(v).trim() === ""); if (missing && st[k] != null && String(st[k]).trim() !== "") out[k] = st[k]; });
+    return out;
+  });
+}
+
+async function mergeStandardLightingFromCleaned(requestObj) {
+  if (!requestObj) return requestObj;
+  const ref = requestObj.standard_lighting?.ref_no ?? requestObj.standard_ref_no;
+  const refKey = ref != null && ref !== "" ? String(ref).trim() : "";
+  if (!refKey) return requestObj;
+  const rows = await loadStandardsCleanedRows();
+  if (!Array.isArray(rows)) return requestObj;
+  const row = rows.find(r => String(r.ref_no).trim() === refKey);
+  if (!row) return requestObj;
+  const existing = requestObj.standard_lighting || {};
+  const merged   = { ...row };
+  Object.keys(existing).forEach(k => { const v = existing[k]; if (v === undefined || v === null || !mergeStandardFieldIsMeaningful(v)) return; merged[k] = v; });
+  requestObj.standard_lighting = merged;
+  return requestObj;
+}
+
+async function mergeUiSettingsFromPublicApi() {
+  try { const r = await fetch(new URL("assets/app_settings.json", window.location.href)); if (r.ok) { const j = await r.json(); const ui = j?.ui; if (ui && typeof ui === "object") { const ini = Number(ui.results_initial_count); const bat = Number(ui.results_batch_size); if (Number.isFinite(ini) && ini > 0) uiPaging.initial = ini; if (Number.isFinite(bat) && bat > 0) uiPaging.batch = bat; } return; } } catch {}
+  const urls = [];
+  for (const ep of API_ENDPOINTS) { try { const u = new URL(ep); if (u.hostname === "localhost" || u.hostname === "127.0.0.1") urls.push(`${u.protocol}//${u.hostname}:5000/api/ui-settings`); } catch {} }
+  urls.push("http://127.0.0.1:5000/api/ui-settings","http://localhost:5000/api/ui-settings");
+  for (const url of [...new Set(urls)]) { try { const r = await fetch(url, { credentials:"omit" }); if (!r.ok) continue; const j = await r.json(); if (!j || typeof j !== "object") continue; const ini = Number(j.results_initial_count); const bat = Number(j.results_batch_size); if (Number.isFinite(ini) && ini > 0) uiPaging.initial = ini; if (Number.isFinite(bat) && bat > 0) uiPaging.batch = bat; return; } catch {} }
+}
+
+function mergeCalculationMetaFromStash(token, apiMeta) {
+  const api = apiMeta && typeof apiMeta === "object" ? { ...apiMeta } : {};
+  if (!token) return api;
+  let st = null;
+  try { const raw = localStorage.getItem("luxscale_result_meta_" + token); if (raw) st = JSON.parse(raw); } catch { return api; }
+  if (!st || typeof st !== "object") return api;
+  const alen = Array.isArray(api.fixture_family_shortfall) ? api.fixture_family_shortfall.length : 0;
+  const slen = Array.isArray(st.fixture_family_shortfall)  ? st.fixture_family_shortfall.length  : 0;
+  const out  = { ...st, ...api };
+  if (slen > alen) out.fixture_family_shortfall = st.fixture_family_shortfall;
+  if (api.prioritized_weatherproof_triproof === undefined && st.prioritized_weatherproof_triproof !== undefined) out.prioritized_weatherproof_triproof = st.prioritized_weatherproof_triproof;
+  return out;
+}
+
+/* ================================================================
+   FETCH RESULTS
+================================================================ */
 async function fetchResultsPayload(token) {
   let lastError = "Failed to fetch results.";
-
   for (const endpoint of API_ENDPOINTS) {
     try {
       const response = await fetch(`${endpoint}?token=${encodeURIComponent(token)}`);
       const responseText = await response.text();
       let data = null;
-
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        throw new Error(`Invalid JSON from ${endpoint}`);
-      }
-
-      if (!response.ok) {
-        throw new Error(data?.message || `Request failed on ${endpoint}`);
-      }
-
+      try { data = JSON.parse(responseText); } catch { throw new Error(`Invalid JSON from ${endpoint}`); }
+      if (!response.ok) throw new Error(data?.message || `Request failed on ${endpoint}`);
       return data;
-    } catch (error) {
-      lastError = error.message || lastError;
-    }
+    } catch (error) { lastError = error.message || lastError; }
   }
-
   throw new Error(lastError);
 }
 
 async function loadResults() {
   const token = getToken();
   if (!token) { alert("No token provided."); return; }
-
   try {
+    await Promise.all([
+      typeof LuxStandardDisplay !== "undefined" ? LuxStandardDisplay.loadAliasesUpgraded() : Promise.resolve(),
+      ensureFixtureMapLoaded(),
+    ]);
     const data = await fetchResultsPayload(token);
-    // adapt to structure from your API
+    calculationMeta = mergeCalculationMetaFromStash(token, data.calculation_meta && typeof data.calculation_meta === "object" ? data.calculation_meta : {});
+    uiPaging = { initial:3, batch:3 };
+    if (data.ui_settings && typeof data.ui_settings === "object") {
+      const ini = Number(data.ui_settings.results_initial_count); const bat = Number(data.ui_settings.results_batch_size);
+      if (Number.isFinite(ini) && ini > 0) uiPaging.initial = ini; if (Number.isFinite(bat) && bat > 0) uiPaging.batch = bat;
+    } else { await mergeUiSettingsFromPublicApi(); }
     results = data.results || data;
     request = data.request || { project_name: data.project_info?.["Project Name"], sides: [data.width, data.length], place: "" };
-    customer = data.customer || {
-      name: data.project_info?.["Client Name"],
-      phone: data.project_info?.["Client Number"],
-      company: data.project_info?.["Company Name"],
-      email: ""
-    };
-
-    // adapt results into internal keys expected by UI if necessary:
-    // convert API objects (with spaces) to simpler fields for CSV/PDF usage
-    results = results.map(r => {
-      return {
-        "Luminaire": r["Luminaire"] ?? r.luminaire,
-        "Power (W)": r["Power (W)"] ?? r.power,
-        "Efficacy (lm/W)": r["Efficacy (lm/W)"] ?? r.efficacy,
-        "Fixtures": r["Fixtures"] ?? r.fixtures,
-        "Spacing X (m)": r["Spacing X (m)"] ?? r.spacing_x,
-        "Spacing Y (m)": r["Spacing Y (m)"] ?? r.spacing_y,
-        "Average Lux": r["Average Lux"] ?? r.avg_lux,
-        "Uniformity": r["Uniformity"] ?? r.uniformity,
-        "Total Power (W/H)": r["Total Power (W/H)"] ?? r.total_power
-      };
-    });
-
+    const mergedSl = mergeStandardLightingSources(data);
+    if (Object.keys(mergedSl).length > 0) request.standard_lighting = mergedSl;
+    else if (!request.standard_lighting && data.standard_lighting) request.standard_lighting = data.standard_lighting;
+    else if (!request.standard_lighting && data.standard_row) request.standard_lighting = data.standard_row;
+    if (request.standard_ref_no == null && mergedSl.ref_no != null) request.standard_ref_no = mergedSl.ref_no;
+    mergeWithStashedStandard(token, request);
+    results = mergeWithStashedResults(token, results);
+    await mergeStandardLightingFromCleaned(request);
+    customer = data.customer || { name: data.project_info?.["Client Name"], phone: data.project_info?.["Client Number"], company: data.project_info?.["Company Name"], email: "" };
+    results  = results.map(r => normalizeCalcResultRow(r));
     displayProjectSummary(request, customer);
     displayResults(results);
-  } catch (err) {
-    console.error("Fetch error:", err);
-    alert("Failed to load results from API.");
-  }
+  } catch (err) { console.error("Fetch error:", err); alert("Failed to load results from API."); }
 }
 
-/* attach buttons */
+/* ================================================================
+   IES VIEWER
+================================================================ */
+async function iesApiFetch(path, options = {}) {
+  const url = FLASK_BASE + path;
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    const ct = res.headers.get("content-type") || "";
+    if (!ct.includes("application/json")) throw new Error(`IES API unreachable at ${url} (HTTP ${res.status}). Is Flask running on port 5000?`);
+  }
+  return res;
+}
+
+async function openPolarCurve(index) {
+  const r = results[index];
+  if (!r) return;
+  const luminaireName = r["Luminaire"] || r.luminaire || "";
+  const powerW        = parseFloat(r["Power (W)"] ?? r.power ?? 0);
+  const productLabel  = `${luminaireName}${powerW ? " \u2014 " + powerW + "W" : ""}`;
+  await ensureFixtureMapLoaded();
+  const iesRelPath = iesPathFromFixtureMap(luminaireName, powerW) || r["IES file"] || r.ies_file || "";
+  const _room_w   = parseFloat(request?.sides?.[0] ?? request?.width  ?? 6) || 6;
+  const _room_l   = parseFloat(request?.sides?.[1] ?? request?.length ?? 6) || 6;
+  const _room_h   = parseFloat(request?.height ?? 3) || 3;
+  const _sx       = parseFloat(r["Spacing X (m)"] ?? r.spacing_x ?? 0) || 0;
+  const _sy       = parseFloat(r["Spacing Y (m)"] ?? r.spacing_y ?? 0) || 0;
+  const _fixtures = Math.max(1, parseInt(r["Fixtures"] ?? r.fixtures ?? 1) || 1);
+  let _nx = parseInt(r["layout_nx"]) || 0;
+  let _ny = parseInt(r["layout_ny"]) || 0;
+  if ((!_nx || !_ny) && r["Layout grid"]) { const parts = String(r["Layout grid"]).split(/[x\u00D7X]/); _nx = parseInt(parts[0]) || 0; _ny = parseInt(parts[1]) || 0; }
+  if ((!_nx || !_ny) && _sx > 0 && _sy > 0 && _fixtures > 1) {
+    const _maxCols = Math.max(1, Math.floor(_room_w / _sx)); const _maxRows = Math.max(1, Math.floor(_room_l / _sy));
+    let _cols = Math.min(_maxCols, _fixtures); let _rows = Math.min(_maxRows, Math.ceil(_fixtures / _cols));
+    if (_cols * _rows < _fixtures) { _rows = Math.ceil(_fixtures / _cols); if (_maxRows > 0 && _rows > _maxRows) { _rows = _maxRows; _cols = Math.ceil(_fixtures / _rows); } }
+    _nx = Math.max(1, _cols); _ny = Math.max(1, _rows);
+  }
+  if (!_nx) _nx = 1; if (!_ny) _ny = 1;
+  const placeData = { room_w:_room_w, room_l:_room_l, room_h:_room_h, layout_nx:_nx, layout_ny:_ny, spacing_x:_sx, spacing_y:_sy, fixtures:_fixtures };
+  let sid = null;
+  try {
+    const fd = new FormData();
+    fd.append("luminaire_name", luminaireName);
+    fd.append("power_w", String(powerW));
+    if (iesRelPath) fd.append("ies_filename", iesRelPath);
+    const _designLm = parseFloat(r["Efficacy (lm/W)"] ?? r.efficacy ?? 0) * powerW;
+    if (_designLm > 0) fd.append("design_lumens", String(_designLm));
+    const res  = await iesApiFetch("/ies/upload", { method:"POST", body:fd });
+    const data = await res.json();
+    if (data.error) { alert("IES upload error: " + data.error); return; }
+    sid = data.session_id;
+  } catch (e) { alert("Could not reach Flask IES API.\n" + e.message); return; }
+  const _efficacy     = parseFloat(r["Efficacy (lm/W)"] ?? r.efficacy ?? 0);
+  const _designLumens = (_efficacy * powerW) || 0;
+  const payload = { sid, placeData, productLabel, designLumens: _designLumens };
+  try { sessionStorage.setItem("ies_open_payload", JSON.stringify(payload)); }
+  catch { alert("sessionStorage unavailable \u2014 cannot open IES viewer."); return; }
+  window.open("openies.html", "_blank");
+}
+
+/* ================================================================
+   BUTTON BINDINGS
+================================================================ */
 document.getElementById("downloadBtn").addEventListener("click", () => {
-  const csv = generateCSV(results.map(r => ({
-    luminaire: r["Luminaire"],
-    power: r["Power (W)"],
-    efficacy: r["Efficacy (lm/W)"],
-    fixtures: r["Fixtures"],
-    spacing_x: r["Spacing X (m)"],
-    spacing_y: r["Spacing Y (m)"],
-    avg_lux: r["Average Lux"],
-    uniformity: r["Uniformity"],
-    total_power: r["Total Power (W/H)"]
-  })));
+  const csv = generateCSV(results, request);
   if (!csv) { alert("No data to download."); return; }
   downloadCSV(csv);
 });
 
-document.getElementById("pdfBtn").addEventListener("click", async () => {
-  await generatePDF(results, request, customer);
+document.getElementById("pdfBtn").addEventListener("click", () => {
+  downloadFullReportPdf();
 });
 
-saveCurrentResultLink();
-loadResults(); // kick off on load
+document.getElementById("viewMoreBtn")?.addEventListener("click", () => {
+  appendResultCards(resultsDisplayed, uiPaging.batch);
+});
 
+/* ================================================================
+   INIT
+================================================================ */
+saveCurrentResultLink();
+loadResults();
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

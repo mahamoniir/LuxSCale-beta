@@ -1,0 +1,18 @@
+{
+  "saved_at": "2026-04-08T12:22:14.686877Z",
+  "label": "auto",
+  "source": "gemini:account_1_free",
+  "quality_score": 95,
+  "confidence": 0.95,
+  "analysis": {
+    "confidence": 0.95,
+    "quality_score": 95,
+    "issues": [],
+    "suggestions": [
+      "Verify uniformity at task level",
+      "Consider dimming for energy savings"
+    ],
+    "summary": "Lighting levels and uniformity meet precision work standards.",
+    "source": "gemini:account_1_free"
+  }
+}

@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 import tempfile
 
 # import your existing functions
-from lighting_calc import calculate_lighting, draw_heatmap
+from luxscale.app_settings import validate_ceiling_height_m
+from luxscale.lighting_calc import calculate_lighting, draw_heatmap
 
 app = Flask(__name__)
 
@@ -20,9 +21,12 @@ def api_calculate():
         place = data["place"]
         sides = data["sides"]  # list of 4 floats
         height = float(data["height"])
+        ok_h, err_h = validate_ceiling_height_m(height)
+        if not ok_h:
+            return jsonify({"status": "error", "message": err_h}), 400
         project_info = data["project_info"]  # dict
 
-        results, length, width = calculate_lighting(place, sides, height)
+        results, length, width, _calc_meta = calculate_lighting(place, sides, height)
         return jsonify({
             "status": "success",
             "project_info": project_info,
@@ -42,9 +46,12 @@ def api_pdf():
     place = data["place"]
     sides = data["sides"]
     height = float(data["height"])
+    ok_h, err_h = validate_ceiling_height_m(height)
+    if not ok_h:
+        return jsonify({"status": "error", "message": err_h}), 400
     project_info = data["project_info"]
 
-    results, length, width = calculate_lighting(place, sides, height)
+    results, length, width, _calc_meta = calculate_lighting(place, sides, height)
 
     pdf = FPDF(format='A4')
     pdf.add_page()

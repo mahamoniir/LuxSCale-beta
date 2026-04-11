@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxScale | New Study</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fm-heading: "Anton", sans-serif;
+            --fm-body: "IBM Plex Sans Arabic", sans-serif;
+            --bg-dark: #111111;
+            --white: #ffffff;
+            --muted: #d8d8d8;
+            --accent: #e51d2f;
+            --glass: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: var(--fm-body);
+            color: var(--white);
+            overflow-x: hidden;
+            background: var(--bg-dark);
+        }
+
+        /* Same background logic from the original page */
+        #myVideo {
+            position: fixed;
+            inset: 0;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(17, 17, 17, 0.92) 5%, rgba(17, 17, 17, 0.68) 45%, rgba(17, 17, 17, 0.85) 100%);
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin-inline: auto;
+        }
+
+        header {
+            padding: 22px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 160px;
+            max-width: 45vw;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 0.95rem;
+        }
+
+        .header-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        .header-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        main {
+            padding: 56px 0 40px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .hero-left {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px;
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 999px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 16px;
+            color: var(--muted);
+        }
+
+        h1 {
+            font-family: var(--fm-heading);
+            font-size: clamp(2rem, 4.8vw, 4.2rem);
+            letter-spacing: 0.02em;
+            line-height: 1.02;
+            margin-bottom: 18px;
+        }
+
+        .hero-text {
+            color: var(--muted);
+            max-width: 52ch;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--white);
+            border-radius: 12px;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            font-family: var(--fm-body);
+            background: transparent;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .hero-right {
+            display: grid;
+            gap: 14px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 1.05rem;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat .value {
+            font-family: var(--fm-heading);
+            font-size: 1.6rem;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat .label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .section-title {
+            margin: 52px 0 18px;
+            font-family: var(--fm-heading);
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            text-align: center;
+            letter-spacing: 0.03em;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .feature h4 {
+            color: var(--white);
+            margin-bottom: 8px;
+            font-size: 1.04rem;
+        }
+
+        .feature p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.92rem;
+        }
+
+        .study-form-section {
+            margin-top: 0;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: max-height 0.45s ease, opacity 0.3s ease, margin-top 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+        }
+
+        .study-form-section.is-open {
+            margin-top: 28px;
+            max-height: 1200px;
+            opacity: 1;
+            pointer-events: auto;
+            border-color: var(--border);
+            padding: 24px;
+        }
+
+        .study-form-head h3 {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            color: var(--white);
+        }
+
+        .study-form-head p {
+            color: var(--muted);
+            margin-bottom: 18px;
+            font-size: 0.93rem;
+        }
+
+        .study-form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.09);
+            color: var(--white);
+            padding: 11px 12px;
+            font-size: 0.92rem;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #e9e9e9;
+            opacity: 0.55;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group select option {
+            color: #111111;
+        }
+
+        .form-group--span-all {
+            grid-column: 1 / -1;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--muted);
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        footer {
+            margin-top: 34px;
+            border-top: 1px solid rgba(255, 255, 255, 0.24);
+            padding: 18px 0 30px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        @media (max-width: 920px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .study-form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .header-links {
+                display: none;
+            }
+
+            .hero-left {
+                padding: 24px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .study-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+        }
+
+        /* ── STEP INDICATOR ── */
+        .form-steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .form-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.45;
+            transition: opacity 0.25s;
+        }
+        .form-step.active { opacity: 1; }
+        .form-step.done { opacity: 0.75; }
+        .step-num {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 600;
+            color: var(--muted);
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .form-step.active .step-num {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--white);
+        }
+        .form-step.done .step-num {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.4);
+            color: var(--white);
+        }
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .form-step.active .step-label { color: var(--white); }
+        .step-divider {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 14px;
+        }
+        .form-panel[hidden] { display: none; }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="myVideo">
+        <source src="assets/myvideo.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <header>
+        <div class="container header-row">
+            <a href="index.html" aria-label="Go to homepage">
+                <img class="logo" src="assets/logo.svg" alt="LuxScale Logo">
+            </a>
+            <nav class="header-links" aria-label="Top navigation">
+                <a href="#">Projects</a>
+                <a href="#">Solutions</a>
+                <a href="about.html">About</a>
+                <a href="mailto:contact@shortcircuitcompany.com">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-grid">
+            <div class="hero-left">
+                <span class="eyebrow">New Luxury Layout</span>
+                <h1>LIGHTING DESIGN, REDEFINED.</h1>
+                <p class="hero-text">
+                    LuxScale is an AI-powered lighting design system that streamlines project setup,
+                    delivers code-aligned recommendations, and enables faster, more confident decisions.
+                </p>
+                <div class="actions">
+                    <button class="btn btn-primary" id="openStudyForm" type="button">Start New Study</button>
+                    <button class="btn" id="viewLastResultBtn" type="button">View Last Result</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="value">90%</div>
+                        <div class="label">Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="value">2m</div>
+                        <div class="label">Average Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="value">24/7</div>
+                        <div class="label">Availability</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <article class="card">
+                    <h3>Smart Calculations</h3>
+                    <p>
+                        Configure dimensions and purpose, then receive AI-powered lighting proposals
+                        aligned with practical engineering needs.
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>Visual Clarity</h3>
+                    <p>
+                        Cleaner hierarchy and modern glass panels improve readability while keeping
+                        your brand character and background atmosphere.
+                    </p>
+                </article>
+                <article class="card">
+                    <h3>Fast Handover</h3>
+                    <p>
+                        Ready to connect with your existing result flow and submit endpoint whenever
+                        you decide to plug in the form logic.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="study-form-section" id="studyFormSection" hidden>
+            <!-- STEP TABS -->
+            <div class="form-steps" id="formSteps">
+                <div class="form-step active" data-step="1">
+                    <span class="step-num">1</span>
+                    <span class="step-label">Company &amp; Project</span>
+                </div>
+                <div class="step-divider"></div>
+                <div class="form-step" data-step="2">
+                    <span class="step-num">2</span>
+                    <span class="step-label">Room &amp; Standard</span>
+                </div>
+            </div>
+
+            <form id="studyForm" novalidate>
+                <!-- ── STEP 1: Company & Project Details ── -->
+                <div class="form-panel" id="stepPanel1">
+                    <div class="study-form-head">
+                        <h3>Company &amp; Project Details</h3>
+                        <p>This information appears on the generated report cover page and project summary.</p>
+                    </div>
+                    <div class="study-form-grid">
+                        <div class="form-group form-group--span-all">
+                            <label for="projectName">Project Name</label>
+                            <input id="projectName" name="project_name" type="text" required placeholder="e.g. Office Block A — Floor 3 Lighting">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientName">Client / Prepared By</label>
+                            <input id="clientName" name="client_name" type="text" required placeholder="e.g. Eng. Ahmed Hassan">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientCompany">Client Company</label>
+                            <input id="clientCompany" name="client_company" type="text" placeholder="e.g. Al-Nour Contracting">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPhone">Phone</label>
+                            <input id="clientPhone" name="client_phone" type="tel" placeholder="e.g. 01012345678">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">Email</label>
+                            <input id="clientEmail" name="client_email" type="email" placeholder="e.g. client@example.com">
+                        </div>
+                        <div class="form-group form-group--span-all">
+                            <label for="projectNotes">Project Notes <span style="opacity:0.5;font-weight:400;">(optional)</span></label>
+                            <input id="projectNotes" name="project_notes" type="text" placeholder="e.g. Renovation phase 2, suspended ceiling at 2.8 m">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="nextToStep2Btn" type="button">Next: Room Details →</button>
+                        <button class="btn" id="cancelStudyForm" type="button">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- ── STEP 2: Room Dimensions & Standard ── -->
+                <div class="form-panel" id="stepPanel2" hidden>
+                    <div class="study-form-head">
+                        <h3>Room Dimensions &amp; Lighting Standard</h3>
+                        <p>Enter room dimensions, then choose a standard category and task (ref_no). Lux targets come from that standard row.</p>
+                    </div>
+                    <div class="study-form-grid">
+                        <div class="form-group">
+                            <label for="dimA">Width 1 (m)</label>
+                            <input id="dimA" name="a" type="number" min="0" step="any" required placeholder="e.g. 5.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="dimB">Length 1 (m)</label>
+                            <input id="dimB" name="b" type="number" min="0" step="any" required placeholder="e.g. 8">
+                        </div>
+                        <div class="form-group">
+                            <label for="dimC">Width 2 (m)</label>
+                            <input id="dimC" name="c" type="number" min="0" step="any" required placeholder="e.g. 5.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="dimD">Length 2 (m)</label>
+                            <input id="dimD" name="d" type="number" min="0" step="any" required placeholder="e.g. 8">
+                        </div>
+                        <div class="form-group">
+                            <label for="dimHeight">Ceiling Height (m)</label>
+                            <input id="dimHeight" name="height" type="number" min="0" step="any" required placeholder="e.g. 3">
+                            <p class="form-hint">Interior: 3–5 m (below 5 m for indoor catalog). Exterior: 5–20 m.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="mountingHeight">Mounting Height (m) <span style="opacity:0.5;font-weight:400;">(optional)</span></label>
+                            <input id="mountingHeight" name="mounting_height" type="number" min="0" step="any" placeholder="e.g. 2.8">
+                            <p class="form-hint">Fixture mounting height — appears on the room drawing in the report.</p>
+                        </div>
+                        <div class="form-group form-group--span-all">
+                            <label for="stdCategory">Standard category</label>
+                            <input id="stdCategory" name="standard_category" type="text" list="dl-std-categories" autocomplete="off" placeholder="Type to search by keyword or category name">
+                        </div>
+                        <div class="form-group form-group--span-all">
+                            <label for="stdTask">Task or activity (standard)</label>
+                            <input id="stdTask" name="standard_task_or_activity" type="text" list="dl-std-tasks" autocomplete="off" placeholder="Depends on category above">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" id="backToStep1Btn" type="button">← Back</button>
+                        <button class="btn btn-primary" id="createStudyBtn" type="submit">Create Study</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+        <!-- Datalists outside the hidden study panel: some browsers skip suggestions when the list lives under display:none -->
+        <datalist id="dl-std-categories"></datalist>
+        <datalist id="dl-std-tasks"></datalist>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Â© 2026 <a href="https://shortcircuit.company/" target="_blank" rel="noopener noreferrer">Short Circuit Company</a>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/standards-picker.js"></script>
+    <script>
+        const openStudyFormBtn = document.getElementById("openStudyForm");
+        const viewLastResultBtn = document.getElementById("viewLastResultBtn");
+        const cancelStudyFormBtn = document.getElementById("cancelStudyForm");
+        const studyFormSection = document.getElementById("studyFormSection");
+        const studyForm = document.getElementById("studyForm");
+        const firstDimensionInput = document.getElementById("projectName");
+        const createStudyBtn = document.getElementById("createStudyBtn");
+        const nextToStep2Btn = document.getElementById("nextToStep2Btn");
+        const backToStep1Btn = document.getElementById("backToStep1Btn");
+        const stepPanel1 = document.getElementById("stepPanel1");
+        const stepPanel2 = document.getElementById("stepPanel2");
+
+        function setStep(n) {
+            [stepPanel1, stepPanel2].forEach((p, i) => { p.hidden = (i+1) !== n; });
+            document.querySelectorAll(".form-step").forEach(el => {
+                const s = parseInt(el.dataset.step);
+                el.classList.toggle("active", s === n);
+                el.classList.toggle("done", s < n);
+            });
+        }
+
+        nextToStep2Btn && nextToStep2Btn.addEventListener("click", function() {
+            const projectName = document.getElementById("projectName").value.trim();
+            const clientName = document.getElementById("clientName").value.trim();
+            if (!projectName) { document.getElementById("projectName").focus(); document.getElementById("projectName").reportValidity && document.getElementById("projectName").reportValidity(); alert("Please enter a project name."); return; }
+            if (!clientName) { document.getElementById("clientName").focus(); alert("Please enter a client / prepared by name."); return; }
+            setStep(2);
+            document.getElementById("dimA").focus();
+            studyFormSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        backToStep1Btn && backToStep1Btn.addEventListener("click", function() {
+            setStep(1);
+            studyFormSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        const RESULT_LINKS_KEY = "luxscale_result_links";
+        const RESULT_LINK_TTL_MS = 60 * 60 * 1000; // 1 hour
+        const RESULT_PAGE_PATH = "result.html";
+
+        /** Same hostname as the page for :5000 so CORS/same-site matches (localhost â‰ 127.0.0.1). */
+        function getLocalFlaskOrigin() {
+            const h = window.location.hostname;
+            if (h === "localhost" || h === "127.0.0.1") {
+                return "http://" + h + ":5000";
+            }
+            return null;
+        }
+
+        /** Local Flask vs PythonAnywhere â€” match index.html */
+        function getCalculateApiUrl() {
+            const origin = getLocalFlaskOrigin();
+            if (origin) return origin + "/calculate";
+            return "https://mahamonir.pythonanywhere.com/calculate";
+        }
+
+        function getPlacesApiUrl() {
+            const origin = getLocalFlaskOrigin();
+            if (origin) return origin + "/places";
+            return "https://mahamonir.pythonanywhere.com/places";
+        }
+
+        function getUiSettingsApiUrl() {
+            const origin = getLocalFlaskOrigin();
+            if (origin) return origin + "/api/ui-settings";
+            return "https://mahamonir.pythonanywhere.com/api/ui-settings";
+        }
+
+        let ceilingHeightBounds = { interior_min_m: 3, interior_max_m: 5, exterior_max_m: 20 };
+
+        function validateCeilingHeightM(heightM) {
+            const h = Number(heightM);
+            if (!Number.isFinite(h)) {
+                return "Not logical dimensions: enter a valid ceiling height (m).";
+            }
+            const th = Number(ceilingHeightBounds.interior_max_m);
+            const minI = Number(ceilingHeightBounds.interior_min_m);
+            const maxE = Number(ceilingHeightBounds.exterior_max_m);
+            if (h < th) {
+                if (h < minI) {
+                    return (
+                        "Not logical dimensions: interior ceiling height must be between " +
+                        minI +
+                        " m and " +
+                        th +
+                        " m (below " +
+                        th +
+                        " m for indoor catalog)."
+                    );
+                }
+                return null;
+            }
+            if (h > maxE) {
+                return (
+                    "Not logical dimensions: exterior ceiling height must be between " +
+                    th +
+                    " m and " +
+                    maxE +
+                    " m."
+                );
+            }
+            return null;
+        }
+
+        (async function loadCeilingHeightBounds() {
+            try {
+                const r = await fetch(getUiSettingsApiUrl(), { cache: "no-store" });
+                if (!r.ok) return;
+                const j = await r.json();
+                if (j.ceiling_height_bounds && typeof j.ceiling_height_bounds === "object") {
+                    ceilingHeightBounds = { ...ceilingHeightBounds, ...j.ceiling_height_bounds };
+                }
+            } catch (e) {
+                /* keep defaults */
+            }
+        })();
+
+        let lastResolvedStandardRow = null;
+
+        /** Full standard row for submit / result (entire standards_cleaned row, all keys). */
+        function exportStandardLighting(row) {
+            if (!row) return null;
+            try {
+                return JSON.parse(JSON.stringify(row));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function standardsAssetUrl(path) {
+            return new URL(path, window.location.href).toString();
+        }
+
+        /** Try several roots (subfolder deploy, /LuxScaleAI/, etc.) until JSON loads. */
+        function standardsJsonUrlCandidates(relPath) {
+            const p = String(relPath).replace(/^\/+/, "");
+            const out = [];
+            const seen = new Set();
+            const add = (url) => {
+                if (!seen.has(url)) {
+                    seen.add(url);
+                    out.push(url);
+                }
+            };
+            add(new URL(p, window.location.href).toString());
+            add(new URL("/LuxScaleAI/" + p, window.location.origin).toString());
+            const seg = window.location.pathname.split("/").filter(Boolean);
+            if (seg.length && seg[seg.length - 1].includes(".")) seg.pop();
+            if (seg.length) add(window.location.origin + "/" + seg.join("/") + "/" + p);
+            return out;
+        }
+
+        async function fetchStandardsJsonOk(relPath) {
+            const candidates = standardsJsonUrlCandidates(relPath);
+            let lastErr = null;
+            for (const url of candidates) {
+                try {
+                    const r = await fetch(url, { cache: "no-store" });
+                    if (!r.ok) {
+                        lastErr = new Error(url + " HTTP " + r.status);
+                        continue;
+                    }
+                    const data = await r.json();
+                    return { data, url };
+                } catch (e) {
+                    lastErr = e;
+                }
+            }
+            throw lastErr || new Error("Could not load " + relPath);
+        }
+
+        /**
+         * Base keywords always from static JSON (works with XAMPP only; no Flask required).
+         * Optional merge from /places when the API responds (same-host :5000 or PythonAnywhere).
+         */
+        async function loadStandardsConfig() {
+            let categoryKeywords = {};
+            let categoryLabels = null;
+
+            try {
+                const pack = await fetchStandardsJsonOk("standards/standards_keywords_upgraded.json");
+                const kw = pack.data;
+                categoryKeywords = { ...(kw.category_keywords || {}) };
+                categoryLabels = Object.keys(categoryKeywords).sort();
+            } catch (e) {
+                console.warn("loadStandardsConfig static keywords:", e);
+            }
+
+            try {
+                const response = await fetch(getPlacesApiUrl());
+                if (!response.ok) throw new Error("places HTTP " + response.status);
+                const data = await response.json();
+                if (data.category_keywords && typeof data.category_keywords === "object") {
+                    categoryKeywords = { ...categoryKeywords, ...data.category_keywords };
+                }
+                if (Array.isArray(data.standard_categories) && data.standard_categories.length > 0) {
+                    categoryLabels = data.standard_categories.slice();
+                } else {
+                    categoryLabels = Object.keys(categoryKeywords).sort();
+                }
+            } catch (err) {
+                console.warn("loadStandardsConfig /places:", err);
+            }
+
+            if (!categoryLabels || categoryLabels.length === 0) {
+                categoryLabels = Object.keys(categoryKeywords).sort();
+            }
+
+            return { categoryLabels, categoryKeywords };
+        }
+
+        async function bootStandardsPicker() {
+            const cfg = await loadStandardsConfig();
+            if (typeof initStandardsPicker !== "function") {
+                console.warn("standards-picker.js did not load; category/task datalists stay empty.");
+                return;
+            }
+
+            let cleanedRows = null;
+            let cleanedUrl = standardsAssetUrl("standards/standards_cleaned.json");
+            try {
+                const pack = await fetchStandardsJsonOk("standards/standards_cleaned.json");
+                cleanedRows = pack.data;
+                cleanedUrl = pack.url;
+            } catch (e) {
+                console.error("standards_cleaned.json:", e);
+            }
+
+            var pickerOpts = {
+                cleanedRows: Array.isArray(cleanedRows) ? cleanedRows : null,
+                cleanedUrl: cleanedUrl,
+                keywordsUrl: standardsAssetUrl("standards/standards_keywords_upgraded.json"),
+                categoryInput: document.getElementById("stdCategory"),
+                categoryDatalist: document.getElementById("dl-std-categories"),
+                taskInput: document.getElementById("stdTask"),
+                taskDatalist: document.getElementById("dl-std-tasks"),
+                categoryKeywords: cfg.categoryKeywords,
+                onRowResolved: function (row) {
+                    lastResolvedStandardRow = row;
+                }
+            };
+            if (cfg.categoryLabels && cfg.categoryLabels.length > 0) {
+                pickerOpts.categoryLabels = cfg.categoryLabels;
+            }
+            const run = initStandardsPicker(pickerOpts);
+            if (run && typeof run.then === "function") {
+                run.catch(function (err) {
+                    console.error("initStandardsPicker:", err);
+                });
+            }
+        }
+
+        const SUBMIT_ENDPOINTS = (() => {
+            const fromCurrentPage = new URL("./api/submit.php", window.location.href).toString();
+            const sameOriginRoot = new URL("/api/submit.php", window.location.origin).toString();
+            const projectRoot = new URL("/LuxScaleAI/api/submit.php", window.location.origin).toString();
+            const endpoints = [fromCurrentPage, projectRoot, sameOriginRoot];
+            const h = window.location.hostname;
+            if (h === "localhost" || h === "127.0.0.1") {
+                endpoints.push("http://127.0.0.1:5000/api/submit");
+                endpoints.push("http://localhost:5000/api/submit");
+                endpoints.push("http://localhost/sc-luxscaleai/api/submit.php");
+            }
+            return [...new Set(endpoints)];
+        })();
+
+        async function submitStudy(payload) {
+            let lastError = "Submit API request failed.";
+
+            for (const endpoint of SUBMIT_ENDPOINTS) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const responseText = await response.text();
+                    let json = null;
+                    try {
+                        json = JSON.parse(responseText);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON response from ${endpoint}`);
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(json?.error || json?.message || `Submit failed on ${endpoint}`);
+                    }
+                    const token = json?.token ?? json?.data?.token;
+                    if (!token || json?.error) {
+                        throw new Error(
+                            json?.error ||
+                                json?.message ||
+                                `No token in submit response (${endpoint})`
+                        );
+                    }
+                    return { ...json, token };
+                } catch (error) {
+                    lastError = error.message || lastError;
+                }
+            }
+
+            throw new Error(lastError);
+        }
+
+        function getStoredLinksRaw() {
+            try {
+                const raw = JSON.parse(localStorage.getItem(RESULT_LINKS_KEY) || "[]");
+                return Array.isArray(raw) ? raw.filter((item) => typeof item === "string" && item.length > 0) : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function getStoredAtFromLink(link) {
+            try {
+                const parsed = new URL(link, window.location.origin);
+                const storedAtValue = Number(parsed.searchParams.get("stored_at"));
+                return Number.isFinite(storedAtValue) ? storedAtValue : 0;
+            } catch (error) {
+                return 0;
+            }
+        }
+
+        function getValidResultLinks() {
+            const now = Date.now();
+            const validLinks = getStoredLinksRaw()
+                .filter((link) => now - getStoredAtFromLink(link) <= RESULT_LINK_TTL_MS)
+                .sort((a, b) => getStoredAtFromLink(b) - getStoredAtFromLink(a));
+
+            localStorage.setItem(RESULT_LINKS_KEY, JSON.stringify(validLinks));
+            return validLinks;
+        }
+
+        function createStoredResultLink(token) {
+            const linkUrl = new URL(RESULT_PAGE_PATH, window.location.href);
+            linkUrl.searchParams.set("token", token);
+            linkUrl.searchParams.set("stored_at", String(Date.now()));
+            return linkUrl.pathname + linkUrl.search;
+        }
+
+        function saveResultLink(link) {
+            const currentLinks = getValidResultLinks();
+            const deduplicatedLinks = currentLinks.filter((item) => item !== link);
+            deduplicatedLinks.unshift(link);
+            localStorage.setItem(RESULT_LINKS_KEY, JSON.stringify(deduplicatedLinks.slice(0, 20)));
+        }
+
+        function updateViewLastResultState() {
+            const latestLink = getValidResultLinks()[0];
+            viewLastResultBtn.disabled = !latestLink;
+            viewLastResultBtn.title = latestLink ? "Open the latest result from the last hour" : "No saved results from the last hour";
+        }
+
+        function openStudyForm() {
+            studyFormSection.hidden = false;
+            studyFormSection.classList.add("is-open");
+            setStep(1);
+            studyFormSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            setTimeout(() => firstDimensionInput.focus(), 220);
+        }
+
+        function closeStudyForm() {
+            studyFormSection.classList.remove("is-open");
+            window.setTimeout(() => {
+                studyFormSection.hidden = true;
+            }, 320);
+        }
+
+        openStudyFormBtn.addEventListener("click", openStudyForm);
+        viewLastResultBtn.addEventListener("click", function () {
+            const latestLink = getValidResultLinks()[0];
+            if (!latestLink) {
+                alert("No saved result found in the last hour.");
+                updateViewLastResultState();
+                return;
+            }
+            window.location.href = latestLink;
+        });
+        cancelStudyFormBtn.addEventListener("click", closeStudyForm);
+        updateViewLastResultState();
+
+        bootStandardsPicker();
+
+        studyForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!studyForm.checkValidity()) {
+                studyForm.reportValidity();
+                return;
+            }
+
+            const width1 = Number(document.getElementById("dimA").value);
+            const length1 = Number(document.getElementById("dimB").value);
+            const width2 = Number(document.getElementById("dimC").value);
+            const length2 = Number(document.getElementById("dimD").value);
+            const height = Number(document.getElementById("dimHeight").value);
+
+            if (!lastResolvedStandardRow || !lastResolvedStandardRow.ref_no) {
+                alert("Please select a standard category and task so a reference (ref_no) is resolved.");
+                return;
+            }
+
+            if (width1 !== width2 || length1 !== length2) {
+                alert("Width 1 must equal Width 2 and Length 1 must equal Length 2 before continuing.");
+                return;
+            }
+
+            if (width1 <= 0 || length1 <= 0 || width2 <= 0 || length2 <= 0 || height <= 0) {
+                alert("Please enter valid positive dimensions.");
+                return;
+            }
+
+            const heightMsg = validateCeilingHeightM(height);
+            if (heightMsg) {
+                alert(heightMsg);
+                return;
+            }
+
+            createStudyBtn.disabled = true;
+            createStudyBtn.textContent = "Creating...";
+
+            try {
+                const sides = [width1, length1, width2, length2];
+                const calcOut = await getResults(sides, height);
+                const allResults = calcOut.results;
+                const calculationMeta = calcOut.calculation_meta || {};
+                // Full API row (beam_angle_deg, U0_calculated, IES fields, â€¦) plus legacy
+                // snake_case aliases for older submit consumers. Do not strip fields here.
+                const formattedResults = allResults.map((result) => ({
+                    ...result,
+                    luminaire: result["Luminaire"],
+                    power: result["Power (W)"],
+                    efficacy: result["Efficacy (lm/W)"],
+                    fixtures: result["Fixtures"],
+                    spacing_x: result["Spacing X (m)"],
+                    spacing_y: result["Spacing Y (m)"],
+                    avg_lux: result["Average Lux"],
+                    uniformity: result["Uniformity"],
+                    total_power: result["Total Power (W/H)"]
+                }));
+
+                const submitData = {
+                    project_name: document.getElementById("projectName").value.trim() || "SC-LUXSCALE Study",
+                    name: document.getElementById("clientName").value.trim() || "LuxScale User",
+                    company: document.getElementById("clientCompany").value.trim() || "Short Circuit Company",
+                    phone: document.getElementById("clientPhone").value.trim() || "",
+                    email: document.getElementById("clientEmail").value.trim() || "",
+                    notes: document.getElementById("projectNotes").value.trim() || "",
+                    mounting_height: parseFloat(document.getElementById("mountingHeight").value) || null,
+                    standard_ref_no: String(lastResolvedStandardRow.ref_no),
+                    standard_category: document.getElementById("stdCategory").value.trim(),
+                    standard_task_or_activity: document.getElementById("stdTask").value.trim(),
+                    standard_lighting: exportStandardLighting(lastResolvedStandardRow),
+                    sides,
+                    height,
+                    results: formattedResults,
+                    calculation_meta: calculationMeta
+                };
+
+                const submitJson = await submitStudy(submitData);
+                if (!submitJson.token) {
+                    throw new Error(submitJson.error || "No token returned from submit API.");
+                }
+
+                localStorage.setItem("user_token", submitJson.token);
+                try {
+                    localStorage.setItem(
+                        "luxscale_result_request_" + submitJson.token,
+                        JSON.stringify({
+                            standard_ref_no: submitData.standard_ref_no,
+                            standard_category: submitData.standard_category,
+                            standard_task_or_activity: submitData.standard_task_or_activity,
+                            standard_lighting: submitData.standard_lighting
+                        })
+                    );
+                    localStorage.setItem(
+                        "luxscale_result_rows_" + submitJson.token,
+                        JSON.stringify(formattedResults)
+                    );
+                    localStorage.setItem(
+                        "luxscale_result_meta_" + submitJson.token,
+                        JSON.stringify(calculationMeta)
+                    );
+                } catch (e) {
+                    console.warn("Could not stash result payload for result page:", e);
+                }
+                const resultLink = createStoredResultLink(submitJson.token);
+                saveResultLink(resultLink);
+                window.location.href = resultLink;
+            } catch (error) {
+                console.error(error);
+                alert("Failed to create study: " + error.message);
+            } finally {
+                createStudyBtn.disabled = false;
+                createStudyBtn.textContent = "Create Study";
+            }
+        });
+
+        async function getResults(sides, height) {
+            const heightMsg = validateCeilingHeightM(height);
+            if (heightMsg) {
+                throw new Error(heightMsg);
+            }
+            const row = lastResolvedStandardRow;
+            const stdCatEl = document.getElementById("stdCategory");
+            const stdTaskEl = document.getElementById("stdTask");
+            const refNo = row.ref_no != null && row.ref_no !== "" ? String(row.ref_no) : "";
+            const projectInfo = {
+                project_name: document.getElementById("projectName").value.trim() || "SC-LUXSCALE Study",
+                name: document.getElementById("clientName").value.trim() || "LuxScale User",
+                company: document.getElementById("clientCompany").value.trim() || "Short Circuit Company",
+                phone: document.getElementById("clientPhone").value.trim() || "",
+                email: document.getElementById("clientEmail").value.trim() || "",
+                notes: document.getElementById("projectNotes") ? document.getElementById("projectNotes").value.trim() : "",
+                mounting_height: document.getElementById("mountingHeight") ? (parseFloat(document.getElementById("mountingHeight").value) || null) : null,
+                standard_ref_no: refNo,
+                standard_category: stdCatEl ? stdCatEl.value.trim() : "",
+                standard_task_or_activity: stdTaskEl ? stdTaskEl.value.trim() : "",
+                standard_lighting: exportStandardLighting(row)
+            };
+
+            const payload = {
+                sides,
+                height,
+                project_info: projectInfo,
+                standard_ref_no: refNo
+            };
+            try {
+                const q = new URLSearchParams(window.location.search);
+                const fq = (q.get("fast") || "").trim().toLowerCase();
+                if (["1", "true", "yes", "fast"].includes(fq)) {
+                    payload.fast = 1;
+                }
+            } catch (e) { /* ignore */ }
+
+            const response = await fetch(getCalculateApiUrl(), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error("Calculation API error: " + errorText);
+            }
+
+            const json = await response.json();
+            if (!Array.isArray(json.results)) {
+                throw new Error("Calculation API did not return a results array.");
+            }
+
+            document.cookie = "results=" + JSON.stringify(json.results);
+            return {
+                results: json.results,
+                calculation_meta:
+                    json.calculation_meta && typeof json.calculation_meta === "object"
+                        ? json.calculation_meta
+                        : {}
+            };
+        }
+    </script>
+</body>
+</html>

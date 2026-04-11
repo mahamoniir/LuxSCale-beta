@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IES Viewer — Short Circuit</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+  <style>
+    :root {
+      --accent: #eb1b26;
+      --accent-dark: #a40e16;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d0d;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────────────── */
+    #ies-page-header {
+      background: #000;
+      border-bottom: 3px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    #ies-page-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Anton', sans-serif;
+      font-size: 15px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #ies-page-title .product-name { color: #fff; }
+    #ies-page-title .filename     { font-weight: 400; opacity: .5; font-size: 11px; }
+
+    #ies-back-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .15s, border-color .15s;
+    }
+    #ies-back-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
+
+    /* ── Tab bar ─────────────────────────────────────────────────────── */
+    #ies-tab-bar {
+      display: flex;
+      border-bottom: 2px solid #1e1e1e;
+      background: #111;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    #ies-tab-bar::-webkit-scrollbar { height: 0; }
+
+    .ies-tab {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: 13px 18px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      color: #666;
+      white-space: nowrap;
+      transition: color .13s, border-color .13s;
+    }
+    .ies-tab:hover { color: #ccc; }
+    .ies-tab-on { color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
+
+    /* ── Panel container ─────────────────────────────────────────────── */
+    #ies-body {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    .ies-panel {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .ies-panel-on { display: flex; }
+
+    /* ── Specs ───────────────────────────────────────────────────────── */
+    .ies-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .ies-spec-tile {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 12px 14px;
+      border-left: 3px solid #ccc;
+    }
+    .ies-spec-tile.red    { border-left-color: var(--accent); }
+    .ies-spec-tile.green  { border-left-color: #1a8c55; }
+    .ies-spec-tile.blue   { border-left-color: #2268c0; }
+    .ies-spec-tile.orange { border-left-color: #e07b00; }
+    .ies-spec-label { font-size: 10px; color: #888; margin-bottom: 4px; font-weight: 500; }
+    .ies-spec-value { font-size: 18px; font-weight: 700; color: #000; line-height: 1.1; }
+    .ies-spec-tile.red    .ies-spec-value { color: var(--accent); }
+    .ies-spec-tile.green  .ies-spec-value { color: #1a8c55; }
+    .ies-spec-tile.blue   .ies-spec-value { color: #2268c0; }
+    .ies-spec-tile.orange .ies-spec-value { color: #e07b00; }
+    .ies-spec-unit { font-size: 11px; font-weight: 400; opacity: .7; margin-left: 2px; }
+
+    .ies-tech-toggle {
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: #888; cursor: pointer;
+      padding: 7px 2px; border-top: 1px solid #e8e8e8; user-select: none;
+    }
+    .ies-tech-toggle:hover { color: var(--accent); }
+    .ies-tech-rows { display: none; font-size: 12px; color: #555; }
+    .ies-tech-rows.open { display: block; }
+    .ies-tech-rows table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    .ies-tech-rows td { padding: 5px 8px; border-bottom: 1px solid #f0f0f0; }
+    .ies-tech-rows td:first-child { color: #999; width: 52%; }
+    .ies-tech-rows td:last-child { font-weight: 600; color: #222; }
+
+    /* ── Polar ───────────────────────────────────────────────────────── */
+    .ies-pctrl {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      padding: 9px 12px; background: #f5f5f5; border: 1px solid #e0e0e0;
+      border-radius: 3px; font-size: 11px; font-weight: 600; color: #666;
+    }
+    .ies-pctrl select {
+      background: #fff; border: 1.5px solid #ddd; color: #222;
+      font-family: 'Poppins', sans-serif; font-size: 11px;
+      padding: 4px 7px; border-radius: 3px; outline: none;
+    }
+    .ies-pctrl select:focus { border-color: var(--accent); }
+    .ies-plot-wrap {
+      position: relative; background: #1a1a1a; border-radius: 3px;
+      overflow: hidden; min-height: 300px; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .ies-spinner { display: flex; flex-direction: column; align-items: center; gap: 10px; color: #666; font-size: 12px; }
+
+    /* ── Sim ─────────────────────────────────────────────────────────── */
+    .ies-sim-info {
+      background: #000; color: #fff; padding: 8px 14px; border-radius: 3px;
+      font-size: 11px; font-weight: 500; border: 1px solid #333;
+    }
+    .ies-sim-info span { color: var(--accent); font-weight: 700; }
+    .ies-sim-ctrls {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 10px; padding: 12px 14px; background: #fff;
+      border: 1px solid #e0e0e0; border-radius: 3px;
+    }
+    .ies-scg { display: flex; flex-direction: column; gap: 3px; }
+    .ies-scg label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .07em; }
+    .ies-scg input[type=range] { accent-color: var(--accent); width: 100%; }
+    .ies-scg span { font-size: 11px; font-weight: 700; color: var(--accent); }
+    .ies-scg select {
+      background: #fff; border: 1.5px solid #ddd; color: #222;
+      font-family: 'Poppins', sans-serif; font-size: 11px;
+      padding: 4px 7px; border-radius: 3px; outline: none;
+    }
+    .ies-scg select:focus { border-color: var(--accent); }
+
+    #ies-sim-mode-bar { display: flex; gap: 6px; padding: 8px 0 2px 0; border-bottom: 1px solid #222; padding-bottom: 8px; }
+    .ies-mode-btn {
+      background: #111; color: #888; border: 1px solid #333;
+      border-radius: 3px; padding: 5px 12px; font-size: 11px;
+      font-weight: 600; cursor: pointer; letter-spacing: .04em; transition: all .15s;
+    }
+    .ies-mode-btn:hover { color: #fff; border-color: #555; }
+    .ies-mode-btn.ies-mode-on { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    #ies-pano-wrap {
+      position: relative; flex: 1; min-height: 400px; border-radius: 3px;
+      overflow: hidden; border: 1px solid #333; background: #0d0d0d;
+    }
+    #ies-pannellum { width: 100%; height: 100%; position: absolute; inset: 0; }
+    #ies-pano-loading {
+      position: absolute; inset: 0; z-index: 10; display: flex;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; background: #0d0d0d; color: #666; font-size: 12px;
+    }
+    #ies-pano-loading p {
+      color: #555; font-size: 11px; max-width: 260px;
+      text-align: center; line-height: 1.6; margin: 0;
+    }
+    #ies-pano-badge {
+      display: none; position: absolute; top: 10px; right: 10px;
+      background: rgba(0,0,0,.7); color: var(--accent); font-size: 10px;
+      font-weight: 700; padding: 3px 9px; border-radius: 2px;
+      border: 1px solid var(--accent); font-family: 'Poppins', sans-serif;
+      letter-spacing: .06em; z-index: 5; pointer-events: none;
+    }
+
+    #ies-floor-wrap {
+      display: none; position: relative; flex: 1; min-height: 400px;
+      border-radius: 3px; overflow: hidden; border: 1px solid #333; background: #0d0d0d;
+    }
+    #ies-floor-img { width: 100%; height: 100%; object-fit: contain; display: none; }
+    #ies-floor-loading {
+      position: absolute; inset: 0; z-index: 10; display: flex;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; background: #0d0d0d; color: #666; font-size: 12px;
+    }
+    #ies-floor-badge {
+      display: none; position: absolute; top: 10px; right: 10px;
+      background: rgba(0,0,0,.7); color: var(--accent); font-size: 10px;
+      font-weight: 700; padding: 3px 9px; border-radius: 2px;
+      border: 1px solid var(--accent); letter-spacing: .06em; z-index: 5;
+      pointer-events: none;
+    }
+    #ies-floor-stats {
+      display: none; position: absolute; bottom: 10px; left: 10px;
+      background: rgba(0,0,0,.75); color: #fff; font-size: 11px;
+      font-weight: 600; padding: 6px 10px; border-radius: 3px; z-index: 5; line-height: 1.8;
+    }
+
+    /* ── 3-D ─────────────────────────────────────────────────────────── */
+    #ies-viewer-3d {
+      width: 100%; height: 480px; background: #141414; border-radius: 3px;
+      border: 1px solid #333; position: relative; overflow: hidden;
+    }
+    #ies-three-canvas { width: 100%; height: 100%; display: block; }
+    .ies-viewer-hint {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,.6); color: #ccc; font-size: 11px;
+      padding: 4px 14px; border-radius: 20px; pointer-events: none; white-space: nowrap;
+    }
+    #ies-3d-loading {
+      position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; flex-direction: column; gap: 12px;
+      background: #141414; color: #666; font-size: 12px;
+    }
+
+    /* ── Shared ──────────────────────────────────────────────────────── */
+    .ies-ring {
+      width: 22px; height: 22px; border: 3px solid #333;
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: ies-spin .7s linear infinite;
+    }
+    @keyframes ies-spin { to { transform: rotate(360deg); } }
+
+    .ies-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 5px; padding: 6px 12px; border-radius: 3px; cursor: pointer;
+      font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600;
+      border: 1.5px solid #ddd; background: #fff; color: #222;
+      transition: all .13s; white-space: nowrap;
+    }
+    .ies-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .ies-btn-red { background: var(--accent); border-color: var(--accent); color: #fff !important; }
+    .ies-btn-red:hover { background: var(--accent-dark) !important; border-color: var(--accent-dark) !important; }
+
+    /* ── Loading screen shown before data arrives ─────────────────────── */
+    #ies-init-loading {
+      position: fixed; inset: 0; z-index: 999;
+      background: #0d0d0d; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 20px;
+    }
+    #ies-init-loading .ies-ring { width: 40px; height: 40px; border-width: 4px; }
+    #ies-init-loading p { color: #555; font-size: 13px; }
+
+    /* ── Error screen ────────────────────────────────────────────────── */
+    #ies-error-screen {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: #0d0d0d; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px; padding: 24px;
+    }
+    #ies-error-screen h2 { color: var(--accent); font-family: 'Anton', sans-serif; letter-spacing: .05em; }
+    #ies-error-screen p  { color: #666; font-size: 13px; text-align: center; max-width: 420px; line-height: 1.7; }
+
+    @media (max-width: 600px) {
+      .ies-specs-grid   { grid-template-columns: 1fr 1fr; }
+      .ies-sim-ctrls    { grid-template-columns: 1fr 1fr; }
+      #ies-viewer-3d    { height: 300px; }
+      #ies-pano-wrap,
+      #ies-floor-wrap   { min-height: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading overlay -->
+  <div id="ies-init-loading">
+    <svg width="54" height="24" viewBox="0 0 88.2 39.6">
+      <path d="m 22.5,0 a 4.06,4.06 0 0 0 -3.72,2.44 h -2.14 v .38 h -5.99 c -2.29,0 -4.2,1.84 -4.2,4.12 v 12.8 c 0,2.28 1.91,4.12 4.2,4.12 h 12.46 a 1.14,1.14 0 0 0 1.14,-1.14 1.14,1.14 0 0 0 -1.14,-1.14 h -12.46 c -1.1,0 -1.91,-0.81 -1.91,-1.83 v -12.8 c 0,-1.02 .82,-1.83 1.91,-1.83 h 5.99 v .38 h 2.06 a 4.06,4.06 0 0 0 3.8,2.64 h 1.07 v -8.12 z m 8.33,0 v 1.56 h -2.2 c -0.37,0 -0.66,.3 -0.66,.66 v .46 c 0,.37 .3,.66 .66,.66 h 2.2 v 1.43 h -2.2 c -0.37,0 -0.66,.3 -0.66,.66 v .46 c 0,.37 .3,.66 .66,.66 h 2.2 v 1.56 h 1.07 a 4.06,4.06 0 0 0 3.8,-2.64 h 2.06 v -.38 h 5.9 c 1.1,0 1.91,.81 1.91,1.83 v 12.8 c 0,1.02 -.82,1.83 -1.91,1.83 h -12.21 a 1.14,1.14 0 0 0 -1.14,1.14 1.14,1.14 0 0 0 1.14,1.14 h 12.21 c 2.29,0 4.2,-1.84 4.2,-4.12 v -12.8 c 0,-2.28 -1.91,-4.12 -4.2,-4.12 h -5.9 v -.38 h -2.14 a 4.06,4.06 0 0 0 -3.72,-2.44 z" fill="#eb1b26"/>
+    </svg>
+    <div class="ies-ring"></div>
+    <p>Loading IES Viewer…</p>
+  </div>
+
+  <!-- Error screen -->
+  <div id="ies-error-screen">
+    <h2>⚠ Could not load IES data</h2>
+    <p id="ies-error-msg">No IES session data was found. Please open this page from the results page.</p>
+    <a href="result.html" style="color:var(--accent);font-weight:600;font-size:13px;">← Back to results</a>
+  </div>
+
+  <!-- Header -->
+  <header id="ies-page-header">
+    <div id="ies-page-title">
+      <svg width="18" height="18" viewBox="0 0 88.2 39.6" style="flex-shrink:0;margin-top:1px">
+        <path d="m 22.5,0 a 4.06,4.06 0 0 0 -3.72,2.44 h -2.14 v .38 h -5.99 c -2.29,0 -4.2,1.84 -4.2,4.12 v 12.8 c 0,2.28 1.91,4.12 4.2,4.12 h 12.46 a 1.14,1.14 0 0 0 1.14,-1.14 1.14,1.14 0 0 0 -1.14,-1.14 h -12.46 c -1.1,0 -1.91,-0.81 -1.91,-1.83 v -12.8 c 0,-1.02 .82,-1.83 1.91,-1.83 h 5.99 v .38 h 2.06 a 4.06,4.06 0 0 0 3.8,2.64 h 1.07 v -8.12 z m 8.33,0 v 1.56 h -2.2 c -0.37,0 -0.66,.3 -0.66,.66 v .46 c 0,.37 .3,.66 .66,.66 h 2.2 v 1.43 h -2.2 c -0.37,0 -0.66,.3 -0.66,.66 v .46 c 0,.37 .3,.66 .66,.66 h 2.2 v 1.56 h 1.07 a 4.06,4.06 0 0 0 3.8,-2.64 h 2.06 v -.38 h 5.9 c 1.1,0 1.91,.81 1.91,1.83 v 12.8 c 0,1.02 -.82,1.83 -1.91,1.83 h -12.21 a 1.14,1.14 0 0 0 -1.14,1.14 1.14,1.14 0 0 0 1.14,1.14 h 12.21 c 2.29,0 4.2,-1.84 4.2,-4.12 v -12.8 c 0,-2.28 -1.91,-4.12 -4.2,-4.12 h -5.9 v -.38 h -2.14 a 4.06,4.06 0 0 0 -3.72,-2.44 z" fill="#eb1b26"/>
+      </svg>
+      <span class="product-name" id="ies-product-name">Luminaire</span>
+      <span class="filename"     id="ies-filename"></span>
+      <span id="ies-fixture-badge" style="display:none;background:#eb1b26;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:8px;letter-spacing:.5px;flex-shrink:0;"></span>
+    </div>
+    <a id="ies-back-btn" href="javascript:window.close()">✕ Close</a>
+  </header>
+
+  <!-- Tab bar -->
+  <div id="ies-tab-bar">
+    <button class="ies-tab ies-tab-on" onclick="iesTab('specs')">📋 Specs</button>
+    <button class="ies-tab"            onclick="iesTab('polar')">📐 Polar Curve</button>
+    <button class="ies-tab"            onclick="iesTab('sim')"  >💡 Light Sim</button>
+    <button class="ies-tab"            onclick="iesTab('3d')"   >🌐 3-D View</button>
+  </div>
+
+  <!-- Panel body -->
+  <div id="ies-body">
+
+    <!-- SPECS -->
+    <div id="ies-panel-specs" class="ies-panel ies-panel-on">
+      <div class="ies-specs-grid" id="ies-specs-grid">
+        <div style="grid-column:1/-1;padding:20px;text-align:center;color:#888">
+          <div class="ies-ring" style="margin:0 auto 10px"></div>
+          Loading IES data…
+        </div>
+      </div>
+      <div class="ies-tech-toggle" onclick="document.getElementById('ies-tech-rows').classList.toggle('open')">Technical data ▾</div>
+      <div id="ies-tech-rows" class="ies-tech-rows"></div>
+    </div>
+
+    <!-- POLAR -->
+    <div id="ies-panel-polar" class="ies-panel">
+      <div class="ies-pctrl">
+        <label>H plane:</label>
+        <select id="ies-ph-sel" onchange="iesRenderPolar()"></select>
+        <label>Scale:</label>
+        <select id="ies-scale" onchange="iesRenderPolar()">
+          <option value="linear">Linear</option>
+          <option value="sqrt">Sqrt</option>
+          <option value="log">Log</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:5px">
+          <input type="checkbox" id="ies-show-beam" checked onchange="iesRenderPolar()" style="accent-color:#eb1b26">
+          Show beam/field
+        </label>
+      </div>
+      <div class="ies-plot-wrap">
+        <div class="ies-spinner" id="ies-sp-polar"><div class="ies-ring"></div><span>Rendering…</span></div>
+        <img id="ies-img-polar" style="display:none;width:100%;border-radius:3px">
+      </div>
+    </div>
+
+    <!-- LIGHT SIM -->
+    <div id="ies-panel-sim" class="ies-panel">
+      <div class="ies-sim-info" id="ies-sim-info">Preparing room simulation — using your project dimensions…</div>
+      <div class="ies-sim-ctrls">
+        <div class="ies-scg">
+          <label>Fixture height (m)</label>
+          <input type="range" id="ies-sim-fh" min="1" max="15" step="0.1" value="3" oninput="iesSimSlider('fh')">
+          <span id="ies-sim-fh-v">3.0 m</span>
+        </div>
+        <div class="ies-scg">
+          <label>Room width (m)</label>
+          <input type="range" id="ies-sim-rw" min="2" max="200" step="0.5" value="6" oninput="iesSimSlider('rw')">
+          <span id="ies-sim-rw-v">6.0 m</span>
+        </div>
+        <div class="ies-scg">
+          <label>Room length (m)</label>
+          <input type="range" id="ies-sim-rl" min="2" max="200" step="0.5" value="6" oninput="iesSimSlider('rl')">
+          <span id="ies-sim-rl-v">6.0 m</span>
+        </div>
+        <div class="ies-scg">
+          <label>Ceiling height (m)</label>
+          <input type="range" id="ies-sim-rh" min="2" max="20" step="0.1" value="3" oninput="iesSimSlider('rh')">
+          <span id="ies-sim-rh-v">3.0 m</span>
+        </div>
+        <div class="ies-scg">
+          <label>Intensity %</label>
+          <input type="range" id="ies-sim-int" min="5" max="200" value="100" oninput="iesSimSlider('int')">
+          <span id="ies-sim-int-v">100%</span>
+        </div>
+        <div class="ies-scg">
+          <label>Color temp</label>
+          <select id="ies-sim-ct" onchange="iesSimRerender()">
+            <option value="warm">Warm White 3000K</option>
+            <option value="neutral">Neutral 4000K</option>
+            <option value="cool">Cool White 6500K</option>
+          </select>
+        </div>
+        <div class="ies-scg">
+          <label>Resolution</label>
+          <select id="ies-sim-res" onchange="iesSimRerender()">
+            <option value="512" selected>Fast (512)</option>
+            <option value="768">Normal (768)</option>
+            <option value="1024">High (1024)</option>
+          </select>
+        </div>
+        <div class="ies-scg" style="justify-content:flex-end;padding-top:16px">
+          <button class="ies-btn ies-btn-red" onclick="iesSimRerender()" style="width:100%">🔄 Re-render</button>
+        </div>
+      </div>
+
+      <div id="ies-sim-mode-bar">
+        <button id="ies-mode-btn-pano"  class="ies-mode-btn ies-mode-on" onclick="iesSetSimMode('pano')">🌐 360° Panorama</button>
+        <button id="ies-mode-btn-floor" class="ies-mode-btn"             onclick="iesSetSimMode('floor')">🗺 Floor Plan Heatmap</button>
+      </div>
+
+      <div id="ies-pano-wrap">
+        <div id="ies-pannellum"></div>
+        <div id="ies-pano-loading">
+          <div class="ies-ring" style="width:32px;height:32px;border-width:4px"></div>
+          <p>Rendering IES light simulation…</p>
+        </div>
+        <div id="ies-pano-badge">360° IES SIM</div>
+      </div>
+
+      <div id="ies-floor-wrap">
+        <img id="ies-floor-img">
+        <div id="ies-floor-loading">
+          <div class="ies-ring" style="width:32px;height:32px;border-width:4px"></div>
+          <p style="color:#555;font-size:11px;max-width:260px;text-align:center;line-height:1.6;margin:0;">Computing illuminance across all fixture positions…</p>
+        </div>
+        <div id="ies-floor-badge">FLOOR PLAN · IES</div>
+        <div id="ies-floor-stats"></div>
+        <div style="position:absolute;bottom:10px;right:10px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.05em;">HIGH</span>
+          <div style="width:14px;height:80px;background:linear-gradient(to bottom,#fff,#ff0,#f80,#f00,#00f,#000);border-radius:2px;border:1px solid #444;"></div>
+          <span style="color:#fff;font-size:9px;font-weight:700;letter-spacing:.05em;">LOW</span>
+        </div>
+        <div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);color:#aaa;font-size:9px;padding:3px 7px;border-radius:2px;z-index:5;">● white dots = fixtures</div>
+      </div>
+    </div>
+
+    <!-- 3-D VIEW -->
+    <div id="ies-panel-3d" class="ies-panel">
+      <div class="ies-pctrl">
+        <label>Color:</label>
+        <select id="ies-3d-color" onchange="iesRebuild3D()">
+          <option value="thermal">Thermal</option>
+          <option value="rainbow">Rainbow</option>
+          <option value="white">White / Intensity</option>
+        </select>
+        <label>Opacity:</label>
+        <input type="range" id="ies-3d-op" min="20" max="100" value="88" oninput="iesUpdate3DOp(this.value)" style="width:80px;accent-color:#eb1b26">
+        <span id="ies-3d-op-v" style="font-size:11px;font-weight:700;color:#eb1b26;min-width:30px">88%</span>
+        <label style="display:flex;align-items:center;gap:4px">
+          <input type="checkbox" id="ies-3d-wire" onchange="iesUpdate3DWire()" style="accent-color:#eb1b26">
+          Wireframe
+        </label>
+        <div style="flex:1"></div>
+        <button class="ies-btn" onclick="iesReset3DCam()">⟳ Reset</button>
+      </div>
+      <div id="ies-viewer-3d">
+        <canvas id="ies-three-canvas"></canvas>
+        <div class="ies-viewer-hint">🖱 Drag · Scroll · Touch</div>
+        <div id="ies-3d-loading">
+          <div class="ies-ring" style="border-color:#333;border-top-color:#eb1b26;width:28px;height:28px"></div>
+          <span>Building 3-D surface…</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#ies-body -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+  <script>
+  /* ================================================================
+     openies.html — standalone IES viewer page
+     Data is received from result.html via sessionStorage key:
+       "ies_open_payload"  → JSON with { sid, placeData, productLabel, fixtureMapAsset }
+  ================================================================ */
+
+  const FLASK_BASE = (() => {
+    const h = window.location.hostname;
+    return (h === "localhost" || h === "127.0.0.1") ? "http://127.0.0.1:5000" : "";
+  })();
+
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
+  }
+
+  // ── computeLayoutGrid (mirrors result.html logic) ─────────────────
+  function computeLayoutGrid({ fixtures, spacingX, spacingY, roomWidth, roomLength }) {
+    const maxCols = Math.floor(roomWidth  / spacingX);
+    const maxRows = Math.floor(roomLength / spacingY);
+    let cols = maxCols > 0 ? maxCols : 1;
+    let rows = maxRows > 0 ? maxRows : 1;
+    if (cols * rows < fixtures) {
+      rows = Math.ceil(fixtures / cols);
+      if (maxRows > 0 && rows > maxRows) {
+        rows = maxRows;
+        cols = Math.ceil(fixtures / rows);
+        if (maxCols > 0 && cols > maxCols) cols = maxCols;
+      }
+    }
+    cols = Math.max(1, cols); rows = Math.max(1, rows);
+    const gridWidth  = (cols - 1) * spacingX;
+    const gridLength = (rows - 1) * spacingY;
+    const startX = -gridWidth  / 2;
+    const startZ = -gridLength / 2;
+    const points = []; let placed = 0;
+    for (let r = 0; r < rows && placed < fixtures; r++)
+      for (let c = 0; c < cols && placed < fixtures; c++) {
+        points.push({ x: startX + c * spacingX, z: startZ + r * spacingY });
+        placed++;
+      }
+    return { cols, rows, gridWidth, gridLength, points };
+  }
+
+  // ── State ─────────────────────────────────────────────────────────
+  let _iesSid         = null;
+  let _iesPlaceData   = {};
+  let _iesDesignLumens = 0;
+  let _iesIESData     = null;
+  let _iesPanoViewer  = null;
+  let _iesSimDebounce = null;
+  let _iesSimMode     = 'pano';
+  let _R3=null,_S3=null,_C3=null,_M3=null,_animId=null;
+  let _sph={theta:0.8,phi:0.55,r:1.5};
+
+  // ── Boot: read sessionStorage payload ────────────────────────────
+  async function bootIESPage() {
+    let payload = null;
+    try {
+      const raw = sessionStorage.getItem("ies_open_payload");
+      if (raw) payload = JSON.parse(raw);
+    } catch(e) {}
+
+    if (!payload || !payload.sid) {
+      document.getElementById("ies-init-loading").style.display = "none";
+      document.getElementById("ies-error-screen").style.display = "flex";
+      return;
+    }
+
+    _iesSid        = payload.sid;
+    _iesPlaceData  = payload.placeData || {};
+    _iesDesignLumens = parseFloat(payload.designLumens || 0) || 0;
+
+    const productLabel = payload.productLabel || "Luminaire";
+    document.getElementById("ies-product-name").textContent = productLabel;
+    document.title = productLabel + " — IES Viewer";
+
+    // Fixture badge
+    const n  = _iesPlaceData.fixtures || 1;
+    const nx = _iesPlaceData.layout_nx || 0;
+    const ny = _iesPlaceData.layout_ny || 0;
+    const grid = (nx > 0 && ny > 0) ? `${nx}×${ny}` : "";
+    const badge = document.getElementById("ies-fixture-badge");
+    badge.textContent = grid ? `${n} fixtures  ${grid}` : `${n} fixture${n > 1 ? "s" : ""}`;
+    badge.style.display = n > 0 ? "inline" : "none";
+
+    // Pre-fill sliders with room dims
+    _iesPreFillSliders(_iesPlaceData);
+
+    // Fetch specs from Flask — also send design_lumens so the session
+    // can apply correct flux scaling in panorama / floorplan renders
+    try {
+      const _specsUrl = `${FLASK_BASE}/ies/specs?sid=${_iesSid}` +
+                        (_iesDesignLumens > 0 ? `&design_lumens=${_iesDesignLumens}` : "");
+      const res  = await fetch(_specsUrl);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      iesPopulateSpecs(data.customer, data.filename);
+    } catch(e) {
+      document.getElementById("ies-specs-grid").innerHTML =
+        `<div style="grid-column:1/-1;color:#eb1b26;padding:16px">
+           Could not load specs: ${escapeHtml(e.message)}
+         </div>`;
+    }
+
+    // Hide loading overlay
+    document.getElementById("ies-init-loading").style.display = "none";
+
+    // Auto-switch to floor plan for large rooms
+    const rw = parseFloat(document.getElementById("ies-sim-rw").value) || 6;
+    const rl = parseFloat(document.getElementById("ies-sim-rl").value) || 6;
+    const fx = _iesPlaceData.fixtures || 1;
+    if (rw > 20 || rl > 20 || fx > 4) _iesSimMode = 'floor';
+  }
+
+  // ── Populate specs ────────────────────────────────────────────────
+  function iesPopulateSpecs(customer, filename) {
+    const fnEl = document.getElementById("ies-filename");
+    if (fnEl) fnEl.textContent = filename || "";
+
+    const ps = document.getElementById("ies-ph-sel");
+    if (ps && customer.horizontal_angles) {
+      ps.innerHTML = "";
+      customer.horizontal_angles.forEach((h, i) => {
+        const o = document.createElement("option");
+        o.value = i; o.textContent = h + "°"; ps.appendChild(o);
+      });
+    }
+
+    const g = document.getElementById("ies-specs-grid");
+    if (!g) return;
+    const fmt = (v, dec=0) => v != null ? Number(v).toLocaleString(undefined, {maximumFractionDigits:dec}) : "—";
+    const pd = _iesPlaceData || {};
+    const fixtureCount = pd.fixtures || 1;
+    const gridStr   = (pd.layout_nx && pd.layout_ny) ? `${pd.layout_nx} × ${pd.layout_ny}` : "—";
+    const spacingStr = (pd.spacing_x && pd.spacing_y)
+      ? `${Number(pd.spacing_x).toFixed(2)} × ${Number(pd.spacing_y).toFixed(2)} m` : "—";
+
+    const tiles = [
+      { label:"Total Lumens",   value: fmt(customer.total_lumens),     unit:"lm",  cls:"green"  },
+      { label:"Beam Angle",     value: fmt(customer.beam_angle_deg,1), unit:"°",   cls:"blue"   },
+      { label:"Peak Intensity", value: fmt(customer.peak_candela),     unit:"cd",  cls:"red"    },
+      { label:"Fixtures",       value: String(fixtureCount),           unit:"pcs", cls:"orange" },
+    ];
+    g.innerHTML = tiles.map(t => `
+      <div class="ies-spec-tile ${t.cls}">
+        <div class="ies-spec-label">${t.label}</div>
+        <div class="ies-spec-value">${t.value}<span class="ies-spec-unit">${t.unit}</span></div>
+      </div>`).join("");
+
+    const tech = document.getElementById("ies-tech-rows");
+    if (!tech) return;
+    const rows = [
+      ["Declared Lumens",   fmt(customer.declared_lumens) + (customer.declared_lumens ? " lm" : "")],
+      ["LOR",               customer.lor_pct != null ? customer.lor_pct.toFixed(1)+"%" : "—"],
+      ["Field Angle",       customer.field_angle_deg != null ? fmt(customer.field_angle_deg,1)+"°" : "—"],
+      ["Shape",             customer.shape    || "—"],
+      ["Symmetry",          customer.symmetry || "—"],
+      ["Fixture W × L × H", [customer.fixture_width_m,customer.fixture_length_m,customer.fixture_height_m].map(v=>v!=null?v.toFixed(3)+"m":"—").join(" × ")],
+      ["H planes",          customer.num_horizontal != null ? customer.num_horizontal : "—"],
+      ["V planes",          customer.num_vertical   != null ? customer.num_vertical   : "—"],
+      ["Layout grid",       gridStr],
+      ["Spacing X × Y",     spacingStr],
+    ];
+    tech.innerHTML = "<table>" + rows.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("") + "</table>";
+  }
+
+  // ── Tab switching ─────────────────────────────────────────────────
+  window.iesTab = function(name) {
+    document.querySelectorAll(".ies-tab").forEach((el, i) => {
+      el.classList.toggle("ies-tab-on", ["specs","polar","sim","3d"][i] === name);
+    });
+    document.querySelectorAll(".ies-panel").forEach(p => p.classList.remove("ies-panel-on"));
+    document.getElementById("ies-panel-" + name).classList.add("ies-panel-on");
+    if (name === "polar") iesRenderPolar();
+    if (name === "sim")   _iesInitSim();
+    if (name === "3d")    _iesInit3D();
+  };
+
+  // ── Pre-fill sliders ──────────────────────────────────────────────
+  function _iesPreFillSliders(pd) {
+    const setSlider = (id, val) => {
+      const el = document.getElementById(id); if (!el || val == null) return;
+      el.min = Math.min(parseFloat(el.min), val);
+      el.max = Math.max(parseFloat(el.max), val);
+      el.value = val;
+    };
+    if (pd.room_w != null) setSlider("ies-sim-rw", pd.room_w);
+    if (pd.room_l != null) setSlider("ies-sim-rl", pd.room_l);
+    if (pd.room_h != null) {
+      setSlider("ies-sim-rh", pd.room_h);
+      setSlider("ies-sim-fh", Math.round(pd.room_h * 0.8 * 10) / 10);
+    }
+    ["rw","rl","rh","fh"].forEach(k => {
+      const el  = document.getElementById(`ies-sim-${k}`);
+      const lbl = document.getElementById(`ies-sim-${k}-v`);
+      if (el && lbl) lbl.textContent = parseFloat(el.value).toFixed(1) + " m";
+    });
+  }
+
+  window.iesSimSlider = function(key) {
+    const el  = document.getElementById(`ies-sim-${key}`);
+    const lbl = document.getElementById(`ies-sim-${key}-v`);
+    if (!el || !lbl) return;
+    const v = parseFloat(el.value);
+    lbl.textContent = key === "int" ? Math.round(v) + "%" : v.toFixed(1) + " m";
+    clearTimeout(_iesSimDebounce);
+    _iesSimDebounce = setTimeout(iesSimRerender, 700);
+  };
+
+  // ── Polar ─────────────────────────────────────────────────────────
+  window.iesRenderPolar = async function() {
+    if (!_iesSid) return;
+    const h    = document.getElementById("ies-ph-sel").value;
+    const sc   = document.getElementById("ies-scale").value;
+    const beam = document.getElementById("ies-show-beam").checked;
+    const url  = `${FLASK_BASE}/ies/plot/polar?sid=${_iesSid}&h_idx=${h}&scale=${sc}&show_beam=${beam}`;
+    const sp   = document.getElementById("ies-sp-polar");
+    const img  = document.getElementById("ies-img-polar");
+    if (sp)  sp.style.display  = "flex";
+    if (img) img.style.display = "none";
+    try {
+      const d = await fetch(url).then(r => r.json());
+      if (d.image) { img.src = "data:image/png;base64," + d.image; img.style.display = "block"; sp.style.display = "none"; }
+      else if (sp) sp.innerHTML = `<span style="color:#eb1b26">${d.error || "Error"}</span>`;
+    } catch(e) { if (sp) sp.innerHTML = `<span style="color:#eb1b26">Error loading polar</span>`; }
+  };
+
+  // ── Sim helpers ───────────────────────────────────────────────────
+  function _buildFixturePositions(rw, rl) {
+    const pd           = _iesPlaceData || {};
+    const fixtureCount = pd.fixtures || 1;
+    const sx_orig      = pd.spacing_x || 0;
+    const sy_orig      = pd.spacing_y || 0;
+    let nx, ny, sx, sy, fixturePositions;
+
+    if (pd.layout_nx && pd.layout_ny) {
+      nx = pd.layout_nx; ny = pd.layout_ny;
+      sx = sx_orig || (rw / Math.max(nx, 1));
+      sy = sy_orig || (rl / Math.max(ny, 1));
+    } else if (sx_orig > 0 && sy_orig > 0 && fixtureCount > 1) {
+      const gridData = computeLayoutGrid({ fixtures:fixtureCount, spacingX:sx_orig, spacingY:sy_orig, roomWidth:rw, roomLength:rl });
+      nx = gridData.cols; ny = gridData.rows; sx = sx_orig; sy = sy_orig;
+      fixturePositions = gridData.points.map(p => [p.x, p.z]);
+    } else {
+      nx = 1; ny = 1; sx = rw; sy = rl;
+    }
+
+    if (!fixturePositions) {
+      fixturePositions = [];
+      const startX = -(nx - 1) * sx / 2;
+      const startZ = -(ny - 1) * sy / 2;
+      let placed = 0;
+      for (let r = 0; r < ny && placed < fixtureCount; r++)
+        for (let c = 0; c < nx && placed < fixtureCount; c++) {
+          fixturePositions.push([startX + c * sx, startZ + r * sy]);
+          placed++;
+        }
+    }
+    return { nx, ny, sx, sy, fixturePositions, actualCount: fixturePositions.length };
+  }
+
+  function _iesInitSim() {
+    const rw = parseFloat(document.getElementById("ies-sim-rw").value) || 6;
+    const rl = parseFloat(document.getElementById("ies-sim-rl").value) || 6;
+    const fx = (_iesPlaceData && _iesPlaceData.fixtures) || 1;
+    if ((rw > 20 || rl > 20 || fx > 4) && _iesSimMode === 'pano') {
+      iesSetSimMode('floor'); return;
+    }
+    if (_iesSimMode === 'floor') iesRenderFloorPlan();
+    else {
+      document.getElementById("ies-pano-loading").style.display = "flex";
+      document.getElementById("ies-pano-badge").style.display   = "none";
+      iesRenderPano();
+    }
+  }
+
+  window.iesSetSimMode = function(mode) {
+    _iesSimMode = mode;
+    document.getElementById("ies-mode-btn-pano").classList.toggle("ies-mode-on",  mode === 'pano');
+    document.getElementById("ies-mode-btn-floor").classList.toggle("ies-mode-on", mode === 'floor');
+    document.getElementById("ies-pano-wrap").style.display  = mode === 'pano'  ? "" : "none";
+    document.getElementById("ies-floor-wrap").style.display = mode === 'floor' ? "" : "none";
+    if (mode === 'floor') iesRenderFloorPlan();
+    else {
+      document.getElementById("ies-pano-loading").style.display = "flex";
+      document.getElementById("ies-pano-badge").style.display   = "none";
+      iesRenderPano();
+    }
+  };
+
+  window.iesSimRerender = function() {
+    if (_iesSimMode === 'floor') iesRenderFloorPlan(); else iesRenderPano();
+  };
+
+  // ── Panorama render ───────────────────────────────────────────────
+  window.iesRenderPano = async function() {
+    if (!_iesSid) return;
+    const fh  = parseFloat(document.getElementById("ies-sim-fh").value);
+    const rw  = parseFloat(document.getElementById("ies-sim-rw").value);
+    const rl  = parseFloat(document.getElementById("ies-sim-rl").value);
+    const rh  = parseFloat(document.getElementById("ies-sim-rh").value);
+    const int = parseFloat(document.getElementById("ies-sim-int").value) / 100;
+    const ct  = document.getElementById("ies-sim-ct").value;
+    const res = parseInt(document.getElementById("ies-sim-res").value);
+    const { nx, ny, sx, sy, fixturePositions, actualCount } = _buildFixturePositions(rw, rl);
+
+    document.getElementById("ies-pano-loading").style.display = "flex";
+    document.getElementById("ies-pano-badge").style.display   = "none";
+    document.getElementById("ies-sim-info").innerHTML =
+      `Room: <span>${rw.toFixed(1)} × ${rl.toFixed(1)} × ${rh.toFixed(1)} m</span>` +
+      ` · <span>${actualCount} fixture${actualCount>1?"s":""} (${nx}×${ny} grid)</span>` +
+      ` · Fixture H: <span>${fh.toFixed(1)} m</span> · <span>Rendering…</span>`;
+    try {
+      const payload = { sid:_iesSid, room_w:rw, room_l:rl, room_h:rh, fixture_h:fh, intensity:int, ct, w:res, h:Math.round(res/2), layout_nx:nx, layout_ny:ny, spacing_x:sx, spacing_y:sy, fixture_positions:fixturePositions };
+      const resp = await fetch(`${FLASK_BASE}/ies/panorama`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+      const d = await resp.json();
+      if (!d.image) { _iesPanoError("No image returned"); return; }
+      _iesKillPano();
+      document.getElementById("ies-pannellum").innerHTML = "";
+      _iesPanoViewer = pannellum.viewer("ies-pannellum", { type:"equirectangular", panorama:"data:image/png;base64,"+d.image, autoLoad:true, autoRotate:-1.5, compass:false, showControls:true, mouseZoom:true, hfov:90, minHfov:40, maxHfov:130, showFullscreenCtrl:true, strings:{loadButtonLabel:"View Room"} });
+      document.getElementById("ies-pano-loading").style.display = "none";
+      document.getElementById("ies-pano-badge").style.display   = "block";
+      document.getElementById("ies-sim-info").innerHTML =
+        `Room: <span>${rw.toFixed(1)} × ${rl.toFixed(1)} × ${rh.toFixed(1)} m</span>` +
+        ` · <span>${actualCount} fixture${actualCount>1?"s":""} @ ${nx}×${ny} grid</span>` +
+        ` · Fixture H: <span>${fh.toFixed(1)} m</span> · Drag to look around <span>↔ 360°</span>`;
+    } catch(e) { _iesPanoError(e.message); }
+  };
+
+  // ── Floor plan render ─────────────────────────────────────────────
+  window.iesRenderFloorPlan = async function() {
+    if (!_iesSid) return;
+    const fh  = parseFloat(document.getElementById("ies-sim-fh").value);
+    const rw  = parseFloat(document.getElementById("ies-sim-rw").value);
+    const rl  = parseFloat(document.getElementById("ies-sim-rl").value);
+    const rh  = parseFloat(document.getElementById("ies-sim-rh").value);
+    const int = parseFloat(document.getElementById("ies-sim-int").value) / 100;
+    const ct  = document.getElementById("ies-sim-ct").value;
+    const res = parseInt(document.getElementById("ies-sim-res").value);
+    const { nx, ny, sx, sy, fixturePositions, actualCount } = _buildFixturePositions(rw, rl);
+
+    const floorLoading = document.getElementById("ies-floor-loading");
+    const floorImg     = document.getElementById("ies-floor-img");
+    const floorBadge   = document.getElementById("ies-floor-badge");
+    const floorStats   = document.getElementById("ies-floor-stats");
+
+    floorLoading.style.display = "flex";
+    floorBadge.style.display   = "none";
+    floorImg.style.display     = "none";
+    floorStats.style.display   = "none";
+
+    document.getElementById("ies-sim-info").innerHTML =
+      `Room: <span>${rw.toFixed(1)} × ${rl.toFixed(1)} × ${rh.toFixed(1)} m</span>` +
+      ` · <span>${actualCount} fixture${actualCount>1?"s":""} (${nx}×${ny} grid)</span>` +
+      ` · Fixture H: <span>${fh.toFixed(1)} m</span> · <span>Computing heatmap…</span>`;
+    try {
+      const aspect = rw / rl;
+      const imgW = res, imgH = Math.max(64, Math.round(res / aspect));
+      const payload = { sid:_iesSid, room_w:rw, room_l:rl, room_h:rh, fixture_h:fh, intensity:int, ct, w:imgW, h:imgH, layout_nx:nx, layout_ny:ny, spacing_x:sx, spacing_y:sy, fixture_positions:fixturePositions };
+      const resp = await fetch(`${FLASK_BASE}/ies/floorplan`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+      const d = await resp.json();
+      if (!d.image) { floorLoading.innerHTML = `<span style="color:#eb1b26">Render failed: ${d.error || "No image"}</span>`; return; }
+      floorImg.src = "data:image/png;base64," + d.image;
+      floorImg.style.display     = "block";
+      floorLoading.style.display = "none";
+      floorBadge.style.display   = "block";
+      floorStats.style.display   = "block";
+      floorStats.innerHTML =
+        `<span style="color:#eb1b26">Eavg</span> ${d.e_avg} lx` +
+        `&nbsp;&nbsp;<span style="color:#4af">Emin</span> ${d.e_min} lx` +
+        `&nbsp;&nbsp;<span style="color:#ff0">Emax</span> ${d.e_max} lx` +
+        `&nbsp;&nbsp;<span style="color:#aaa">U₀</span> ${d.e_avg > 0 ? (d.e_min/d.e_avg).toFixed(3) : "—"}`;
+      document.getElementById("ies-sim-info").innerHTML =
+        `Room: <span>${rw.toFixed(1)} × ${rl.toFixed(1)} m</span>` +
+        ` · <span>${actualCount} fixture${actualCount>1?"s":""} @ ${nx}×${ny} grid</span>` +
+        ` · Eavg <span>${d.e_avg} lx</span>` +
+        ` · U₀ <span>${d.e_avg > 0 ? (d.e_min/d.e_avg).toFixed(3) : "—"}</span>`;
+    } catch(e) { floorLoading.innerHTML = `<span style="color:#eb1b26">Render failed: ${e.message}</span>`; }
+  };
+
+  function _iesPanoError(msg) {
+    const el = document.getElementById("ies-pano-loading");
+    if (el) el.innerHTML = `<span style="color:#eb1b26">Render failed: ${msg}</span>`;
+  }
+  function _iesKillPano() {
+    if (_iesPanoViewer) { try { _iesPanoViewer.destroy(); } catch(e) {} _iesPanoViewer = null; }
+  }
+
+  // ── 3-D ──────────────────────────────────────────────────────────
+  async function _iesInit3D() {
+    if (!_iesSid) { document.getElementById("ies-3d-loading").innerHTML = `<span style="color:#888;padding:20px;display:block;text-align:center">IES data not loaded.</span>`; return; }
+    if (!_iesIESData) {
+      document.getElementById("ies-3d-loading").style.display = "flex";
+      try { _iesIESData = await fetch(`${FLASK_BASE}/ies/ies_data?sid=${_iesSid}`).then(r => r.json()); }
+      catch(e) { document.getElementById("ies-3d-loading").innerHTML = `<span style="color:#eb1b26">Failed to load data</span>`; return; }
+    }
+    _iesSetupRenderer(); iesRebuild3D();
+    document.getElementById("ies-3d-loading").style.display = "none";
+    if (!_animId) _iesAnimate();
+  }
+
+  function _iesSetupRenderer() {
+    if (_R3) return;
+    const canvas = document.getElementById("ies-three-canvas");
+    const cont   = document.getElementById("ies-viewer-3d");
+    _R3 = new THREE.WebGLRenderer({ canvas, antialias:true });
+    _R3.setPixelRatio(Math.min(devicePixelRatio, 2));
+    _R3.setClearColor(0x141414);
+    _R3.setSize(cont.clientWidth, cont.clientHeight);
+    _S3 = new THREE.Scene();
+    _S3.add(new THREE.AmbientLight(0xffffff, 0.5));
+    const dl = new THREE.DirectionalLight(0xffffff, 0.9); dl.position.set(1.5,2,1); _S3.add(dl);
+    _C3 = new THREE.PerspectiveCamera(45, cont.clientWidth/cont.clientHeight, 0.005, 50);
+    _iesUpdateCam();
+    _S3.add(new THREE.AxesHelper(0.4));
+    const grid = new THREE.GridHelper(2.4, 24, 0x2a2a2a, 0x222222); grid.position.y = -0.01; _S3.add(grid);
+    _iesSetupOrbit(canvas);
+    new ResizeObserver(() => {
+      const c = document.getElementById("ies-viewer-3d");
+      if (!c || !_R3) return;
+      _R3.setSize(c.clientWidth, c.clientHeight);
+      _C3.aspect = c.clientWidth / c.clientHeight;
+      _C3.updateProjectionMatrix();
+    }).observe(cont);
+  }
+
+  function _iesUpdateCam() { _C3.position.set(_sph.r*Math.sin(_sph.phi)*Math.sin(_sph.theta), _sph.r*Math.cos(_sph.phi), _sph.r*Math.sin(_sph.phi)*Math.cos(_sph.theta)); _C3.lookAt(0,0.05,0); }
+  window.iesReset3DCam = function() { _sph={theta:0.8,phi:0.55,r:1.5}; _iesUpdateCam(); };
+
+  window.iesRebuild3D = function() {
+    if (!_iesIESData || !_S3) return;
+    if (_M3) { _S3.remove(_M3); _M3.geometry.dispose(); _M3.material.dispose(); _M3 = null; }
+    const d=_iesIESData, va=d.vertical_angles, ha=d.horizontal_angles, mat=d.candela_matrix, pk=d.max_value||1;
+    const nH=ha.length, nV=va.length, sym=(d.symmetry||"").toLowerCase();
+    let haFull=[], matFull=[];
+    if (nH===1) { for(let i=0;i<72;i++){haFull.push(i*5);matFull.push(mat[0]);} }
+    else if (sym.includes("quadrant")||ha[nH-1]<=90) {
+      const q1=ha.map((h,i)=>({h,cd:mat[i]})); const q2=q1.slice().reverse().map(e=>({h:180-e.h,cd:e.cd})); const q3=q1.map(e=>({h:180+e.h,cd:e.cd})); const q4=q1.slice().reverse().map(e=>({h:360-e.h,cd:e.cd}));
+      [...q1,...q2.slice(1),...q3.slice(1),...q4.slice(1,-1)].forEach(e=>{haFull.push(e.h);matFull.push(e.cd);});
+    } else if (sym.includes("half")||ha[nH-1]<=180) {
+      ha.forEach((h,i)=>{haFull.push(h);matFull.push(mat[i]);}); ha.slice(1,-1).reverse().forEach((h,ri)=>{haFull.push(360-h);matFull.push(mat[nH-2-ri]);});
+    } else { ha.forEach((h,i)=>{haFull.push(h);matFull.push(mat[i]);}); }
+
+    const nHF=haFull.length, geo=new THREE.BufferGeometry(), pos=[], col=[], idx=[];
+    const cMode = document.getElementById("ies-3d-color").value;
+    function getColor(t) {
+      if (cMode==="white") return [t,t,t];
+      if (cMode==="rainbow") { const c=new THREE.Color().setHSL((1-t)*0.66,1,0.45); return [c.r,c.g,c.b]; }
+      if (t<0.2){const f=t/0.2;return[0,0,f];}if(t<0.4){const f=(t-0.2)/0.2;return[0,f,1];}if(t<0.6){const f=(t-0.4)/0.2;return[0,1,1-f];}if(t<0.8){const f=(t-0.6)/0.2;return[f,1,0];}const f=(t-0.8)/0.2;return[1,1-f*0.7,0];
+    }
+    for(let hi=0;hi<nHF;hi++){const phi=haFull[hi]*Math.PI/180,cdRow=matFull[hi];if(!cdRow||!cdRow.length)continue;for(let vi=0;vi<nV;vi++){const theta=va[vi]*Math.PI/180,r=Math.max(0,(cdRow[vi]||0))/pk;pos.push(r*Math.sin(theta)*Math.cos(phi),-r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi));const c=getColor(r);col.push(c[0],c[1],c[2]);}}
+    for(let hi=0;hi<nHF;hi++){const hiN=(hi+1)%nHF;for(let vi=0;vi<nV-1;vi++){const a=hi*nV+vi,b=hi*nV+vi+1,c=hiN*nV+vi,dd=hiN*nV+vi+1;idx.push(a,b,c,b,dd,c);}}
+    geo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
+    geo.setAttribute("color",new THREE.Float32BufferAttribute(col,3));
+    geo.setIndex(idx); geo.computeVertexNormals();
+    const op = parseInt(document.getElementById("ies-3d-op").value)/100;
+    const mat3 = new THREE.MeshPhongMaterial({ vertexColors:true, side:THREE.DoubleSide, wireframe:document.getElementById("ies-3d-wire").checked, opacity:op, transparent:op<1, shininess:40 });
+    _M3 = new THREE.Mesh(geo, mat3); _S3.add(_M3);
+  };
+
+  window.iesUpdate3DOp = function(v) { document.getElementById("ies-3d-op-v").textContent=v+"%"; if(_M3){_M3.material.opacity=v/100;_M3.material.transparent=v<100;_M3.material.needsUpdate=true;} };
+  window.iesUpdate3DWire = function() { if(_M3){_M3.material.wireframe=document.getElementById("ies-3d-wire").checked;_M3.material.needsUpdate=true;} };
+  function _iesAnimate() { _animId=requestAnimationFrame(_iesAnimate); if(_R3&&_S3&&_C3) _R3.render(_S3,_C3); }
+
+  function _iesSetupOrbit(canvas) {
+    let drag=false,lastX=0,lastY=0,t0d=0;
+    canvas.addEventListener("mousedown",e=>{drag=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault();});
+    canvas.addEventListener("contextmenu",e=>e.preventDefault());
+    window.addEventListener("mouseup",()=>drag=false);
+    window.addEventListener("mousemove",e=>{if(!drag)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;_sph.theta-=dx*0.007;_sph.phi=Math.max(0.04,Math.min(Math.PI-0.04,_sph.phi+dy*0.007));_iesUpdateCam();});
+    canvas.addEventListener("wheel",e=>{_sph.r=Math.max(0.25,Math.min(5,_sph.r+e.deltaY*0.0015));_iesUpdateCam();e.preventDefault();},{passive:false});
+    canvas.addEventListener("touchstart",e=>{if(e.touches.length===1){drag=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;}if(e.touches.length===2){const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;t0d=Math.hypot(dx,dy);}e.preventDefault();},{passive:false});
+    canvas.addEventListener("touchmove",e=>{if(e.touches.length===1&&drag){const dx=e.touches[0].clientX-lastX,dy=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;_sph.theta-=dx*0.007;_sph.phi=Math.max(0.04,Math.min(Math.PI-0.04,_sph.phi+dy*0.007));_iesUpdateCam();}if(e.touches.length===2){const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;const dist=Math.hypot(dx,dy);_sph.r=Math.max(0.25,Math.min(5,_sph.r-(dist-t0d)*0.004));t0d=dist;_iesUpdateCam();}e.preventDefault();},{passive:false});
+    canvas.addEventListener("touchend",()=>drag=false);
+  }
+
+  // ── Boot ──────────────────────────────────────────────────────────
+  bootIESPage();
+  </script>
+</body>
+</html>

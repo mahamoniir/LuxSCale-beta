@@ -1,0 +1,242 @@
+# ================================================================
+#  SC LuxScaleAI — .gitignore
+#  Flask + Python backend  |  Vanilla JS / HTML frontend
+#  Place this file at the project root: LuxScaleAI/.gitignore
+# ================================================================
+
+luxscale_app.log
+uniformity_reports/
+calculation_logs/
+api/data/studies/*.json
+
+# Local env (copy from .env.example)
+.env
+# Add these lines to your existing .gitignore:
+gemini_config.json
+gemini_snapshot.json
+
+# ────────────────────────────────────────────────────────────────
+#  STUDY DATA  (user-generated, never commit)
+# ────────────────────────────────────────────────────────────────
+api/data/studies/*.json
+api/data/studies/!.gitignore
+
+# IES photometric files (large binaries, serve from storage)
+api/data/ies/
+ies/
+*.ies
+*.IES
+
+# Generated PDF reports
+*.pdf
+reports/
+
+# Generated exports
+*.dxf
+*.stl
+
+
+# ────────────────────────────────────────────────────────────────
+#  PYTHON
+# ────────────────────────────────────────────────────────────────
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+*.py,cover
+htmlcov/
+.pytest_cache/
+nosetests.xml
+
+# mypy / pyright / type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+
+# ────────────────────────────────────────────────────────────────
+#  FLASK / APP SECRETS
+# ────────────────────────────────────────────────────────────────
+instance/
+.env
+.env.*
+!.env.example
+secrets.json
+config_local.py
+config.local.py
+luxscale_app.log
+*.log
+logs/
+
+# Flask session files
+flask_session/
+
+
+# ────────────────────────────────────────────────────────────────
+#  NODE / FRONTEND BUILD
+# ────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+.parcel-cache/
+.vite/
+.next/
+out/
+
+# Sass cache
+.sass-cache/
+*.css.map
+*.js.map
+
+
+# ────────────────────────────────────────────────────────────────
+#  EDITORS & IDEs
+# ────────────────────────────────────────────────────────────────
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains (PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+Session.vim
+.netrwhist
+
+# Emacs
+\#*\#
+.#*
+
+
+# ────────────────────────────────────────────────────────────────
+#  OPERATING SYSTEM
+# ────────────────────────────────────────────────────────────────
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon?
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+
+
+# ────────────────────────────────────────────────────────────────
+#  XAMPP / LOCAL SERVER
+# ────────────────────────────────────────────────────────────────
+# XAMPP error / access logs that may appear in project folder
+access.log
+error.log
+xampp-control.log
+
+
+# ────────────────────────────────────────────────────────────────
+#  UPLOADS & TEMP
+# ────────────────────────────────────────────────────────────────
+uploads/
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+
+# ────────────────────────────────────────────────────────────────
+#  SECURITY — never commit these
+# ────────────────────────────────────────────────────────────────
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+.htpasswd
+auth.json
+credentials.json
+
+
+# ────────────────────────────────────────────────────────────────
+#  KEEP THESE (force-include important tracked files)
+# ────────────────────────────────────────────────────────────────
+!api/data/studies/.gitignore
+!.env.example
+!assets/.gitkeep
+*.zip
+maha/

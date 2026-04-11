@@ -1,0 +1,168 @@
+{
+  "export_info": {
+    "exported_at": "2025-12-02T21:30:21.913105",
+    "exporter_version": "1.0",
+    "source_file": "E:\\AI_projects\\final_comparator\\IES\\Highbay 150 w\\by698p+led265cw+wb+g2.ies"
+  },
+  "metadata": {
+    "filename": "by698p+led265cw+wb+g2.ies",
+    "metadata_lines": [
+      "IESNA:LM-63-2002",
+      "[TEST] LVC2190357",
+      "[TESTLAB]",
+      "[MANUFAC] PHILIPS",
+      "[LUMCAT]",
+      "[LUMINAIRE] BY698P LED265CW G2 WB",
+      "[LAMP] LED",
+      "[BALLAST]",
+      "[ISSUEDATE] 2019-04-09",
+      "[OTHER] B-Angle = 0.00 B-Tilt = 0.00 2019-04-12",
+      "TILT=NONE"
+    ],
+    "photometric_type": 1,
+    "photometric_type_name": "Type C",
+    "units": "feet"
+  },
+  "lamp_info": {
+    "lamp_count": 1,
+    "lumens_per_lamp": 26500.0,
+    "total_lumens": 26500.0,
+    "total_lumens_calculated": 0.0,
+    "candela_multiplier": 1.0,
+    "wattage": 2.0,
+    "input_watts": null,
+    "efficacy_lm_per_w": 13250.0,
+    "ballast_factor": 1.0
+  },
+  "fixture_dimensions": {
+    "width": -0.338,
+    "length": -0.338,
+    "height": 0.0
+  },
+  "photometric_data": {
+    "vertical_angles": [
+      0.0,
+      2.5,
+      5.0,
+      7.5,
+      10.0,
+      12.5,
+      15.0,
+      17.5,
+      20.0,
+      22.5,
+      25.0,
+      27.5,
+      30.0,
+      32.5,
+      35.0,
+      37.5,
+      40.0,
+      42.5,
+      45.0,
+      47.5,
+      50.0,
+      52.5,
+      55.0,
+      57.5,
+      60.0,
+      62.5,
+      65.0,
+      67.5,
+      70.0,
+      72.5,
+      75.0,
+      77.5,
+      80.0,
+      82.5,
+      85.0,
+      87.5,
+      90.0,
+      92.5,
+      95.0,
+      97.5,
+      100.0,
+      180.0
+    ],
+    "horizontal_angles": [
+      0.0
+    ],
+    "vertical_count": 42,
+    "horizontal_count": 1,
+    "peak_candela": 12127.2,
+    "min_candela": 0.0,
+    "peak_candela_location": {
+      "horizontal": 0.0,
+      "vertical": 0.0
+    },
+    "candela_matrix": [
+      [
+        12127.2,
+        12120.57,
+        12100.43,
+        12060.41,
+        12011.13,
+        11970.05,
+        11956.8,
+        11980.65,
+        12009.27,
+        11984.89,
+        11836.49,
+        11494.38,
+        10936.29,
+        10186.07,
+        9311.57,
+        8393.88,
+        7490.76,
+        6648.58,
+        5876.91,
+        5182.34,
+        4554.29,
+        3987.19,
+        3471.5,
+        3002.45,
+        2579.25,
+        2200.29,
+        1864.81,
+        1566.95,
+        1307.25,
+        1079.88,
+        878.21,
+        695.63,
+        529.73,
+        374.97,
+        227.37,
+        89.57,
+        1.86,
+        0.26,
+        0.26,
+        0.26,
+        0.26,
+        0.0
+      ]
+    ]
+  },
+  "beam_angles": {
+    "vertical_fwhm_at_0deg_horizontal": 42.5,
+    "vertical_10pct_at_0deg_horizontal": 70.0,
+    "vertical_50pct_at_0deg_horizontal": 42.5,
+    "horizontal_fwhm_at_peak_vertical": 0.0,
+    "horizontal_10pct_at_peak_vertical": 0.0,
+    "horizontal_50pct_at_peak_vertical": 0.0,
+    "vertical_fwhm_min": 42.5,
+    "vertical_fwhm_max": 42.5,
+    "vertical_fwhm_median": 42.5,
+    "peak_location": {
+      "horizontal_angle": 0.0,
+      "vertical_angle": 0.0
+    }
+  },
+  "statistics": {
+    "peak_candela": 12127.2,
+    "min_candela": 0.0,
+    "peak_location": {
+      "horizontal": 0.0,
+      "vertical": 0.0
+    }
+  }
+}

@@ -145,6 +145,15 @@
 
     <script>
 
+    /** Local Flask API vs public PythonAnywhere — same-origin public sites use hosted API */
+    function getCalculateApiUrl() {
+        var h = window.location.hostname;
+        if (h === "localhost" || h === "127.0.0.1") {
+            return "http://127.0.0.1:5000/calculate";
+        }
+        return "https://mahamonir.pythonanywhere.com/calculate";
+    }
+
     async function calculate() {
 
         // const form = document.getElementById('popupForm');
@@ -157,7 +166,8 @@
 
         let all_results = await getResults();
         // document.cookie = `results=${JSON.stringify(all_results)}`;
-        results = all_results.map(result => ({
+        results = all_results.map((result) => ({
+            ...result,
             luminaire: result["Luminaire"],
             power: result["Power (W)"],
             efficacy: result["Efficacy (lm/W)"],
@@ -267,10 +277,9 @@
             }
         };
 
-        console.log("Sending to API:", data);
+        console.log("Sending to API:", getCalculateApiUrl(), data);
 
-        const res = await fetch("https://mahamonir.pythonanywhere.com/calculate", {
-        // const res = await fetch("https://salma-maha.up.railway.app/calculate", {
+        const res = await fetch(getCalculateApiUrl(), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -285,7 +294,9 @@
         }
 
         const json = await res.json();
-        if (!json.results) throw new Error("No results field in API response");
+        if (!Array.isArray(json.results)) {
+            throw new Error("No results array in API response");
+        }
 
         document.cookie = `results=${JSON.stringify(json.results)}`;
         return json.results;

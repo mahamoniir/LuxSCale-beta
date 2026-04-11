@@ -116,6 +116,7 @@ const NAME_TO_BASE = {
   "sc triproof": "SC-Triproof",
   "sc backlight": "SC-Backlight",
   "sc flood": "SC-Flood",
+  "sc flood light exterior": "SC-Flood",
   "sc highbay": "SC-HighBay",
   "sc street": "SC-Street",
   "sc solar aio street": "SC-Solar-AIO-Street",
@@ -132,6 +133,18 @@ function extForBase(base) {
   return "webp";
 }
 
+/** Watt segment in CDN filename when it differs from IES/catalog power (display only). */
+function imageWattForUrl(luminaire, power) {
+  const key = luminaire.toString().trim().toLowerCase();
+  const pw = Number(power);
+  if (key === "eco highbay" && pw === 138) return 100;
+  if (key === "sc highbay" && pw === 138) return 100;
+  if (key === "sc street" && (pw === 50 || pw === 90)) return 100;
+  if (key === "sc backlight" && (pw === 42 || pw === 32 || pw === 35)) return 36;
+  if (key === "sc triproof" && (pw === 30 || pw === 40)) return 36;
+  return pw;
+}
+
 // Build array of 4 image urls for a luminaire + power
 function buildFixtureImages(luminaire, power) {
   if (!luminaire) return [PLACEHOLDER];
@@ -140,7 +153,6 @@ function buildFixtureImages(luminaire, power) {
 
   // fallback: try to convert name to a reasonable base (capitalize words and join with hyphen)
   if (!base) {
-    // e.g. "SC downlight" -> "SC-Downlight"
     base = luminaire
       .trim()
       .split(/\s+/)
@@ -148,16 +160,21 @@ function buildFixtureImages(luminaire, power) {
       .join("-");
   }
 
-  // Some fixtures in API might not exactly match wattage sets (like 42W) — we'll use the given power.
-  let watt = power ? `${power}W` : "";
-
   const ext = extForBase(base);
   const images = [];
+  if (key === "sc downlight" || base === "SC-Spot") {
+    for (let i = 1; i <= 4; i++) {
+      images.push(FIXTURES_BASE + `${base}000${i}.${ext}`);
+    }
+    return images;
+  }
+
+  const wNum = imageWattForUrl(luminaire, power);
+  const watt = wNum != null && wNum !== "" && !Number.isNaN(wNum) ? `${wNum}W` : "";
   for (let i = 1; i <= 4; i++) {
-    // compose filename like: SC-Backlight-36W-transparent0001.png
-    console.log(base, watt, ext);
-    watt == "42W" ? watt = "36W" : watt ;
-    const filename = watt ? `${base}-${watt}-transparent000${i}.${ext}` : `${base}-transparent000${i}.${ext}`;
+    const filename = watt
+      ? `${base}-${watt}-transparent000${i}.${ext}`
+      : `${base}-transparent000${i}.${ext}`;
     images.push(FIXTURES_BASE + filename);
   }
   return images;

@@ -1,0 +1,611 @@
+{
+    "company": "Short Circuit Company",
+    "website": "https://shortcircuit.company",
+    "base_image_url": "https://shortcircuit.company/assets/img/products/",
+    "generated_at": "2026-03-30",
+    "categories": [
+      {
+        "id": "high-power",
+        "name": "High Power Products",
+        "url": "https://shortcircuit.company/products/high-power.html",
+        "products": [
+          {
+            "id": "sc-flood-100",
+            "name": "SC TM Flood 100",
+            "title": "SC Flood Light 100W / 150W",
+            "url": "https://shortcircuit.company/products/sc-flood-100.html",
+            "type": "Flood Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "100W / 150W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "160lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": true,
+              "ot_protection": true,
+              "pcb": "Taiwan",
+              "lifetime": "50,000H / 100,000H",
+              "warranty": "5 Years / 7 Years"
+            }
+          },
+          {
+            "id": "sc-flood-200",
+            "name": "SC TM Flood 200",
+            "title": "SC Flood Light 200W / 250W",
+            "url": "https://shortcircuit.company/products/sc-flood-200.html",
+            "type": "Flood Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "200W / 250W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "160lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": true,
+              "ot_protection": true,
+              "pcb": "Taiwan",
+              "lifetime": "50,000H / 100,000H",
+              "warranty": "5 Years / 7 Years"
+            }
+          },
+          {
+            "id": "sc-flood-400",
+            "name": "SC TM Flood 400",
+            "title": "SC Flood Light 300W / 350W / 400W",
+            "url": "https://shortcircuit.company/products/sc-flood-400.html",
+            "type": "Flood Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Flood-400W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-400W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-400W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Flood-400W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "300W / 350W / 400W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "160lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": true,
+              "ot_protection": true,
+              "pcb": "Taiwan",
+              "lifetime": "50,000H / 100,000H",
+              "warranty": "5 Years / 7 Years"
+            }
+          },
+          {
+            "id": "sv-flood-100",
+            "name": "SV TM Flood 100",
+            "title": "SV Flood Light 100W",
+            "url": "https://shortcircuit.company/products/sv-flood-100.html",
+            "type": "Flood Light",
+            "series": "SV",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "100W",
+              "chip": "Sanan COB",
+              "driver": "TLG",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.8",
+              "luminous_efficacy": "110lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "3000K - 6500K",
+              "ov_protection": true,
+              "oc_protection": false,
+              "ot_protection": false,
+              "pcb": "Taiwan",
+              "lifetime": "20,000H",
+              "warranty": "2 Years"
+            }
+          },
+          {
+            "id": "sv-flood-200",
+            "name": "SV TM Flood 200",
+            "title": "SV Flood Light 200W",
+            "url": "https://shortcircuit.company/products/sv-flood-200.html",
+            "type": "Flood Light",
+            "series": "SV",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "200W",
+              "chip": "Sanan COB",
+              "driver": "TLG",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.8",
+              "luminous_efficacy": "110lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "3000K - 6500K",
+              "ov_protection": true,
+              "oc_protection": false,
+              "ot_protection": false,
+              "pcb": "Taiwan",
+              "lifetime": "20,000H",
+              "warranty": "2 Years"
+            }
+          },
+          {
+            "id": "sv-flood-300",
+            "name": "SV TM Flood 300",
+            "title": "SV Flood Light 300W",
+            "url": "https://shortcircuit.company/products/sv-flood-300.html",
+            "type": "Flood Light",
+            "series": "SV",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "300W",
+              "chip": "Sanan COB",
+              "driver": "TLG",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.8",
+              "luminous_efficacy": "110lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "3000K - 6500K",
+              "ov_protection": true,
+              "oc_protection": false,
+              "ot_protection": false,
+              "pcb": "Taiwan",
+              "lifetime": "20,000H",
+              "warranty": "2 Years"
+            }
+          },
+          {
+            "id": "sv-flood-400",
+            "name": "SV TM Flood 400",
+            "title": "SV Flood Light 400W",
+            "url": "https://shortcircuit.company/products/sv-flood-400.html",
+            "type": "Flood Light",
+            "series": "SV",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SV-Flood-400W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-400W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-400W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SV-Flood-400W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "400W",
+              "chip": "Sanan COB",
+              "driver": "TLG",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.8",
+              "luminous_efficacy": "110lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "3000K - 6500K",
+              "ov_protection": true,
+              "oc_protection": false,
+              "ot_protection": false,
+              "pcb": "Taiwan",
+              "lifetime": "20,000H",
+              "warranty": "2 Years"
+            }
+          },
+          {
+            "id": "sc-high-bay",
+            "name": "SC TM High Bay",
+            "title": "SC High-Bay Light 100W / 150W / 200W",
+            "url": "https://shortcircuit.company/products/sc-high-bay.html",
+            "type": "High Bay",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "100W / 150W / 200W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "160lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": true,
+              "ot_protection": true,
+              "pcb": "Taiwan",
+              "lifetime": "50,000H / 100,000H",
+              "warranty": "5 Years / 7 Years"
+            }
+          },
+          {
+            "id": "eco-high-bay",
+            "name": "ECO TM High Bay",
+            "title": "ECO High-Bay 100W / 150W",
+            "url": "https://shortcircuit.company/products/eco-high-bay.html",
+            "type": "High Bay",
+            "series": "ECO",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/ECO-HighBay-100W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/ECO-HighBay-100W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/ECO-HighBay-100W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/ECO-HighBay-100W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "100W / 150W",
+              "chip": "Epistar",
+              "driver": "ECO driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "130lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "3000K - 6500K",
+              "ov_protection": true,
+              "oc_protection": false,
+              "ot_protection": false,
+              "pcb": "Taiwan",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          },
+          {
+            "id": "sc-street-100",
+            "name": "SC TM Street Light 100W",
+            "title": "SC Street Light 50W / 100W",
+            "url": "https://shortcircuit.company/products/sc-street.html",
+            "type": "Street Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Street-100W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Street-100W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Street-100W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Street-100W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "50W / 100W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "160lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": true,
+              "ot_protection": true,
+              "pcb": "Taiwan",
+              "lifetime": "50,000H / 100,000H",
+              "warranty": "5 Years / 7 Years"
+            }
+          },
+          {
+            "id": "sc-street-150",
+            "name": "SC TM Street Light 150W",
+            "title": "SC Street Light 150W / 200W",
+            "url": "https://shortcircuit.company/products/sc-street-150.html",
+            "type": "Street Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Street-150W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Street-150W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Street-150W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/SC-Street-150W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "150W / 200W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-300V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "160lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": true,
+              "ot_protection": true,
+              "pcb": "Taiwan",
+              "lifetime": "50,000H / 100,000H",
+              "warranty": "5 Years / 7 Years"
+            }
+          },
+          {
+            "id": "eco-street-100",
+            "name": "ECO TM Street Light 100W",
+            "title": "ECO Street Light 100W / 150W",
+            "url": "https://shortcircuit.company/products/eco-street.html",
+            "type": "Street Light",
+            "series": "ECO",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/ECO-Street-100W-transparent0001.webp",
+              "https://shortcircuit.company/assets/img/products/ECO-Street-100W-transparent0002.webp",
+              "https://shortcircuit.company/assets/img/products/ECO-Street-100W-transparent0003.webp",
+              "https://shortcircuit.company/assets/img/products/ECO-Street-100W-transparent0004.webp"
+            ],
+            "specs": {
+              "power": "100W / 150W",
+              "chip": "Epistar 3030",
+              "driver": "ECO driver™",
+              "input_voltage": "AC 85-256V",
+              "frequency": "50-60Hz",
+              "power_factor": ">0.95",
+              "luminous_efficacy": "145lm/W",
+              "protection": "IP65 IK08",
+              "beam_angle": "120°",
+              "cct": "2200K - 6500K",
+              "ov_protection": true,
+              "oc_protection": null,
+              "ot_protection": null,
+              "pcb": "Taiwan",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          }
+        ]
+      },
+      {
+        "id": "indoor",
+        "name": "Indoor Lighting Products",
+        "url": "https://shortcircuit.company/products/indoor.html",
+        "products": [
+          {
+            "id": "sc-triproof",
+            "name": "SC TM Triproof 120cm",
+            "title": "SC Triproof 120cm Light Fixture",
+            "url": "https://shortcircuit.company/products/sc-triproof.html",
+            "type": "Triproof",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0004.png"
+            ],
+            "specs": {
+              "power": "36W",
+              "chip": "Philips 3030",
+              "driver": "On-board",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "material": "Polycarbonate",
+              "luminous_efficacy": "110lm/W",
+              "total_lumen": "3,960lm",
+              "protection": "IP65",
+              "cct": "3000K - 6500K",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          },
+          {
+            "id": "sc-panel-36",
+            "name": "SC TM Panel 60x60 - 36W",
+            "title": "SC Panel 60x60 - 36W",
+            "url": "https://shortcircuit.company/products/sc-panel-36.html",
+            "type": "Panel",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0004.png"
+            ],
+            "specs": {
+              "power": "36W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "material": "Polycarbonate",
+              "luminous_efficacy": "110lm/W",
+              "total_lumen": "3,960lm",
+              "protection": "IP65",
+              "cct": "3000K - 6500K",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          },
+          {
+            "id": "sc-panel-48",
+            "name": "SC TM Panel 60x60 - 48W",
+            "title": "SC Panel 60x60 - 48W",
+            "url": "https://shortcircuit.company/products/sc-panel-48.html",
+            "type": "Panel",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-48W-transparent0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-48W-transparent0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-48W-transparent0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-48W-transparent0004.png"
+            ],
+            "specs": {
+              "power": "48W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "material": "Polycarbonate",
+              "luminous_efficacy": "110lm/W",
+              "total_lumen": "5,280lm",
+              "protection": "IP65",
+              "cct": "3000K - 6500K",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          },
+          {
+            "id": "sc-panel-18",
+            "name": "SC TM Panel 30x30 - 18W",
+            "title": "SC Panel 30x30 - 18W",
+            "url": "https://shortcircuit.company/products/sc-panel-18.html",
+            "type": "Panel",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-18W-transparent0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-18W-transparent0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-18W-transparent0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Backlight-18W-transparent0004.png"
+            ],
+            "specs": {
+              "power": "18W",
+              "chip": "Philips 3030",
+              "driver": "SC driver™",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "material": "Polycarbonate",
+              "luminous_efficacy": "110lm/W",
+              "total_lumen": "1,980lm",
+              "protection": "IP65",
+              "cct": "3000K - 6500K",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          },
+          {
+            "id": "sc-spot",
+            "name": "SC TM Spot - 10W",
+            "title": "SC Spot 10W",
+            "url": "https://shortcircuit.company/products/sc-spot.html",
+            "type": "Spot",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Spot0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Spot0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Spot0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Spot0004.png"
+            ],
+            "specs": {
+              "power": "10W",
+              "chip": "COB",
+              "driver": "BAOS",
+              "input_voltage": "AC 85-265V",
+              "frequency": "50-60Hz",
+              "material": "Polycarbonate / Aluminium",
+              "luminous_efficacy": "110lm/W",
+              "total_lumen": "1,100lm",
+              "protection": "IP54",
+              "cct": "2700K - 6500K",
+              "lifetime": "30,000H",
+              "warranty": "3 Years"
+            }
+          }
+        ]
+      },
+      {
+        "id": "solar-aio",
+        "name": "All-In-One Solar Products",
+        "url": "https://shortcircuit.company/products/solar-aio.html",
+        "products": [
+          {
+            "id": "sc-solar-aio-street-50",
+            "name": "SC TM Solar Street Light 50W",
+            "title": "SC Solar Street Light 50W",
+            "url": "https://shortcircuit.company/products/sc-street-aio-50.html",
+            "type": "Solar Street Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-50W-transparent0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-50W-transparent0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-50W-transparent0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-50W-transparent0004.png"
+            ],
+            "specs": {
+              "led_chip": "Cree 3030 - 48 PCS",
+              "solar_panel": "Monocrystalline",
+              "solar_panel_power": "18V - 36W",
+              "battery_type": "Lithium (LiFePO4)",
+              "battery_power": "12.8V - 18Ah",
+              "charging_time": "4 - 8 Hours",
+              "discharging_time": "8 - 12 Hours",
+              "fixture_dimensions": "342mm x 532mm x 55mm",
+              "housing_material": "Aluminium Alloy",
+              "luminous_efficacy": "160lm/W",
+              "cct": "6500K",
+              "lifetime": "50,000H",
+              "warranty": "3 Years"
+            }
+          },
+          {
+            "id": "sc-solar-aio-street-100",
+            "name": "SC TM Solar Street Light 100W",
+            "title": "SC Solar Street Light 100W",
+            "url": "https://shortcircuit.company/products/sc-street-aio-100.html",
+            "type": "Solar Street Light",
+            "series": "SC",
+            "images": [
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-100W-transparent0001.png",
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-100W-transparent0002.png",
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-100W-transparent0003.png",
+              "https://shortcircuit.company/assets/img/products/SC-Solar-AIO-Street-100W-transparent0004.png"
+            ],
+            "specs": {
+              "led_chip": "Cree 3030 - 96 PCS",
+              "solar_panel": "Monocrystalline",
+              "solar_panel_power": "18V - 80W",
+              "battery_type": "Lithium (LiFePO4)",
+              "battery_power": "12.8V - 30Ah",
+              "charging_time": "4 - 8 Hours",
+              "discharging_time": "8 - 12 Hours",
+              "fixture_dimensions": "342mm x 630mm x 55mm",
+              "housing_material": "Aluminium Alloy",
+              "luminous_efficacy": "160lm/W",
+              "cct": "6500K",
+              "lifetime": "50,000H",
+              "warranty": "3 Years"
+            }
+          }
+        ]
+      }
+    ]
+  }

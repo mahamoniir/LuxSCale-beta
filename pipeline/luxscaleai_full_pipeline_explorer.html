@@ -1,0 +1,469 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.pipeline{padding:16px 0}
+.stage{margin-bottom:8px;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden;background:var(--color-background-primary)}
+.stage-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;transition:background .15s}
+.stage-header:hover{background:var(--color-background-secondary)}
+.stage-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.stage-meta{flex:1}
+.stage-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.stage-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.stage-arrow{font-size:12px;color:var(--color-text-tertiary);transition:transform .2s;flex-shrink:0}
+.stage-arrow.open{transform:rotate(90deg)}
+.stage-body{display:none;padding:0 16px 16px;border-top:0.5px solid var(--color-border-tertiary)}
+.stage-body.open{display:block}
+.section{margin-top:14px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.info-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.info-card-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.info-card-val{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.code-line{background:var(--color-background-secondary);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary);margin-bottom:6px;border-left:3px solid}
+.step-list{list-style:none}
+.step-list li{display:flex;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;align-items:flex-start}
+.step-list li:last-child{border-bottom:none}
+.step-n{min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px}
+.tag{display:inline-block;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:500;margin:0 2px}
+.connector{text-align:center;color:var(--color-text-tertiary);font-size:18px;padding:2px 0;margin:0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.side-card{border-radius:var(--border-radius-md);padding:10px 12px;font-size:12px;line-height:1.6}
+.formula{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;font-family:var(--font-mono);font-size:12px;line-height:1.8;border:0.5px solid var(--color-border-tertiary)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary)}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+</style>
+
+<div class="pipeline">
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:#185FA5"></div>Frontend (HTML/JS)</div>
+  <div class="legend-item"><div class="dot" style="background:#0F6E56"></div>Flask / Python backend</div>
+  <div class="legend-item"><div class="dot" style="background:#854F0B"></div>Calculation engine</div>
+  <div class="legend-item"><div class="dot" style="background:#534AB7"></div>AI layer</div>
+  <div class="legend-item"><div class="dot" style="background:#888780"></div>Storage</div>
+</div>
+
+<div id="stages"></div>
+
+</div>
+
+<script>
+const stages = [
+  {
+    num:"1", color:"#185FA5", bg:"#E6F1FB", layer:"Frontend",
+    title:"User fills the form",
+    sub:"index3.html — project name, room sides, height, standard",
+    what:"The user opens index3.html and fills out the project form. They choose a room type preset (Office, Factory...) OR pick a standard from the EN 12464 database by category and task. The form also collects customer info (name, email, company) and project name.",
+    details:[
+      {label:"File",val:"index3.html"},
+      {label:"Standard source",val:"standards_cleaned.json (42KB database)"},
+      {label:"Room presets",val:"Office 450lx, Warehouse 150lx, Cafe 450lx..."},
+      {label:"Sides input",val:"4 walls in meters: [10, 8, 10, 8]"},
+    ],
+    steps:[
+      "User types project name, customer info (name/phone/company/email)",
+      "Picks a standard by category → task → ref_no (e.g. ref 6.21.3 → 1000 lux, U₀=0.7)",
+      "OR picks a preset place like 'Office' (built-in 450 lux, U₀=0.58)",
+      "Enters 4 room sides in meters and ceiling height",
+      "Presses the Calculate button → JavaScript takes over",
+    ],
+    code:"POST /calculate  →  http://127.0.0.1:5000/calculate",
+    codeColor:"#185FA5"
+  },
+  {
+    num:"2", color:"#0F6E56", bg:"#E1F5EE", layer:"Flask backend",
+    title:"Flask receives and validates",
+    sub:"app.py → api_calculate() — checks input, resolves standard",
+    what:"Flask gets the JSON body, checks that all required fields are present (sides, height, either a place name or a valid standard ref_no). It then loads the full standard row from standards_cleaned.json to get the exact Em and U₀ targets. All errors return a clear JSON error message.",
+    details:[
+      {label:"File",val:"app.py — api_calculate() line 193"},
+      {label:"Required fields",val:"sides (4 numbers), height, place OR standard_ref_no"},
+      {label:"Standard lookup",val:"cleaned_row_by_ref(ref) searches standards_cleaned.json"},
+      {label:"Height validation",val:"validate_ceiling_height_m() — rejects impossible values"},
+    ],
+    steps:[
+      "Receives JSON body, checks it's a dict not null",
+      "Validates sides array exists and height is present",
+      "Calls validate_ceiling_height_m(height) — rejects values < 0.1m or > 50m",
+      "If standard_ref_no given: loads full row from standards_cleaned.json",
+      "Resolves Em_r_lx (required lux) and Uo (required uniformity) from standard row",
+      "Creates a CalculationTrace object to log every internal step",
+      "Calls calculate_lighting(place, sides, height, standard_row=..., trace=...)",
+    ],
+    code:"from luxscale.lighting_calc import calculate_lighting",
+    codeColor:"#0F6E56"
+  },
+  {
+    num:"3", color:"#854F0B", bg:"#FAEEDA", layer:"Calculation engine",
+    title:"Room geometry and zone detection",
+    sub:"calculate.py — area, zone, luminaire candidates",
+    what:"The first thing calculate_lighting() does is understand the room. It computes the exact floor area using Brahmagupta's formula (works for non-rectangular rooms too). Then it determines if the space is interior (height < 5m) or exterior (height ≥ 5m), which controls which fixture families are offered.",
+    details:[
+      {label:"File",val:"lighting_calc/calculate.py line 840+"},
+      {label:"Area formula",val:"Brahmagupta: √((s-a)(s-b)(s-c)(s-d))"},
+      {label:"Length/Width",val:"L = max(side1, side3), W = max(side2, side4)"},
+      {label:"Interior threshold",val:"height < 5m (configurable in admin settings)"},
+    ],
+    steps:[
+      "Unpacks sides: a,b,c,d → computes s = (a+b+c+d)/2",
+      "Area = √((s-a)(s-b)(s-c)(s-d)) — exact even for odd-shaped rooms",
+      "L = max(a,c), W = max(b,d) — used for grid layout",
+      "zone = 'interior' if height < 5m else 'exterior'",
+      "Interior → candidates: SC downlight [9W,10W], SC triproof [30W,40W], SC backlight [32W,35W]",
+      "Exterior → candidates: SC highbay [100W,150W,200W], SC flood [100W,150W,200W]",
+      "Compact room (area ≤ 400m² or min side ≤ 14m) → triproof moved to first position",
+    ],
+    code:"area = cyclic_quadrilateral_area(a, b, c, d)\nzone = determine_zone(height)",
+    codeColor:"#854F0B"
+  },
+  {
+    num:"4", color:"#854F0B", bg:"#FAEEDA", layer:"Calculation engine",
+    title:"Lumen method — finding the minimum fixture count",
+    sub:"calculate.py — quick estimate before heavy IES calculations",
+    what:"For each fixture candidate (luminaire × wattage × efficacy), the calculator uses the fast lumen method to estimate the minimum number of fixtures needed. This is a simple formula with no IES file needed — it's just physics: how many lumens do you need, how many does each fixture produce, how many fixtures does that require?",
+    details:[
+      {label:"Efficacy interior",val:"110 lm/W (all interior fixtures)"},
+      {label:"Efficacy exterior",val:"145, 160, or 200 lm/W (per wattage tier)"},
+      {label:"Maintenance factor",val:"MF = 0.63 (accounts for dirt + aging)"},
+      {label:"Over-light cap",val:"Stop if avg_lux > 1.35 × required_lux"},
+    ],
+    steps:[
+      "flux = power_W × efficacy_lm_per_W  (e.g. 100W × 145 = 14,500 lm per fixture)",
+      "flux_effective = flux × MF  (e.g. 14,500 × 0.63 = 9,135 lm effective)",
+      "lumens_needed = required_lux × area / MF  (e.g. 1000 × 80 / 0.63 = 126,984 lm)",
+      "N_min = floor(lumens_needed / flux) + 1  (e.g. floor(126984/14500)+1 = 10)",
+      "search_span = max(15, min(60, N_min × 0.75)) — how far above N_min to search",
+      "N_max = N_min + search_span  (e.g. 10 + 18 = 28)",
+      "avg_lux = (N × flux × MF) / area — checked each iteration",
+    ],
+    code:"N_min = int((required_lux × area / MF) / lumens) + 1\navg_lux = (N × lumens × MF) / area",
+    codeColor:"#854F0B"
+  },
+  {
+    num:"5", color:"#854F0B", bg:"#FAEEDA", layer:"Calculation engine",
+    title:"IES file lookup and beam angle extraction",
+    sub:"ies_fixture_params.py — reading real photometry data",
+    what:"Before the grid calculation, the code looks up the IES file for this luminaire+wattage combination. The IES file contains the real measured light distribution — a table of candela values at every horizontal and vertical angle. The beam angle is extracted by finding where the intensity drops to 50% of peak (half-power method). If no IES file exists, the default 120° beam angle is used.",
+    details:[
+      {label:"IES lookup",val:"resolve_ies_path(luminaire_name, power_W)"},
+      {label:"Parser",val:"ies-render/module/ies_parser.py (loaded dynamically)"},
+      {label:"Beam angle method",val:"Half-power: 2 × angle where I drops to 50% of peak"},
+      {label:"Default if missing",val:"beam_angle = 120° (nominal catalog value)"},
+    ],
+    steps:[
+      "resolve_ies_path() checks fixture_map.json for this luminaire+wattage combo",
+      "If found: loads IES file using ies_params_for_file() with lru_cache",
+      "Reads header: lumens_per_lamp, num_lamps, multiplier",
+      "Reads candela table: I(θ_h, θ_v) for all horizontal and vertical angles",
+      "Half-power beam angle: find I_peak, then find where I = 0.5×I_peak",
+      "Linear interpolation between adjacent angles for precision",
+      "beam_angle = 2 × half_angle (full included angle)",
+      "Asymmetric fixtures: compute across all H planes, take narrowest beam",
+      "Filter: if beam_angle < 34° and U₀_required ≥ 0.62 → skip (too narrow for good uniformity)",
+    ],
+    code:"ies_meta = ies_params_for_file(ies_path)\nbeam_deg = ies_meta['beam_angle_deg']  # e.g. 59.8°",
+    codeColor:"#854F0B"
+  },
+  {
+    num:"6", color:"#854F0B", bg:"#FAEEDA", layer:"Calculation engine",
+    title:"Main search loop — testing every fixture count",
+    sub:"calculate.py — N_min to N_max, all grid layouts, IES uniformity",
+    what:"This is the heaviest part of the engine. For each fixture count N from N_min to N_max, the code finds all valid grid layouts (nx × ny = N exactly), then runs the full IES point-by-point grid calculation for each layout. It looks for the first N and layout where BOTH lux AND U₀ are satisfied.",
+    details:[
+      {label:"Grid layouts",val:"All integer pairs (nx, ny) where nx×ny = N exactly"},
+      {label:"Min spacing",val:"min(L/nx, W/ny) ≥ 0.8m — stops if too crowded"},
+      {label:"Grid sample points",val:"G×G grid on work plane (G sized by room area)"},
+      {label:"Work plane height",val:"0.75m above floor"},
+    ],
+    steps:[
+      "For N = N_min to N_max (step 1 normal, step 2 in fast mode):",
+      "  Check avg_lux = (N × flux × MF) / area — skip if < required_lux",
+      "  Stop loop if avg_lux > 1.35 × required_lux (over-lighting)",
+      "  Find all valid (nx, ny) pairs sorted by |spacing_x - spacing_y| (squarest first)",
+      "  For each (nx, ny): run compute_uniformity_metrics(ies_path, L, W, H, N, lumens, nx, ny)",
+      "  IES grid: place G×G sample points on work plane at (0.75m height)",
+      "  For each sample point, sum illuminance from all N fixtures: E = I(θ_h,θ_v) × cos(i) / R²",
+      "  Compute U₀ = E_min / E_avg_grid and U₁ = E_min / E_max_grid",
+      "  If lux_gap ≤ 0 AND u0_gap ≤ 0: add to results, mark as compliant",
+      "  Else: save as 'closest_candidate' if it's better than previous best",
+      "Stop when max_solutions_cap compliant options found (default 80)",
+    ],
+    code:"met = compute_uniformity_metrics(ies_path, L, W, H, N, lumens, nx, ny)\nU0 = met['U0']  # E_min / E_avg_grid\nif lux_ok and u0_ok: results.append(row)",
+    codeColor:"#854F0B"
+  },
+  {
+    num:"7", color:"#854F0B", bg:"#FAEEDA", layer:"Calculation engine",
+    title:"Fallback sweep if nothing passes",
+    sub:"_uniformity_fallback_sweep_rows() — wider search when standard search fails",
+    what:"If the main search found no options that satisfy BOTH lux AND U₀, a fallback sweep runs. It takes the best non-compliant candidates and tries larger fixture counts (up to 120 extra) with a looser over-lighting cap (1.65× instead of 1.35×). The goal is to tighten spacing until U₀ improves enough. Up to 300 IES grid calls are made in this phase.",
+    details:[
+      {label:"Trigger",val:"len(results) == 0 after main loop"},
+      {label:"Seeds",val:"Best non-compliant candidates from main loop"},
+      {label:"Extra fixtures",val:"Up to 120 more than the seed's count"},
+      {label:"Max IES calls",val:"300 in full mode, 80 in fast mode"},
+    ],
+    steps:[
+      "Take all closest_candidates from main loop (one per luminaire×wattage combo)",
+      "Sort by (U₀ gap, lux gap) — try best candidates first",
+      "For each seed: sweep N from seed_count to seed_count + 120",
+      "Relaxed over-lighting cap: avg_lux ≤ 1.65 × required_lux",
+      "Tighter spacing → more fixture overlap → higher E_min → better U₀",
+      "Track best (U₀_gap, lux_gap) combo for each layout",
+      "Pool all passing or best-effort results, sort by U₀ descending",
+      "Deduplicate by (luminaire, power, efficacy, fixtures) key",
+      "Return up to 3 best options from fallback",
+    ],
+    code:"fb_rows = _uniformity_fallback_sweep_rows(closest_candidates, L, W, H, area,\n    required_lux, required_uniformity, u_grid_n)",
+    codeColor:"#854F0B"
+  },
+  {
+    num:"8", color:"#888780", bg:"#F1EFE8", layer:"Storage",
+    title:"Results saved — token generated",
+    sub:"app.py → api_study_submit() — JSON file per study",
+    what:"After the calculation finishes, Flask packages all the results, project info, and calculation metadata into a study record. It generates a random 32-character hex token (like bca62ed6b65842ca...) and saves everything to a JSON file on disk. This token is how the result page will retrieve the data.",
+    details:[
+      {label:"Token generator",val:"secrets.token_hex(16) — 32 hex chars"},
+      {label:"Storage path",val:"api/data/studies/{token}.json"},
+      {label:"File content",val:"token + saved_at + full payload (all results + project info)"},
+      {label:"Stash in localStorage",val:"JS also saves result rows in browser for faster reload"},
+    ],
+    steps:[
+      "Flask returns JSON response with results, length, width, calc_meta, ui_settings",
+      "JavaScript receives the response → calls submitStudy(payload)",
+      "submitStudy() tries SUBMIT_ENDPOINTS in order (Flask /api/submit, then PHP submit.php)",
+      "Flask's api_study_submit() validates, creates token = secrets.token_hex(16)",
+      "Writes file: {token: '...', saved_at: '2026-04-04T...', payload: {...}} to studies/",
+      "Returns {status: 'success', token: 'bca62...'} to JavaScript",
+      "JS saves result rows to localStorage keyed by token (luxscale_result_rows_{token})",
+      "JS redirects browser to result.html?token={token}",
+    ],
+    code:"token = secrets.token_hex(16)\npath = os.path.join(STUDIES_DIR, f'{token}.json')\njson.dump(record, open(path, 'w'))",
+    codeColor:"#888780"
+  },
+  {
+    num:"9", color:"#185FA5", bg:"#E6F1FB", layer:"Frontend",
+    title:"Result page loads and displays",
+    sub:"result.html — fetches study by token, renders all options",
+    what:"The result page reads the token from the URL, fetches the saved study from Flask, and builds the full results table in JavaScript. It also merges data from localStorage (which was saved in the previous step) to ensure no data is lost even if the server reloaded.",
+    details:[
+      {label:"File",val:"result.html (68KB — most complex frontend file)"},
+      {label:"Token source",val:"?token= URL parameter"},
+      {label:"Data fetch",val:"GET /api/get?token={token}"},
+      {label:"Fallback fetch",val:"Also tries api/get.php if Flask unavailable"},
+    ],
+    steps:[
+      "result.html reads token from URL: new URLSearchParams(location.search).get('token')",
+      "Calls fetchResultsPayload(token) — tries Flask /api/get first, then PHP get.php",
+      "Merges result rows from localStorage (stashed at submit time) for completeness",
+      "Merges standard lighting data from standards_cleaned.json for display",
+      "Calls displayProjectSummary(request, customer) — shows project header",
+      "Calls displayResults(results) — builds table of all fixture options",
+      "Each row shows: Luminaire, Power, Fixtures, Spacing, Average Lux, U₀, IES beam angle...",
+      "Compliance shown in color: green = passes both lux+U₀, red = fails one or both",
+      "PDF export button available: POST /pdf with full calculation data",
+    ],
+    code:"const data = await fetchResultsPayload(token)\ndisplayProjectSummary(data.request, data.customer)\ndisplayResults(data.results)",
+    codeColor:"#185FA5"
+  },
+  {
+    num:"10", color:"#534AB7", bg:"#EEEDFE", layer:"AI layer",
+    title:"AI analysis requested",
+    sub:"ai_test.html / result.html → POST /api/ai/analyze",
+    what:"The user clicks 'Run Analysis'. JavaScript sends the study token to Flask's AI endpoint. Flask loads the saved study, builds a compact prompt from the key metrics, and passes it to gemini_manager.py which decides which AI source to use based on ollama_priority and account quotas.",
+    details:[
+      {label:"Endpoint",val:"POST /api/ai/analyze"},
+      {label:"Body",val:"{token: 'bca62ed6...'} or inline payload"},
+      {label:"File",val:"luxscale/ai_routes.py → luxscale/gemini_manager.py"},
+      {label:"Prompt size",val:"~200 chars — just key metrics, no customer data"},
+    ],
+    steps:[
+      "User clicks 'Run Analysis' button in ai_test.html or result.html",
+      "JavaScript POSTs {token: 'bca62...'} to http://127.0.0.1:5000/api/ai/analyze",
+      "ai_routes.py loads the study from api/data/studies/{token}.json",
+      "Extracts: sides, height, place, results[0] metrics (avg_lux, U₀, fixtures, power)",
+      "Extracts: standard_lighting (Em required, U₀ required)",
+      "Builds compact prompt: ~200 chars with just the numbers",
+      "Calls gemini_manager.analyze_lighting_result(payload)",
+      "gemini_manager reads gemini_config.json to get model, accounts, ollama_priority",
+    ],
+    code:"payload = load_study(token)\nresult = analyze_lighting_result(payload)\nreturn jsonify({'status': 'success', **result})",
+    codeColor:"#534AB7"
+  },
+  {
+    num:"11", color:"#534AB7", bg:"#EEEDFE", layer:"AI layer",
+    title:"Waterfall — which AI source answers?",
+    sub:"gemini_manager.py — Ollama → Gemini accounts → Snapshot → Default",
+    what:"This is the core of the AI pipeline. It tries sources in order, skipping any that are unavailable or have used their daily quota. The order depends on the ollama_priority setting in gemini_config.json. Every source must return valid JSON with confidence ≥ 0.6 or it gets skipped.",
+    details:[
+      {label:"Config file",val:"gemini_config.json — read fresh every request"},
+      {label:"Ollama URL",val:"http://localhost:11434 (only if OLLAMA_ENABLED=true)"},
+      {label:"Gemini model",val:"gemini-3.1-flash-lite-preview (500 RPD free)"},
+      {label:"Min confidence",val:"0.6 — below this, skip to next source"},
+    ],
+    steps:[
+      "Read gemini_config.json: ollama_priority, accounts, model, min_confidence",
+      "If ollama_priority=true: try Ollama first",
+      "  → Check OLLAMA_ENABLED env var — skip if not set (production)",
+      "  → GET http://localhost:11434/api/tags — skip if Ollama not running",
+      "  → POST prompt to /api/generate with model=gemma3:27b",
+      "  → Parse JSON response, check confidence ≥ 0.6",
+      "For each Gemini account (in order):",
+      "  → Check enabled=true and has api_key and used_today < daily_limit",
+      "  → Reset used_today to 0 if reset_date ≠ today (auto midnight reset)",
+      "  → POST to Gemini generateContent API with responseMimeType=application/json",
+      "  → 429 = rate limit → mark SKIP_KEY, try next account immediately",
+      "  → 400/401/403 = bad key → mark SKIP_KEY, try next",
+      "  → Parse JSON (3-attempt parser), check confidence ≥ 0.6",
+      "  → Success: used_today += 1, return result",
+      "If all fail: load gemini_snapshot.json (last approved analysis)",
+      "If no snapshot: return safe default (quality_score=50, no issues)",
+    ],
+    code:"if ollama_priority:\n  result = _try_ollama() or _try_gemini_accounts()\nelse:\n  result = _try_gemini_accounts() or _try_ollama()",
+    codeColor:"#534AB7"
+  },
+  {
+    num:"12", color:"#534AB7", bg:"#EEEDFE", layer:"AI layer",
+    title:"AI response validation and parsing",
+    sub:"gemini_manager._parse_and_validate() — 3-attempt JSON parser",
+    what:"AI models sometimes wrap their JSON in markdown fences or add explanatory text before it. The parser tries 3 strategies to extract valid JSON. Then it checks the confidence score and adds safe defaults for any missing fields so a partial response doesn't break the UI.",
+    details:[
+      {label:"Attempt 1",val:"Strip ```json ... ``` fences with regex"},
+      {label:"Attempt 2",val:"Find first { ... } block with regex search"},
+      {label:"Attempt 3",val:"Find outermost { and } by index"},
+      {label:"Auto-fill",val:"Missing fields get safe defaults, not rejection"},
+    ],
+    steps:[
+      "Receive raw text from AI (e.g. '```json\\n{...}\\n```')",
+      "Log full response: length + first 800 chars (for debugging)",
+      "Attempt 1: strip regex ^```[a-zA-Z]*\\n? and \\n?```$ from start/end",
+      "Attempt 2: if no leading {, search for any {…} block in the text",
+      "Attempt 3: text.index('{') to text.rindex('}') + 1",
+      "json.loads(text) — if fails after all 3 attempts: return None (skip source)",
+      "Check confidence = result.get('confidence', 0.8)",
+      "If confidence < min_confidence (0.6): return None (skip source)",
+      "Auto-fill missing: issues=[], suggestions=[], summary='', quality_score=50",
+      "Return validated dict — ready to send to frontend",
+    ],
+    code:"text = re.sub(r'^```[a-zA-Z]*\\s*', '', raw)\nresult = json.loads(text)\nif result['confidence'] < min_confidence: return None",
+    codeColor:"#534AB7"
+  },
+  {
+    num:"13", color:"#185FA5", bg:"#E6F1FB", layer:"Frontend",
+    title:"AI result displayed to user",
+    sub:"ai_test.html / result.html — quality score, issues, suggestions",
+    what:"The AI response is displayed visually: a large quality score (0–100) with color coding, the source badge (which AI answered), a 2-sentence summary, then each issue listed with severity (HIGH/MEDIUM/LOW), the specific field affected, description of the problem, and a suggested fix.",
+    details:[
+      {label:"Quality score colors",val:"≥80 green, 60-79 amber, <60 red"},
+      {label:"Source badges",val:"Gemini/Ollama local/Snapshot/Default"},
+      {label:"Issue severities",val:"HIGH (red), MEDIUM (amber), LOW (blue)"},
+      {label:"Approve button",val:"Saves analysis as snapshot for future fallback"},
+    ],
+    steps:[
+      "JavaScript receives JSON: {source, confidence, quality_score, issues, suggestions, summary}",
+      "Renders score box with color (green/amber/red based on score value)",
+      "Shows source badge: which Gemini account, or Ollama, or Snapshot",
+      "Shows confidence %: e.g. 'Confidence: 90%'",
+      "Renders summary paragraph (2 sentences from AI)",
+      "For each issue: colored left border (HIGH=red, MEDIUM=amber, LOW=blue)",
+      "  Shows: field name, severity badge, description, suggested fix (with →)",
+      "Lists suggestions as bullet points",
+      "If issues exist: shows 'Approve & Save as Baseline' button",
+      "'Show JSON' link reveals raw API response for debugging",
+    ],
+    code:"const scoreColor = score >= 80 ? '#27ae60' : score >= 60 ? '#e67e22' : '#e74c3c'\nrenderResult(data)  // builds HTML from AI response",
+    codeColor:"#185FA5"
+  },
+  {
+    num:"14", color:"#888780", bg:"#F1EFE8", layer:"Storage",
+    title:"User approves — snapshot saved",
+    sub:"POST /api/ai/approve-fix → gemini_snapshot.json",
+    what:"When the user clicks 'Approve & Save as Baseline', the current analysis is saved to gemini_snapshot.json. This becomes the permanent fallback for all future requests — if Ollama is down and all Gemini accounts are exhausted, this saved analysis is returned instead of an empty default.",
+    details:[
+      {label:"Endpoint",val:"POST /api/ai/approve-fix"},
+      {label:"Saved to",val:"gemini_snapshot.json at project root"},
+      {label:"Content",val:"{saved_at: '...', analysis: {full AI response}}"},
+      {label:"Future use",val:"Returned when all AI sources fail"},
+    ],
+    steps:[
+      "User reads analysis, decides it looks correct, clicks 'Approve'",
+      "JavaScript POSTs {analysis: {...}, token: 'bca62...'} to /api/ai/approve-fix",
+      "ai_routes.py calls save_snapshot(analysis)",
+      "gemini_manager.save_snapshot() writes gemini_snapshot.json:",
+      "  {saved_at: '2026-04-04T16:50:32Z', analysis: {confidence, quality_score, issues...}}",
+      "Returns {status: 'success', message: 'Saved as baseline snapshot'}",
+      "From now on: if all Gemini + Ollama fail → this snapshot is returned with source='snapshot'",
+      "The snapshot persists across Flask restarts (it's a file, not memory)",
+    ],
+    code:"snapshot = {'saved_at': datetime.utcnow().isoformat()+'Z', 'analysis': analysis}\njson.dump(snapshot, open(SNAPSHOT_PATH, 'w'))",
+    codeColor:"#888780"
+  }
+];
+
+const colors = {
+  "Frontend (HTML/JS)": "#185FA5",
+  "Flask backend": "#0F6E56",
+  "Calculation engine": "#854F0B",
+  "AI layer": "#534AB7",
+  "Storage": "#888780"
+};
+
+function buildStage(s, i) {
+  const div = document.createElement('div');
+  div.className = 'stage';
+  div.innerHTML = `
+    <div class="stage-header" onclick="toggle(${i})">
+      <div class="stage-num" style="background:${s.bg};color:${s.color}">${s.num}</div>
+      <div class="stage-meta">
+        <div class="stage-title">${s.title}</div>
+        <div class="stage-sub">${s.sub}</div>
+      </div>
+      <span class="tag" style="background:${s.bg};color:${s.color}">${s.layer}</span>
+      <div class="stage-arrow" id="arr${i}">▶</div>
+    </div>
+    <div class="stage-body" id="body${i}">
+      <div class="section">
+        <div class="section-label">What happens here</div>
+        <div style="font-size:13px;line-height:1.6;color:var(--color-text-secondary)">${s.what}</div>
+      </div>
+      <div class="section">
+        <div class="section-label">Key details</div>
+        <div class="info-grid">
+          ${s.details.map(d=>`<div class="info-card"><div class="info-card-label">${d.label}</div><div class="info-card-val" style="font-size:12px">${d.val}</div></div>`).join('')}
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-label">Step by step</div>
+        <ul class="step-list">
+          ${s.steps.map((st,j)=>`<li><div class="step-n" style="background:${s.bg};color:${s.color}">${j+1}</div><div style="color:var(--color-text-primary)">${st}</div></li>`).join('')}
+        </ul>
+      </div>
+      <div class="section">
+        <div class="section-label">Key code</div>
+        <div class="code-line" style="border-color:${s.codeColor}">${s.code.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>
+  `;
+  return div;
+}
+
+function toggle(i) {
+  const body = document.getElementById('body'+i);
+  const arr = document.getElementById('arr'+i);
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  arr.classList.toggle('open', !open);
+}
+
+const container = document.getElementById('stages');
+stages.forEach((s,i) => {
+  container.appendChild(buildStage(s,i));
+  if(i < stages.length-1) {
+    const c = document.createElement('div');
+    c.className = 'connector';
+    c.textContent = '↓';
+    container.appendChild(c);
+  }
+});
+</script>

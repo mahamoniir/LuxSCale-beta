@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "generated_note": "examples/SC_IES_Fixed_v3 snapshot; runtime uses merged_ies_relative_map().",
+  "entries": [
+    {
+      "api_luminaire_name": "SC backlight",
+      "power_w": 32,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_PANEL_36W.ies"
+    },
+    {
+      "api_luminaire_name": "SC backlight",
+      "power_w": 35,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_PANEL_36W.ies"
+    },
+    {
+      "api_luminaire_name": "SC downlight",
+      "power_w": 9,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_SPOT_10W.ies"
+    },
+    {
+      "api_luminaire_name": "SC downlight",
+      "power_w": 10,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_SPOT_10W.ies"
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 100,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_FLOOD_100W.ies"
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 150,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_FLOOD_150W.ies"
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 200,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_FLOOD_200W.ies"
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 100,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_HIGHBAY_100W.ies"
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 150,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_HIGHBAY_150W.ies"
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 200,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_HIGHBAY_200W.ies"
+    },
+    {
+      "api_luminaire_name": "SC street",
+      "power_w": 30,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_STREET_50W/SL250SI5KN01_75x150deg_50W.IES"
+    },
+    {
+      "api_luminaire_name": "SC street",
+      "power_w": 60,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_STREET_90W/SL290SI5KN01_75x150deg_90W.IES"
+    },
+    {
+      "api_luminaire_name": "SC triproof",
+      "power_w": 30,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_TRIPROOF_36W.ies"
+    },
+    {
+      "api_luminaire_name": "SC triproof",
+      "power_w": 40,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SC_TRIPROOF_36W.ies"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 100,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SV_FLOOD_100W.ies"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 200,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SV_FLOOD_200W.ies"
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 300,
+      "relative_ies": "examples/SC_IES_Fixed_v3/SV_FLOOD_300W.ies"
+    }
+  ]
+}

@@ -1,0 +1,410 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-04-02T11:45:40.076920+00:00",
+  "generator": "luxscale.fixture_map_builder",
+  "fixtures_base_url": "https://shortcircuit.company/assets/img/products/",
+  "notes": {
+    "api_field": "Matches JSON/API key Luminaire (same strings as lighting_calc output).",
+    "images": "SC-Spot: SC-Spot0001..4.png. Others: {image_file_base}-{power}W-transparent0001..4.{ext}; SC backlight = panel line (SC-Backlight-*). Triproof 30W/40W IES use 36W images; panel 32W/35W IES use 36W images. See _image_watt_for_url. Same as result.html.",
+    "photometry_json": "Relative to ies-render/ (see ies.json manifest field photometry_json).",
+    "online_catalog": "Rows require a published product (non-empty `images`) in fixtures_online.json and a mapping in fixture_online_merge._ONLINE_BY_API. IES paths come from ies-render/examples/SC_IES_Fixed_v3/ (see luxscale.ies_dataset_config).",
+    "ies_dataset": "Photometry folder: SC_IES_Fixed_v3. Switch in luxscale/ies_dataset_config.py."
+  },
+  "online_catalog_source": {
+    "file": "fixtures_online.json",
+    "company": "Short Circuit Company",
+    "website": "https://shortcircuit.company",
+    "base_image_url": "https://shortcircuit.company/assets/img/products/",
+    "generated_at": "2026-03-30",
+    "merged_at": "2026-04-02T11:45:40.076920+00:00"
+  },
+  "api_name_to_image_base": {
+    "eco highbay": "ECO-HighBay",
+    "eco street": "ECO-Street",
+    "sc backlight": "SC-Backlight",
+    "sc downlight": "SC-Spot",
+    "sc flood": "SC-Flood",
+    "sc flood light exterior": "SC-Flood",
+    "sc highbay": "SC-HighBay",
+    "sc solar aio street": "SC-Solar-AIO-Street",
+    "sc street": "SC-Street",
+    "sc triproof": "SC-Triproof",
+    "sv flood": "SV-Flood"
+  },
+  "entries": [
+    {
+      "api_luminaire_name": "SC backlight",
+      "power_w": 32,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_PANEL_36W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_PANEL_36W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Backlight",
+      "image_extension": "png",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0001.png",
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0002.png",
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0003.png",
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0004.png"
+      ],
+      "online": {
+        "product_id": "sc-panel-36",
+        "product_url": "https://shortcircuit.company/products/sc-panel-36.html",
+        "product_title": "SC Panel 60x60 - 36W",
+        "category_id": "indoor",
+        "match_note": "SC_FIXED 32W panel; storefront uses 36W panel imagery."
+      }
+    },
+    {
+      "api_luminaire_name": "SC backlight",
+      "power_w": 35,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_PANEL_36W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_PANEL_36W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Backlight",
+      "image_extension": "png",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0001.png",
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0002.png",
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0003.png",
+        "https://shortcircuit.company/assets/img/products/SC-Backlight-36W-transparent0004.png"
+      ],
+      "online": {
+        "product_id": "sc-panel-36",
+        "product_url": "https://shortcircuit.company/products/sc-panel-36.html",
+        "product_title": "SC Panel 60x60 - 36W",
+        "category_id": "indoor",
+        "match_note": "SC_FIXED 35W panel; storefront 36W family page."
+      }
+    },
+    {
+      "api_luminaire_name": "SC downlight",
+      "power_w": 9,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_SPOT_10W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_SPOT_10W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Spot",
+      "image_extension": "png",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Spot0001.png",
+        "https://shortcircuit.company/assets/img/products/SC-Spot0002.png",
+        "https://shortcircuit.company/assets/img/products/SC-Spot0003.png",
+        "https://shortcircuit.company/assets/img/products/SC-Spot0004.png"
+      ],
+      "online": {
+        "product_id": "sc-spot",
+        "product_url": "https://shortcircuit.company/products/sc-spot.html",
+        "product_title": "SC Spot 10W",
+        "category_id": "indoor",
+        "match_note": "API 9W uses SC_SPOT 10W IES in SC_FIXED."
+      }
+    },
+    {
+      "api_luminaire_name": "SC downlight",
+      "power_w": 10,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_SPOT_10W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_SPOT_10W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Spot",
+      "image_extension": "png",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Spot0001.png",
+        "https://shortcircuit.company/assets/img/products/SC-Spot0002.png",
+        "https://shortcircuit.company/assets/img/products/SC-Spot0003.png",
+        "https://shortcircuit.company/assets/img/products/SC-Spot0004.png"
+      ],
+      "online": {
+        "product_id": "sc-spot",
+        "product_url": "https://shortcircuit.company/products/sc-spot.html",
+        "product_title": "SC Spot 10W",
+        "category_id": "indoor",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 100,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_FLOOD_100W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_FLOOD_100W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Flood",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-100W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-flood-100",
+        "product_url": "https://shortcircuit.company/products/sc-flood-100.html",
+        "product_title": "SC Flood Light 100W / 150W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 150,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_FLOOD_150W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_FLOOD_150W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Flood",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Flood-150W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-150W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-150W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-150W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-flood-100",
+        "product_url": "https://shortcircuit.company/products/sc-flood-100.html",
+        "product_title": "SC Flood Light 100W / 150W",
+        "category_id": "high-power",
+        "match_note": "150W GL-FL SC_FIXED; grouped with 100W/150W storefront line."
+      }
+    },
+    {
+      "api_luminaire_name": "SC flood light exterior",
+      "power_w": 200,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_FLOOD_200W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_FLOOD_200W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Flood",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Flood-200W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-flood-200",
+        "product_url": "https://shortcircuit.company/products/sc-flood-200.html",
+        "product_title": "SC Flood Light 200W / 250W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 100,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_HIGHBAY_100W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_HIGHBAY_100W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-HighBay",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-100W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-high-bay",
+        "product_url": "https://shortcircuit.company/products/sc-high-bay.html",
+        "product_title": "SC High-Bay Light 100W / 150W / 200W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 150,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_HIGHBAY_150W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_HIGHBAY_150W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-HighBay",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-150W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-150W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-150W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-150W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-high-bay",
+        "product_url": "https://shortcircuit.company/products/sc-high-bay.html",
+        "product_title": "SC High-Bay Light 100W / 150W / 200W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC highbay",
+      "power_w": 200,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_HIGHBAY_200W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_HIGHBAY_200W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-HighBay",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-200W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-200W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-200W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-HighBay-200W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-high-bay",
+        "product_url": "https://shortcircuit.company/products/sc-high-bay.html",
+        "product_title": "SC High-Bay Light 100W / 150W / 200W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC street",
+      "power_w": 30,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_STREET_50W/SL250SI5KN01_75x150deg_50W.IES",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_STREET_50W/SL250SI5KN01_75x150deg_50W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Street",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Street-30W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Street-30W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Street-30W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Street-30W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-street-100",
+        "product_url": "https://shortcircuit.company/products/sc-street.html",
+        "product_title": "SC Street Light 50W / 100W",
+        "category_id": "high-power",
+        "match_note": "SC_FIXED 30W street IES."
+      }
+    },
+    {
+      "api_luminaire_name": "SC street",
+      "power_w": 60,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_STREET_90W/SL290SI5KN01_75x150deg_90W.IES",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_STREET_90W/SL290SI5KN01_75x150deg_90W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Street",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Street-60W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Street-60W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Street-60W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SC-Street-60W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sc-street-100",
+        "product_url": "https://shortcircuit.company/products/sc-street.html",
+        "product_title": "SC Street Light 50W / 100W",
+        "category_id": "high-power",
+        "match_note": "SC_FIXED 60W street IES."
+      }
+    },
+    {
+      "api_luminaire_name": "SC triproof",
+      "power_w": 30,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_TRIPROOF_36W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_TRIPROOF_36W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Triproof",
+      "image_extension": "png",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0001.png",
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0002.png",
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0003.png",
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0004.png"
+      ],
+      "online": {
+        "product_id": "sc-triproof",
+        "product_url": "https://shortcircuit.company/products/sc-triproof.html",
+        "product_title": "SC Triproof 120cm Light Fixture",
+        "category_id": "indoor",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SC triproof",
+      "power_w": 40,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SC_TRIPROOF_36W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SC_TRIPROOF_36W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SC-Triproof",
+      "image_extension": "png",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0001.png",
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0002.png",
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0003.png",
+        "https://shortcircuit.company/assets/img/products/SC-Triproof-36W-transparent0004.png"
+      ],
+      "online": {
+        "product_id": "sc-triproof",
+        "product_url": "https://shortcircuit.company/products/sc-triproof.html",
+        "product_title": "SC Triproof 120cm Light Fixture",
+        "category_id": "indoor",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 100,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SV_FLOOD_100W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SV_FLOOD_100W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SV-Flood",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-100W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sv-flood-100",
+        "product_url": "https://shortcircuit.company/products/sv-flood-100.html",
+        "product_title": "SV Flood Light 100W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 200,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SV_FLOOD_200W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SV_FLOOD_200W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SV-Flood",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-200W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sv-flood-200",
+        "product_url": "https://shortcircuit.company/products/sv-flood-200.html",
+        "product_title": "SV Flood Light 200W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    },
+    {
+      "api_luminaire_name": "SV flood",
+      "power_w": 300,
+      "relative_ies_path": "examples/SC_IES_Fixed_v3/SV_FLOOD_300W.ies",
+      "photometry_json": "ies_json/examples/SC_IES_Fixed_v3/SV_FLOOD_300W.json",
+      "ies_file_exists": true,
+      "image_file_base": "SV-Flood",
+      "image_extension": "webp",
+      "image_urls": [
+        "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0001.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0002.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0003.webp",
+        "https://shortcircuit.company/assets/img/products/SV-Flood-300W-transparent0004.webp"
+      ],
+      "online": {
+        "product_id": "sv-flood-300",
+        "product_url": "https://shortcircuit.company/products/sv-flood-300.html",
+        "product_title": "SV Flood Light 300W",
+        "category_id": "high-power",
+        "match_note": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRNE DM160-U Field Guide | Short Circuit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sc-red: #eb1b26;
+      --sc-red-dark: #a40e16;
+      --sc-black: #0a0a0a;
+      --sc-grey-dark: #1a1a1a;
+      --sc-grey-mid: #2a2a2a;
+      --sc-grey-light: #888888;
+      --sc-white: #ffffff;
+      --sc-offwhite: #f5f5f5;
+      --ratio: 1.618;
+      --base-unit: 16px;
+      --space-sm: calc(var(--base-unit) / var(--ratio));
+      --space-md: var(--base-unit);
+      --space-lg: calc(var(--base-unit) * var(--ratio));
+      --space-xl: calc(var(--base-unit) * var(--ratio) * var(--ratio));
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--sc-black);
+      color: var(--sc-offwhite);
+      line-height: 1.6;
+      font-weight: 400;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 calc(10% / 2);
+    }
+    
+    /* Header */
+    .brand-header {
+      background: linear-gradient(135deg, var(--sc-red-dark) 0%, var(--sc-red) 100%);
+      padding: var(--space-xl) 0;
+      border-bottom: 4px solid var(--sc-black);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .brand-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-mark {
+      font-family: 'Anton', sans-serif;
+      font-size: calc(var(--base-unit) * 3);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--sc-white);
+      line-height: 1;
+    }
+    
+    .logo-mark span {
+      color: var(--sc-black);
+    }
+    
+    .header-meta {
+      text-align: right;
+    }
+    
+    .header-meta .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+    }
+    
+    .header-meta .value {
+      font-family: 'Anton', sans-serif;
+      font-size: calc(var(--base-unit) * 1.5);
+      text-transform: uppercase;
+      color: var(--sc-white);
+      line-height: 1.2;
+    }
+    
+    /* Navigation */
+    .nav-bar {
+      background: var(--sc-grey-dark);
+      border-bottom: 1px solid var(--sc-grey-mid);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow-x: auto;
+    }
+    
+    .nav-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0;
+      list-style: none;
+      min-width: max-content;
+    }
+    
+    .nav-tab {
+      padding: var(--space-md) calc(var(--space-md) * 1.5);
+      background: transparent;
+      border: none;
+      color: var(--sc-grey-light);
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    
+    .nav-tab:hover {
+      color: var(--sc-white);
+      background: var(--sc-grey-mid);
+    }
+    
+    .nav-tab.active {
+      color: var(--sc-red);
+      border-bottom-color: var(--sc-red);
+      background: var(--sc-black);
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: var(--space-xl) 0;
+    }
+    
+    .panel {
+      display: none;
+    }
+    
+    .panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Typography */
+    h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: calc(var(--base-unit) * 2.5);
+      text-transform: uppercase;
+      color: var(--sc-white);
+      margin-bottom: var(--space-lg);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+    
+    h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: calc(var(--base-unit) * 1.2);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--sc-red);
+      margin: var(--space-xl) 0 var(--space-md);
+      border-left: 4px solid var(--sc-red);
+      padding-left: var(--space-md);
+    }
+    
+    h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: calc(var(--base-unit) * 0.9);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sc-grey-light);
+      margin-bottom: var(--space-sm);
+    }
+    
+    p {
+      margin-bottom: var(--space-md);
+      color: var(--sc-offwhite);
+    }
+    
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .card {
+      background: var(--sc-grey-dark);
+      border: 1px solid var(--sc-grey-mid);
+      padding: var(--space-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--sc-grey-mid);
+    }
+    
+    .card.alert::before {
+      background: var(--sc-red);
+    }
+    
+    .card.success::before {
+      background: #22c55e;
+    }
+    
+    .card.info::before {
+      background: #3b82f6;
+    }
+    
+    .card h4 {
+      color: var(--sc-white);
+      margin-top: 0;
+    }
+    
+    .card.alert h4 {
+      color: var(--sc-red);
+    }
+    
+    .card p {
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+    
+    .card strong {
+      color: var(--sc-white);
+      font-weight: 600;
+    }
+    
+    /* Metrics */
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    
+    .metric {
+      background: var(--sc-grey-dark);
+      border: 1px solid var(--sc-grey-mid);
+      padding: var(--space-md);
+      text-align: center;
+      position: relative;
+    }
+    
+    .metric::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--sc-red);
+      opacity: 0.3;
+    }
+    
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--sc-grey-light);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .metric-value {
+      font-family: 'Anton', sans-serif;
+      font-size: calc(var(--base-unit) * 1.8);
+      color: var(--sc-white);
+      line-height: 1;
+    }
+    
+    .metric-unit {
+      font-size: 12px;
+      color: var(--sc-grey-light);
+      text-transform: uppercase;
+    }
+    
+    /* Steps */
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+    }
+    
+    .step-item {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+      position: relative;
+      padding-left: calc(var(--space-md) * 2.5);
+    }
+    
+    .step-item::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--sc-red);
+      color: var(--sc-white);
+      font-family: 'Anton', sans-serif;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    
+    .step-content h4 {
+      color: var(--sc-white);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .step-content p {
+      color: var(--sc-grey-light);
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+    
+    /* Calculator */
+    .calc-container {
+      background: var(--sc-grey-dark);
+      border: 1px solid var(--sc-grey-mid);
+      padding: var(--space-lg);
+    }
+    
+    .input-group {
+      margin-bottom: var(--space-md);
+    }
+    
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--sc-grey-light);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    
+    input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 4px;
+      background: var(--sc-grey-mid);
+      border-radius: 2px;
+      outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--sc-red);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--sc-white);
+    }
+    
+    .value-display {
+      font-family: 'Anton', sans-serif;
+      font-size: 18px;
+      color: var(--sc-white);
+      min-width: 100px;
+      text-align: right;
+    }
+    
+    .result-panel {
+      background: var(--sc-black);
+      border: 2px solid var(--sc-red);
+      padding: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--sc-grey-mid);
+    }
+    
+    .result-row:last-child {
+      border-bottom: none;
+    }
+    
+    .result-label {
+      font-size: 13px;
+      color: var(--sc-grey-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .result-value {
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      color: var(--sc-white);
+    }
+    
+    .result-value.ok {
+      color: #22c55e;
+    }
+    
+    .result-value.warn {
+      color: var(--sc-red);
+    }
+    
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: var(--space-lg) 0;
+    }
+    
+    .data-table th {
+      text-align: left;
+      padding: var(--space-md);
+      background: var(--sc-grey-mid);
+      color: var(--sc-white);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--sc-red);
+    }
+    
+    .data-table td {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--sc-grey-mid);
+      color: var(--sc-offwhite);
+    }
+    
+    .data-table tr:hover td {
+      background: rgba(235, 27, 38, 0.05);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--sc-red);
+      color: var(--sc-white);
+    }
+    
+    .badge.secondary {
+      background: var(--sc-grey-mid);
+      color: var(--sc-white);
+    }
+    
+    /* Indicators */
+    .indicator-list {
+      list-style: none;
+    }
+    
+    .indicator-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) 0;
+      border-bottom: 1px solid var(--sc-grey-mid);
+    }
+    
+    .indicator-item:last-child {
+      border-bottom: none;
+    }
+    
+    .indicator-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+    }
+    
+    .indicator-dot.steady {
+      background: #22c55e;
+    }
+    
+    .indicator-dot.slow {
+      background: #22c55e;
+      animation: pulse 1.5s infinite;
+    }
+    
+    .indicator-dot.fast {
+      background: var(--sc-red);
+      animation: pulse 0.4s infinite;
+    }
+    
+    .indicator-dot.off {
+      background: var(--sc-grey-mid);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    
+    .indicator-label {
+      font-weight: 600;
+      color: var(--sc-white);
+      min-width: 140px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .indicator-desc {
+      color: var(--sc-grey-light);
+      font-size: 13px;
+    }
+    
+    /* Links */
+    .link-list {
+      list-style: none;
+    }
+    
+    .link-item {
+      margin-bottom: var(--space-md);
+    }
+    
+    .link-item a {
+      color: var(--sc-red);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: color 0.2s;
+    }
+    
+    .link-item a:hover {
+      color: var(--sc-white);
+    }
+    
+    .link-item a::after {
+      content: '→';
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .metric-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+      }
+      
+      .header-meta {
+        text-align: left;
+      }
+      
+      h2 {
+        font-size: calc(var(--base-unit) * 1.8);
+      }
+    }
+    
+    /* Warning box */
+    .warning-box {
+      background: linear-gradient(135deg, var(--sc-red-dark) 0%, var(--sc-red) 100%);
+      color: var(--sc-white);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+      position: relative;
+    }
+    
+    .warning-box::before {
+      content: '!';
+      position: absolute;
+      right: var(--space-lg);
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Anton', sans-serif;
+      font-size: 80px;
+      opacity: 0.1;
+    }
+    
+    .warning-box h4 {
+      color: var(--sc-white);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .warning-box p {
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+    
+    .warning-box strong {
+      color: var(--sc-white);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="brand-header">
+    <div class="container header-content">
+      <div class="logo-mark">SHORT<span>CIRCUIT</span></div>
+      <div class="header-meta">
+        <div class="label">Technical Field Guide</div>
+        <div class="value">SRNE DM160-U</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <div class="container">
+      <ul class="nav-tabs">
+        <li class="nav-tab active" onclick="showTab('fix')">The Fix</li>
+        <li class="nav-tab" onclick="showTab('calc')">Power Calc</li>
+        <li class="nav-tab" onclick="showTab('setup')">Wiring</li>
+        <li class="nav-tab" onclick="showTab('remote')">Settings</li>
+        <li class="nav-tab" onclick="showTab('leds')">Indicators</li>
+        <li class="nav-tab" onclick="showTab('refs')">References</li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content container">
+
+    <!-- TAB: THE FIX -->
+    <div id="fix" class="panel active">
+      <h2>System Configuration</h2>
+      
+      <div class="warning-box">
+        <h4>Problem: Rapid Battery Drain</h4>
+        <p>Your LED PCB is rated <strong>35V / 3000mA = 105W</strong>. The DM160-U on a 24V system supports up to <strong>160W</strong>—so the controller isn't limiting you. You're running the LED at full 3A draw. Reducing to <strong>1500mA</strong> halves the wattage to ~52.5W, effectively doubling your runtime per charge cycle.</p>
+      </div>
+
+      <h3>Configuration Steps</h3>
+      
+      <ol class="step-list">
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Wake the CU-ALL Remote</h4>
+            <p>Press any key to activate the LCD. Point directly at the controller's IR receiver window. Maintain distance under 3 meters for reliable signal transmission.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Enter Load Parameters</h4>
+            <p>Navigate to the "Load" settings section. You'll find 3-stage programming plus morning-on settings. Each stage controls duration and power percentage.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Map Power % to Current</h4>
+            <p>The controller regulates current, not voltage. 100% equals full rated current (900mA default, adjustable to 5600mA on DM160). To achieve <strong>1500mA</strong> at 35V, calculate the percentage using the Power Calc tab.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Configure All Stages</h4>
+            <p>Set Stage 1, 2, and 3 to your target percentage. Set Stage 1 duration to 8-12 hours (full night coverage), set Stages 2 & 3 to 0h. This locks current constant throughout the night.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Transmit Settings</h4>
+            <p>Aim the remote at the controller and press SEND/CONFIRM. The controller will emit an audible beep or LED flash to confirm successful programming.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Enable Intelligent Power</h4>
+            <p>Activate "Intelligent Power" mode in the remote settings. This automatically reduces LED current if battery voltage drops below ~50% SOC, preventing deep discharge damage—the primary cause of premature battery failure.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="card success">
+        <h4>Output Current Range</h4>
+        <p>The DM160-U output current is adjustable from <strong>70mA to 5600mA</strong> (default 900mA). Your target of <strong>1500mA</strong> operates well within specification. Output voltage auto-adjusts to match your LED series—35V is comfortably within the 60V maximum.</p>
+      </div>
+    </div>
+
+    <!-- TAB: POWER CALC -->
+    <div id="calc" class="panel">
+      <h2>Power Calculator</h2>
+      
+      <div class="calc-container">
+        <div class="input-group">
+          <label>LED Forward Voltage</label>
+          <div class="slider-container">
+            <input type="range" min="15" max="60" value="35" id="vled" oninput="calculate()">
+            <span class="value-display" id="vled-out">35V</span>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label>Target Current</label>
+          <div class="slider-container">
+            <input type="range" min="70" max="5600" step="50" value="1500" id="iled" oninput="calculate()">
+            <span class="value-display" id="iled-out">1500mA</span>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label>Maximum Output Current (Controller Limit)</label>
+          <div class="slider-container">
+            <input type="range" min="900" max="5600" step="50" value="5600" id="imax" oninput="calculate()">
+            <span class="value-display" id="imax-out">5600mA</span>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <div class="result-row">
+            <span class="result-label">LED Power Draw</span>
+            <span class="result-value" id="r-watt">--</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Remote Setting (Power %)</span>
+            <span class="result-value" id="r-pct">--</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Battery Draw (24V System)</span>
+            <span class="result-value" id="r-batt">--</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">System Status</span>
+            <span class="result-value" id="r-status">--</span>
+          </div>
+        </div>
+        
+        <p style="margin-top: var(--space-md); font-size: 12px; color: var(--sc-grey-light);">
+          Battery draw calculation assumes 93% load conversion efficiency. Actual runtime depends on battery Ah capacity and depth of discharge settings.
+        </p>
+      </div>
+
+      <div class="card info" style="margin-top: var(--space-xl);">
+        <h4>Your Configuration Analysis</h4>
+        <p>At <strong>35V × 1500mA = 52.5W</strong> LED load: Accounting for 93% efficiency, battery sees ~56.5W draw. A typical 50Ah / 24V battery (~720Wh usable at 50% DoD = 360Wh) provides approximately <strong>6.4 hours</strong> runtime. At 3000mA (105W), runtime drops to ~3 hours. Halving the current doubles the operational duration.</p>
+      </div>
+    </div>
+
+    <!-- TAB: WIRING -->
+    <div id="setup" class="panel">
+      <h2>Installation Procedure</h2>
+      
+      <div class="warning-box">
+        <h4>Critical: Wiring Sequence</h4>
+        <p>Always connect in this exact order: <strong>1. LED Load → 2. Battery → 3. Solar Panel</strong>. Disconnect in reverse order. Incorrect sequence may result in permanent controller damage.</p>
+      </div>
+
+      <h3>24V System Checklist</h3>
+      
+      <ol class="step-list">
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Verify LED Series Count</h4>
+            <p>24V systems require <strong>minimum 10 LEDs in series</strong> (Vout ≥ 30V). Your 35V PCB satisfies this requirement. Confirm all LEDs are wired in series, not parallel branches.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Connect LED Load First</h4>
+            <p>Connect LED PCB to LOAD terminals (Red = Positive, Black = Negative). Verify polarity with multimeter before applying power.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Connect Battery</h4>
+            <p>Connect 24V battery to BAT terminals. Battery indicator should display steady illumination. Fast flashing indicates over-discharge condition—charge battery before proceeding.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Connect Solar Panel Last</h4>
+            <p>Solar panel open-circuit voltage must be ≤ 60V. Connect to PV terminals. During daylight, charging indicator should display slow flash pattern (charging active).</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-content">
+            <h4>Configure Battery Chemistry</h4>
+            <p>Use CU-ALL remote to select Lead-acid or Lithium profile. Lithium settings support adjustable charge voltages (7.5–15.5V × 2 for 24V). Default boost voltage: 14.4V × 2 = 28.8V for lead-acid systems.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- TAB: REMOTE SETTINGS -->
+    <div id="remote" class="panel">
+      <h2>Remote Configuration</h2>
+      
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Recommended Setting</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Stage 1–3 Power %</td>
+            <td><span class="badge">~27%</span></td>
+            <td>1500mA ÷ 5600mA = 26.8% → Round to 27%</td>
+          </tr>
+          <tr>
+            <td>Stage 1 Duration</td>
+            <td><span class="badge">8–12 Hours</span></td>
+            <td>Cover full night operation period</td>
+          </tr>
+          <tr>
+            <td>Stage 2 & 3 Duration</td>
+            <td><span class="badge secondary">0 Hours</span></td>
+            <td>Maintains constant power all night</td>
+          </tr>
+          <tr>
+            <td>Intelligent Power</td>
+            <td><span class="badge">ON</span></td>
+            <td>Auto-dims at low battery, extends battery life</td>
+          </tr>
+          <tr>
+            <td>Battery Type</td>
+            <td><span class="badge secondary">Match Physical</span></td>
+            <td>Select Lead-acid or Lithium per installation</td>
+          </tr>
+          <tr>
+            <td>Light Control Delay</td>
+            <td><span class="badge secondary">1 Minute</span></td>
+            <td>Delay between dusk detection and activation</td>
+          </tr>
+          <tr>
+            <td>Over-Discharge Voltage</td>
+            <td><span class="badge secondary">22V</span></td>
+            <td>Protects 24V battery from deep discharge</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card info">
+        <h4>Power % to Current Mapping</h4>
+        <p>The power percentage setting scales the <em>current</em> output, not direct wattage. 100% equals the maximum configured current (up to 5600mA on DM160). Default factory current is 900mA—you may need to first configure maximum output current to 5600mA, then set 27% to achieve 1500mA. Use CU-ALL to set both parameters.</p>
+      </div>
+    </div>
+
+    <!-- TAB: LED INDICATORS -->
+    <div id="leds" class="panel">
+      <h2>Status Indicators</h2>
+      
+      <div class="card-grid">
+        <div class="card">
+          <h4>Charging Indicator</h4>
+          <ul class="indicator-list">
+            <li class="indicator-item">
+              <div class="indicator-dot steady"></div>
+              <span class="indicator-label">Steady On</span>
+              <span class="indicator-desc">Solar voltage above threshold (daylight, no charging needed)</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot off"></div>
+              <span class="indicator-label">Off</span>
+              <span class="indicator-desc">Solar voltage below threshold (night or shaded)</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot slow"></div>
+              <span class="indicator-label">Slow Flash</span>
+              <span class="indicator-desc">Charging in progress—normal operation</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot fast"></div>
+              <span class="indicator-label">Fast Flash</span>
+              <span class="indicator-desc">System over-voltage—check panel Voc</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>Battery Indicator</h4>
+          <ul class="indicator-list">
+            <li class="indicator-item">
+              <div class="indicator-dot steady"></div>
+              <span class="indicator-label">Steady On</span>
+              <span class="indicator-desc">Battery connected, normal state</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot off"></div>
+              <span class="indicator-label">Off</span>
+              <span class="indicator-desc">Battery not connected—check wiring</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot fast"></div>
+              <span class="indicator-label">Fast Flash</span>
+              <span class="indicator-desc">Battery over-discharged—charge immediately</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>Load Indicator</h4>
+          <ul class="indicator-list">
+            <li class="indicator-item">
+              <div class="indicator-dot steady"></div>
+              <span class="indicator-label">Steady On</span>
+              <span class="indicator-desc">LED load active and operational</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot slow"></div>
+              <span class="indicator-label">Slow Flash</span>
+              <span class="indicator-desc">Open circuit—check LED connections</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot fast"></div>
+              <span class="indicator-label">Fast Flash</span>
+              <span class="indicator-desc">Short circuit—disconnect load immediately</span>
+            </li>
+            <li class="indicator-item">
+              <div class="indicator-dot off"></div>
+              <span class="indicator-label">Off</span>
+              <span class="indicator-desc">Load inactive (daytime or scheduled off)</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: REFERENCES -->
+    <div id="refs" class="panel">
+      <h2>Technical References</h2>
+      
+      <div class="card-grid">
+        <div class="card">
+          <h4>Video Tutorials</h4>
+          <ul class="link-list">
+            <li class="link-item">
+              <a href="https://www.youtube.com/results?search_query=SRNE+DM160+solar+street+light+controller+setup" target="_blank">SRNE DM160 Controller Setup</a>
+            </li>
+            <li class="link-item">
+              <a href="https://www.youtube.com/results?search_query=SRNE+CU-ALL+remote+control+programming+tutorial" target="_blank">CU-ALL Remote Programming</a>
+            </li>
+            <li class="link-item">
+              <a href="https://www.youtube.com/results?search_query=MPPT+solar+street+light+controller+constant+current+LED" target="_blank">MPPT Constant Current LED Control</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>Official Documentation</h4>
+          <ul class="link-list">
+            <li class="link-item">
+              <a href="https://www.srnesolar.com/productdetail/Solar-Street-Light-Controller-DM.html" target="_blank">SRNE DM Series Product Page</a>
+            </li>
+            <li class="link-item">
+              <a href="https://www.srnesolar.com/wp-content/uploads/2020/11/Datasheet_MPPT_GEN4-DM60-120-160-200_EN_V1.01.pdf" target="_blank">Gen4 DM Series Datasheet (PDF)</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>Community Resources</h4>
+          <ul class="link-list">
+            <li class="link-item">
+              <a href="https://diysolarforum.com/threads/srne-mppt-programming-for-lifepo4.52520/" target="_blank">DIY Solar Forum: LiFePO4 Programming</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card info" style="margin-top: var(--space-lg);">
+        <h4>Cross-Compatibility Note</h4>
+        <p>The CU-ALL remote interface is identical across all SRNE DM series controllers (DM60, DM120, DM160, DM200). Video tutorials for any DM series model apply directly to your DM160-U configuration.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function showTab(tabId) {
+      // Update tabs
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Update panels
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+    }
+    
+    function calculate() {
+      const vled = parseInt(document.getElementById('vled').value);
+      const iled = parseInt(document.getElementById('iled').value);
+      const imax = parseInt(document.getElementById('imax').value);
+      
+      document.getElementById('vled-out').textContent = vled + 'V';
+      document.getElementById('iled-out').textContent = iled + 'mA';
+      document.getElementById('imax-out').textContent = imax + 'mA';
+      
+      const wattage = (vled * iled / 1000).toFixed(1);
+      const percentage = Math.round((iled / imax) * 100);
+      const batteryDraw = (vled * iled / 1000 / 0.93).toFixed(1);
+      
+      document.getElementById('r-watt').textContent = wattage + 'W';
+      document.getElementById('r-pct').textContent = percentage + '%';
+      document.getElementById('r-batt').textContent = batteryDraw + 'W';
+      
+      const statusEl = document.getElementById('r-status');
+      if (iled > imax) {
+        statusEl.textContent = 'EXCEEDS LIMIT';
+        statusEl.className = 'result-value warn';
+      } else if (iled <= 5600 && vled <= 60) {
+        statusEl.textContent = 'WITHIN SPEC';
+        statusEl.className = 'result-value ok';
+      } else {
+        statusEl.textContent = 'OUT OF RANGE';
+        statusEl.className = 'result-value warn';
+      }
+    }
+    
+    // Initialize calculator
+    calculate();
+  </script>
+
+</body>
+</html>

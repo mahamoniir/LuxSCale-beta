@@ -1,8 +1,15 @@
-Flask
+# Core dependencies for app.py + lighting_calc.py
+# Install with the SAME interpreter you use to run the app (Windows often has multiple Pythons):
+#   py -m pip install -r requirements.txt
+# Plain "pip install" may target a different Python than "py app.py", causing ModuleNotFoundError.
+# Python: 3.10–3.14 supported for these packages. TensorFlow is NOT used by this project;
+# if you ever need it, use Python 3.11 or 3.12 and install tensorflow separately.
+Flask>=2.0
 flask-cors
+python-dotenv>=1.0
 fpdf
 matplotlib
 numpy
 openai
-scikit-learn
-tensorflow
+scipy>=1.9.0
+Pillow>=9.0.0

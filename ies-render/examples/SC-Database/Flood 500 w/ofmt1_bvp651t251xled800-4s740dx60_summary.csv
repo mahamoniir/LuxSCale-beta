@@ -1,0 +1,2 @@
+filename,lamp_count,lumens_per_lamp,total_lumens,wattage,efficacy_lm_per_w,peak_candela,vertical_fwhm,horizontal_fwhm,vertical_10pct,horizontal_10pct,peak_horizontal_angle,peak_vertical_angle
+ofmt1_bvp651t251xled800-4s740dx60.ies,1,80000.0,80000.0,,,67092.48,30.0,57.5,44.0,360.0,0.0,34.0

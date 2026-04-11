@@ -1,0 +1,20 @@
+------------------------------------------------------------ 
+FILE: SC_ECO_HIGHBAY_100W_4000K.IES 
+PATH: C:\xampp\htdocs\LuxScaleAI\ies-render\examples\SC_FIXED\SC_ECO_HIGHBAY_100W_4000K.IES 
+------------------------------------------------------------ 
+INFO:root:IES file: [4m[94mexamples/ies-lights-pack/area-light.ies[0m
+[1mShape:	rectangular, L=0.381m, H=0.0m[0m
+[1m[4m[92mVertical:[0m
+	0.0, 5.0, ... 180.0 [35 values]
+[1m[4m[92mHorizontal:[0m
+	0.0, 5.0, ... 180.0 [35 values]
+[1m[4m[92mCandela:[0m
+	[1m[93m0:[0m	7417.0, 7382.0, 7263.0, 7121.0, 6990.0, 6758.0, 6434.0, 6118.0, 5692.0, 4547.0, 3496.0, 4195.0, 4796.0, 5633.0, 5783.0, 5751.0, 4859.0, 3975.0, 2344.0, 1366.0, 160.0, 72.0, 39.0, 24.0, 21.0, 20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+	[1m...[0m
+
+	[1m[93m180:[0m	7417.0, 7348.0, 7218.0, 7033.0, 6787.0, 6357.0, 5609.0, 4578.0, 3463.0, 2809.0, 2508.0, 2217.0, 1920.0, 1583.0, 1285.0, 987.0, 694.0, 490.0, 238.0, 142.0, 86.0, 44.0, 22.0, 19.0, 20.0, 20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+
+INFO:root:Beam angle (FWHM, vertical slice @ first horizontal angle; same as LuxScale / ies.json): 43.30 deg
+INFO:root: Rendering 'examples/ies-lights-pack/area-light.ies' with size 1024...
+INFO:root: Saved image to examples/ies-lights-pack/area-light_s1024_d0.0_h0.png
+render took 2.769459 seconds to run.

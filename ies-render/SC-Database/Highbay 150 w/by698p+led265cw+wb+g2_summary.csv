@@ -1,0 +1,2 @@
+filename,lamp_count,lumens_per_lamp,total_lumens,wattage,efficacy_lm_per_w,peak_candela,vertical_fwhm,horizontal_fwhm,vertical_10pct,horizontal_10pct,peak_horizontal_angle,peak_vertical_angle
+by698p+led265cw+wb+g2.ies,1,26500.0,26500.0,2.0,13250.0,12127.2,42.5,0.0,70.0,0.0,0.0,0.0
