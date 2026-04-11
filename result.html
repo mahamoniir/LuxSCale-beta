@@ -333,7 +333,8 @@ const API_ENDPOINTS = (() => {
 const FLASK_BASE = (() => {
   const h = window.location.hostname;
   if (h === "localhost" || h === "127.0.0.1") return "http://127.0.0.1:5000";
-  return "";
+  // return "";
+  return "https://bkr3800.pythonanywhere.com";
 })();
 
 const FIXTURES_BASE = "https://shortcircuit.company/assets/img/products/";

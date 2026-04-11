@@ -705,19 +705,22 @@
         function getCalculateApiUrl() {
             const origin = getLocalFlaskOrigin();
             if (origin) return origin + "/calculate";
-            return "https://mahamonir.pythonanywhere.com/calculate";
+            // return "https://bkr3800.pythonanywhere.com/calculate";
+            return "https://bkr3800.pythonanywhere.com/calculate";
         }
 
         function getPlacesApiUrl() {
             const origin = getLocalFlaskOrigin();
             if (origin) return origin + "/places";
-            return "https://mahamonir.pythonanywhere.com/places";
+            // return "https://bkr3800.pythonanywhere.com/places";
+            return "https://bkr3800.pythonanywhere.com/places";
         }
 
         function getUiSettingsApiUrl() {
             const origin = getLocalFlaskOrigin();
             if (origin) return origin + "/api/ui-settings";
-            return "https://mahamonir.pythonanywhere.com/api/ui-settings";
+            // return "https://bkr3800.pythonanywhere.com/api/ui-settings";
+            return "https://bkr3800.pythonanywhere.com/api/ui-settings";
         }
 
         let ceilingHeightBounds = { interior_min_m: 3, interior_max_m: 5, exterior_max_m: 20 };
