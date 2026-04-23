@@ -14,7 +14,8 @@ The AI pipeline is a post-calculation analysis layer that takes completed lighti
 luxscale/
 ├── gemini_manager.py     — Main orchestrator: accounts, waterfall, config
 ├── ollama_manager.py     — Local model interface (Ollama REST API)
-├── ai_routes.py          — Flask endpoints (/api/ai/analyze, /approve-fix, /status, /account)
+├── ai_routes.py          — Flask endpoints (/api/ai/analyze, /approve-fix, /status, /account, /snapshots/*)
+├── ai_prompt.py          — Shared prompt builder used by Gemini and Ollama
 └── gemini_config.json    — Live config: keys, model, priority, quota counters
 ```
 
@@ -25,9 +26,9 @@ All behavior is controlled by this single file — no code changes needed to swi
 ```json
 {
   "accounts": [
-    { "name": "account_1_free", "api_key": "AIzaSy...", "daily_limit": 15, "used_today": 3, "enabled": true },
-    { "name": "account_2_free", "api_key": "AIzaSy...", "daily_limit": 15, "used_today": 0, "enabled": true },
-    { "name": "account_3_free", "api_key": "", "daily_limit": 15, "enabled": false },
+    { "name": "account_1_free", "api_key": "AIzaSy...", "daily_limit": 40, "used_today": 3, "enabled": true },
+    { "name": "account_2_free", "api_key": "AIzaSy...", "daily_limit": 40, "used_today": 0, "enabled": true },
+    { "name": "account_3_free", "api_key": "", "daily_limit": 40, "enabled": false },
     { "name": "account_5_paid", "api_key": "", "daily_limit": 800, "enabled": false }
   ],
   "model": "gemini-3.1-flash-lite-preview",
@@ -155,7 +156,7 @@ Before any result is used:
 
 ## Part 4 — Snapshot System (Fallback Safety)
 
-When the user clicks "Approve & Save as Baseline" in the UI, the current analysis is written to `gemini_snapshot.json`:
+Snapshots are written in three main cases: high-confidence auto-save, explicit approve-fix, and restore actions. The active fallback file is `gemini_snapshot.json`.
 
 ```json
 {
@@ -170,7 +171,7 @@ When the user clicks "Approve & Save as Baseline" in the UI, the current analysi
 }
 ```
 
-If all AI sources fail in future requests, this snapshot is returned with `source: snapshot`. This ensures the system always has a meaningful response even with zero connectivity — it falls back to the last known-good analysis rather than an empty default.
+If all AI sources fail in future requests, this snapshot is returned with `source: snapshot`. This ensures the system always has a meaningful response even with zero connectivity — it falls back to the latest saved analysis rather than an empty default.
 
 ---
 
@@ -262,7 +263,7 @@ Summary:
 
 ### Current mechanism: snapshot baseline
 
-Every approved AI analysis is saved as the snapshot. When Gemini is unavailable, the system returns the last approved analysis rather than an empty default. This means:
+Approved analyses are saved, and high-confidence analyses are also auto-saved. When AI sources are unavailable, the system returns the latest saved snapshot rather than an empty default. This means:
 
 - Day 1: No snapshot → generic default response
 - Day 5: After several approved analyses → snapshot reflects real project patterns
@@ -332,6 +333,12 @@ Update an account key at runtime without restarting Flask.
 { "name": "account_2_free", "api_key": "AIzaSy...", "enabled": true }
 ```
 
+### Snapshot endpoints *(admin only)*
+
+- `GET /api/ai/snapshots`
+- `GET /api/ai/snapshots/<filename>`
+- `POST /api/ai/snapshots/restore`
+
 ---
 
 ## Part 8 — Model Comparison
@@ -355,7 +362,7 @@ Update an account key at runtime without restarting Flask.
 
 - `gemini_config.json` must be in `.gitignore` — it contains live API keys
 - `gemini_snapshot.json` must be in `.gitignore` — may contain project data
-- `/api/ai/status` and `/api/ai/account` are protected by `_admin_session_ok()` — same auth as admin dashboard
+- `/api/ai/status`, `/api/ai/account`, and `/api/ai/snapshots*` are protected by `_ai_admin_ok()` — same admin auth model (session or `X-Admin-Token`)
 - `/api/ai/analyze` is public (same as `/calculate`) — it only returns analysis, never exposes keys
 - Study token is validated against `[a-f0-9]{32}` pattern before file access
 - Only lighting metrics are sent to Gemini — customer name, email, phone are never included in the prompt

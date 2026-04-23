@@ -46,7 +46,7 @@ U_{0,\mathrm{req}}, & \text{undefined.}
 \texttt{is\_compliant} \equiv (\text{Lux gap} \le \varepsilon) \land (\text{U0 gap} \le \varepsilon).
 \]
 
-Both **average** (lumen method) **and** **uniformity** (IES grid) must pass.
+Both illuminance (grid-preferred average) and uniformity (IES grid) must pass.
 
 ---
 
@@ -85,7 +85,7 @@ These **do not** replace gaps for pass/fail; they aid **comparison** in the UI/P
 
 ## 7. Closest non-compliant ranking (when no pass)
 
-When no compliant layout exists for a **(luminaire, power, efficacy)** line, the solver keeps the row minimizing the tuple **(U₀ gap, Lux gap, total power, fixture count)** — used to **seed** the fallback sweep.
+When no compliant layout exists for a **(luminaire, power, efficacy)** line, the solver keeps the row minimizing **(U₀ gap, Lux gap, -U₀_calculated, total power, fixture count)** — used to **seed** the fallback sweep.
 
 ---
 

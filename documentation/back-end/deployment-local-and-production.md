@@ -75,6 +75,8 @@ When admin HTML is on **port 80** and Flask on **5000**:
 | `LUXSCALE_CORS_ORIGINS` | Often default | **Set** to site URL |
 | `LUXSCALE_ADMIN_*` | Default | **Change** |
 | `LUXSCALE_DASHBOARD_API_BASE` | `http://127.0.0.1:5000` | Public API URL if dashboard static |
+| `LUXSCALE_IES_DATASET` | Optional | Active examples dataset name under `ies-render/examples/` |
+| `LUXSCALE_FIXTURE_MAP` | Optional | Active fixture-map basename in `assets/` |
 
 ---
 

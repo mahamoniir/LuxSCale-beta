@@ -13,7 +13,9 @@ Legacy path: **`define_places[place]`** in **`constants.py`** provides **`lux`**
 
 ## 2. Row fields **`_row_with_compliance_metrics`** (`calculate.py`)
 
-Let **`avg`** = **Average Lux** (lumen method).
+Let **`avg`** = compliance average from `_avg_lux_for_compliance`:
+- `E_avg_grid_lx` when IES grid ran
+- otherwise `Average Lux` (lumen method)
 
 \[
 \text{Lux gap} = \max(0,\, E_{m,r} - \text{avg})
@@ -29,7 +31,7 @@ Let **`u0`** = **`U0_calculated`** from the grid (may be missing).
 
 So compliance requires **both**:
 
-1. **Lumen-method average** ≥ **Em,r**
+1. **Compliance average** (grid preferred, lumen fallback) ≥ **Em,r**
 2. **Grid U₀** ≥ **Uo**
 
 ---
@@ -48,13 +50,13 @@ If exceeded, the fixture-count loop **breaks** upward for that luminaire/power/e
 
 ## 4. Minimum spacing
 
-If **min(spacing_x, spacing_y) < 0.8 m**, the loop **breaks** — no further density for that line.
+Layouts with **min(spacing_x, spacing_y) < 0.8 m** are filtered out by `spacing_factor_pairs`; fixture counts with no valid pairs are skipped.
 
 ---
 
 ## 5. Closest non-compliant candidate
 
-If no **(lux OK + U₀ OK)** is found for a combo, the row with best tuple **(U₀ gap, Lux gap, total power, fixtures)** is kept as **`closest_non_compliant_candidate`** for **seeding** the fallback sweep.
+If no **(lux OK + U₀ OK)** is found for a combo, the row with best tuple **(U₀ gap, Lux gap, -U₀_calculated, total power, fixtures)** is kept as **`closest_non_compliant_candidate`** for **seeding** the fallback sweep.
 
 ---
 

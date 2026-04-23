@@ -31,7 +31,13 @@ Ceiling **`ceiling_z`**, work plane **`plane_z`**: \(\Delta z = \text{ceiling} -
 
 ## 4. Candela lookup
 
-**`candela_at_angle_simple`** picks the nearest **horizontal** slice (or the only slice), then **linearly interpolates** **\(I\)** vs vertical angle. Missing or edge cases return **0**.
+Current implementation uses **`candela_at_angle_type_c`**:
+
+- Interpolates vertically within each horizontal slice
+- Linearly interpolates between adjacent horizontal planes
+- Applies azimuth folding for symmetric Type C reductions
+
+`candela_at_angle_simple` remains as a backward-compatible wrapper.
 
 ---
 
@@ -50,7 +56,7 @@ E = \frac{I \cdot \cos(i)}{r^{2}}
 **`illuminance_at_point_horizontal`** implements:
 
 ```text
-I ← candela_at_angle_simple(...);  if IES lumens: I *= flux_scale / ies_total_lm
+I ← candela_at_angle_type_c(...);  if IES lumens: I *= flux_scale / ies_total_lm
 return I * cos_i / (r*r)
 ```
 

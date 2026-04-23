@@ -8,7 +8,7 @@
 | **`luxscale/`** | Python package: lighting calc, IES helpers, uniformity, logging, paths |
 | **`ies-render/`** | IES files, `module/ies_parser.py`, manifests (`ies.json`), photometry JSON blobs |
 | **`standards/`** | `standards_cleaned.json`, keywords, aliases — loaded by Flask and static front-end |
-| **`assets/`** | `app_settings.json`, `fixture_map.json`, `fixture_ies_catalog.json` (snapshots) |
+| **`assets/`** | `app_settings.json`, active fixture map (`fixture_map_SC_IES_Fixed_v3.json` by default), fixture-catalog snapshots |
 | **`api/`** | **PHP** `submit.php`, `get.php` for XAMPP stacks; `api/data/studies/*.json` stored payloads |
 | **`calculation_logs/`** | Per-request **calculation trace** `.txt` (timing steps) |
 | **`uniformity_reports/`** | Session **uniformity** `.txt` exports from calculator |
@@ -20,14 +20,14 @@
 
 | Module area | Responsibility |
 |-------------|------------------|
-| **`lighting_calc/`** | `calculate_lighting`, geometry (`calculate_spacing`, `determine_zone`), constants (`maintenance_factor`, `led_efficacy`) |
+| **`lighting_calc/`** | `calculate_lighting`, geometry (`calculate_spacing`, `determine_zone`), constants (beam/efficacy defaults) |
 | **`uniformity_calculator.py`** | IES-based grid illuminance, U₀/U₁, report formatting |
 | **`ies_fixture_params.py`** | Load IES → `IESData`, `resolve_ies_path`, `ies_params_for_file`, beam angle |
-| **`fixture_ies_catalog.py`** | Merge legacy + `sc_ies_scan` → `(luminaire, power)` → relative path |
-| **`fixture_catalog.py`** | Read **`assets/fixture_map.json`** for IES path + images |
+| **`fixture_ies_catalog.py`** | Build merged map from active examples dataset scan (`scan_examples_ies_dataset`) |
+| **`fixture_catalog.py`** | Read active `assets/<active_fixture_map_basename()>` for IES path + images |
 | **`photometry_ies_adapter.py`** | Build `IESData` from catalog blob (fast path) |
 | **`ies_json_loader.py`** | Read `ies-render/ies.json` + `ies_json/*.json` blobs |
-| **`sc_ies_scan.py`** | Scan `ies-render/SC-ies/` folders → API names + wattage |
+| **`sc_ies_scan.py`** | Scan `ies-render/examples/<dataset>/` (plus legacy helpers) → API names + wattage |
 | **`app_settings.py`** | Merge defaults + `assets/app_settings.json`; validation helpers |
 | **`app_logging.py`** | `log_step`, `log_exception` → `luxscale_app.log` |
 | **`calculation_trace.py`** | `CalculationTrace` → `calculation_logs/calculation_steps_*.txt` |
@@ -52,6 +52,8 @@
 | **`LUXSCALE_DASHBOARD_API_BASE`** | Flask base URL written to `assets/dashboard_config.json` for static admin on XAMPP |
 | **`LUXSCALE_ADMIN_USER`** / **`LUXSCALE_ADMIN_PASSWORD`** | Admin login (defaults exist — override in prod) |
 | **`LUXSCALE_ADMIN_TOKEN_TTL_S`** | Bearer token lifetime for cross-origin admin API |
+| **`LUXSCALE_IES_DATASET`** | Active examples dataset under `ies-render/examples/` |
+| **`LUXSCALE_FIXTURE_MAP`** | Active fixture-map basename in `assets/` |
 
 `.env` is loaded via **`python-dotenv`** from repo root when `app.py` starts.
 

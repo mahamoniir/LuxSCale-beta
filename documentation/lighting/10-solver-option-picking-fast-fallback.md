@@ -47,6 +47,14 @@ When a compliant row is appended, a **uniformity text chunk** is often appended 
 2. If **results** still empty, run **`_uniformity_fallback_sweep_rows`** from those seeds.
 3. If still empty, user sees **no compliant** options; **`meta.no_compliant_options`** reflects that.
 
+Fallback sweep specifics (current implementation):
+
+- Relaxes average-lux cap to about **`1.65 × required_lux`**
+- Uses call budgets (lower in `fast` mode; may increase for stricter U₀ targets)
+- Can skip narrow-beam seeds for high-uniformity targets
+- Ranks fallback candidates by `(U0 gap, Lux gap, -U0_calculated, total power, fixtures)`
+- Marks accepted fallback rows as `Selection: uniformity_fixture_sweep_fallback`
+
 ---
 
 ## 7. Meta returned with results

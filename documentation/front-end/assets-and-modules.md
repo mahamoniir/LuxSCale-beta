@@ -9,10 +9,11 @@
 | **`myvideo.mp4`** | Video | Looping full-screen background on marketing pages |
 | **`standards-picker.js`** | JS | Standards UI: datalists, category/task filtering, resolve `ref_no` row — see §3 |
 | **`standard-display.js`** | JS | Maps `standards_cleaned.json` fields to human labels via **`standards/aliases_upgraded.json`** |
-| **`fixture_map.json`** | JSON | API luminaire name → image URLs, IES paths, online product links for **`result.html`** |
+| **`fixture_map_SC_IES_Fixed_v3.json`** | JSON | Default fixture map used by `result.html` (`FIXTURE_MAP_ASSET`) |
+| **`fixture_map.json`** | JSON | Legacy fixture-map variant (optional switch) |
 | **`fixture_ies_catalog.json`** | JSON | Luminaire × wattage → IES file paths (server/calc use; UI may reference) |
 | **`fixtures_online.json`** | JSON | Storefront metadata merged into fixture map |
-| **`app_settings.json`** | JSON | Runtime calc/UI settings (merged with code defaults); edited via **admin dashboard** |
+| **`app_settings.json`** | JSON | Runtime calc/UI settings (merged with defaults): pagination, height bounds, maintenance factor, reflectance preset |
 
 Optional/generated assets (not exhaustive): product PNGs, `ies_json/` references under `ies-render/`.
 
@@ -89,7 +90,7 @@ These are **static files**; Flask **`/places`** may mirror or extend categories 
 | Pattern | Example |
 |---------|---------|
 | **DOM ids** | `dimA`–`dimD`, `dimHeight`, `stdCategory`, `stdTask` |
-| **localStorage** | `luxscale_result_rows_{token}`, `luxscale_result_request_{token}`, `luxscale_result_links` |
+| **localStorage** | `luxscale_result_rows_{token}`, `luxscale_result_request_{token}`, `luxscale_result_meta_{token}`, `luxscale_result_links` |
 | **API fields** | PascalCase keys in result rows (`Luminaire`, `Spacing X (m)`) with snake_case duplicates for legacy consumers |
 
 ---

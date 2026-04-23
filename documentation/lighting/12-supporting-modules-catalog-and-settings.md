@@ -25,6 +25,8 @@ Default **`calc`** block includes:
 - **`interior_height_max_m`**: **5.0** — doubles as **threshold** \(H_\text{th}\) between interior/exterior catalog (same key as **`get_interior_height_max_m()`** used in **`determine_zone`** / **`determine_luminaire`**).
 - **`exterior_height_min_m`**: present in defaults but **not** read by **`validate_ceiling_height_m`** (exterior lower bound is effectively **`interior_height_max_m`** in validation).
 - **`exterior_height_max_m`**: **20.0**
+- **`maintenance_factor`**: **0.8** (runtime design MF; clamped)
+- **`room_reflectance_preset`**: `"medium"` (indirect fraction estimate for grid illuminance scaling)
 
 ### 2.2 Ceiling height validation **`validate_ceiling_height_m(height)`**
 
@@ -57,7 +59,7 @@ Exposes UI batch sizes and **`ceiling_height_bounds`** for the front end — no 
 
 ## 3. `luxscale/fixture_catalog.py`
 
-**Role:** Load **`assets/fixture_map.json`** and find a row with **`api_luminaire_name`** and **`power_w`** matching the calculation request.
+**Role:** Load the active fixture map (`assets/<active_fixture_map_basename()>`) and find a row with **`api_luminaire_name`** and **`power_w`** matching the calculation request.
 
 **`fixture_entry_for_api(name, power_w)`** returns an entry dict (including **`relative_ies_path`**, **`ies_file_exists`**, etc.) or **`None`**.
 
@@ -71,7 +73,7 @@ Exposes UI batch sizes and **`ceiling_height_bounds`** for the front end — no 
 
 **Role:** Build **`(luminaire name, power) → relative path under `ies-render/`** without requiring **`fixture_map.json`**.
 
-- **`merged_ies_relative_map()`**: starts from embedded **`_LEGACY_IES_RELATIVE`**, then **overwrites** with **`scan_sc_ies()`** ( **`SC-ies`** folder scan).
+- **`merged_ies_relative_map()`**: builds from **`scan_examples_ies_dataset(active_ies_dataset())`** and optional storefront filtering; this is the active runtime merge path.
 - **`catalog_luminaire_power_options()`**: distinct wattages per luminaire — feeds **`determine_luminaire`** options in **`geometry.py`**.
 
 **Math:** None — data wiring. **Determines which IES files exist** for the solver’s luminaire list.
@@ -185,7 +187,7 @@ app.py
 ## 11. Files intentionally not duplicated here
 
 - **`ies_json_builder.py`**, **`fixture_map_builder.py`**, **`regenerate_fixture_catalog.py`**: build-time / admin tooling; they **shape** the catalog but are not invoked on every **`POST /calculate`**.
-- **`sc_ies_scan.py`**: filesystem scan feeding **`merged_ies_relative_map`** at import/runtime — no per-request photometric formula.
+- **`sc_ies_scan.py`**: filesystem scan feeding `merged_ies_relative_map` (active examples datasets plus legacy helpers) — no per-request photometric formula.
 
 ---
 

@@ -29,14 +29,15 @@ These may represent upper illuminance bands, vertical task illuminance, or cylin
 ## 5. Daylight, furniture, non-rectangular rooms
 
 - **No daylight** contribution.
-- **No furniture** occlusion or inter-reflection (radiosity).
+- **No furniture** occlusion.
+- **No full radiosity/light-transport solver**; current implementation can apply a simple inter-reflection estimate factor from room reflectance presets.
 - **Floor** is a **rectangle** derived from **`max(a,c)` × `max(b,d)`** for length/width; the **area** may come from the **cyclic quadrilateral** formula — see [02-input-parameters-room-and-height.md](./02-input-parameters-room-and-height.md).
 
 ---
 
 ## 6. Maintenance
 
-A **single** **`maintenance_factor`** (**0.63**) lumps dirt and depreciation — not lamp-specific L90 curves or cleaning schedules.
+Maintenance is modeled by a single configurable **`maintenance_factor`** (from app settings; default 0.8), not lamp-specific L90 curves or cleaning schedules.
 
 ---
 

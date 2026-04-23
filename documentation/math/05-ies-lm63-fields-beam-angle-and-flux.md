@@ -76,31 +76,15 @@ So **absolute** lx follow **installed design lumens**; **shape** follows **IES**
 
 ---
 
-## 4. Beam angle (half-power style)
+## 4. Beam/field angle metrics
 
-Taken on the **first horizontal** angle slice **`horizontal_angles[0]`** (Type C symmetry assumption for this helper).
+Current result metadata comes from `ies_params_for_file(...)` via analyzer metrics (`compute_all_metrics`), which expose:
 
-Let vertical samples be \((\gamma_i, c_i)\) with \(c_i\) candela, \(i=0\ldots N_v-1\).
+- `beam_angle_deg`
+- `field_angle_deg`
+- optional asymmetry spans (`beam_angle_min/max`, `field_angle_min/max`)
 
-1. **Peak:** \(c_\mathrm{peak} = \max_i c_i\).
-2. **Cut:** \(c_\mathrm{cut} = \texttt{threshold} \times c_\mathrm{peak}\) (default **threshold = 0.5** → **half-power** between peak and zero along the profile).
-3. Find first segment where \(c_i \ge c_\mathrm{cut} \ge c_{i+1}\).
-4. **Linear interpolate** vertical angle at the crossing:
-
-\[
-t = \frac{c_i - c_\mathrm{cut}}{c_i - c_{i+1}}, \qquad
-\gamma_\mathrm{half} = \gamma_i + t(\gamma_{i+1}-\gamma_i).
-\]
-
-5. **Full beam width (reported):**
-
-\[
-\boxed{\theta_\mathrm{beam} = 2\,\gamma_\mathrm{half}}.
-\]
-
-If no crossing is found → **`beam_angle_deg`** = **`None`** → UI uses nominal **120°** from **`constants.beam_angle`**.
-
-**Threshold 0.1** gives a wider “field”-style angle (not used for default **`ies_params_for_file`**).
+The solver/report path normalizes beam outputs to non-negative display values and falls back to nominal `beam_angle` when IES metadata is unavailable.
 
 ---
 
@@ -122,7 +106,7 @@ If no crossing is found → **`beam_angle_deg`** = **`None`** → UI uses nomina
 |----------|-------------------|
 | **Candela table** | LM-63 photometric web |
 | **max_candela** | \(\max\) of table |
-| **Beam angle (°)** | \(2 \times\) interpolated half-angle at 50 % of peak on first H slice |
+| **Beam angle (°)** | Analyzer-derived beam metric from `ies_params_for_file` (normalized for display) |
 | **Lumens (header product)** | lumens_per_lamp × multiplier (× num_lamps for total rated flux) |
 | **Grid E, U₀, U₁** | Inverse square + superposition + min/mean/max ratios |
 

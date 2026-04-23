@@ -6,16 +6,15 @@
 
 ---
 
-## 2. IES-derived beam (**half-power** style)
+## 2. IES-derived beam metadata
 
-**`approx_beam_angle_deg(ies_data, threshold=0.5)`** in **`ies_fixture_params.py`**:
+`ies_params_for_file(...)` uses the current IES analyzer metrics path (`compute_all_metrics`) to provide:
 
-- Takes the **first horizontal** candela slice ( **`horizontal_angles[0]`** ).
-- Finds **global peak** candela on that vertical profile.
-- Walks **increasing vertical angle** until candela **crosses** **`0.5 × peak`** (50 % of peak — half-power style).
-- **Linearly interpolates** the crossing angle → **half-angle**; returns **twice** that → **full beam width** (symmetric-about-nadir convention, matching **`ies-render`** viewer).
+- `beam_angle_deg` (IES-derived beam estimate)
+- `field_angle_deg`
+- optional asymmetry spans (`beam_angle_min/max`, `field_angle_min/max`)
 
-**`threshold=0.1`** would give a wider “field” angle; the **solver and results** use **0.5** for **`beam_angle_deg`** in **`ies_params_for_file`**.
+Result output normalizes beam values to non-negative display values (`_non_negative_beam_angle_deg`) and keeps nominal fallback when IES metadata is unavailable.
 
 ---
 

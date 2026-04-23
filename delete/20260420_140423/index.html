@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+        document.oncontextmenu =new Function("return false;")
+        document.onselectstart =new Function("return false;")
+    </script>
+
+    <style>
+        .inputs-dark input {
+            color: #111 !important;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .popupInput {
+            /* padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px; */
+            color: #111;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+        
+    <title>LuxSCale | Design your lighting with AI</title>
+</head>
+
+<video autoplay muted loop id="myVideo">
+    <source src="assets/myvideo.mp4" type="video/mp4">
+</video>
+
+<body>
+    <div class="overlay"></div>
+
+    <div class="cridits">
+        <div class="title">
+            <p>Powered by</p>
+        </div>
+        <a href="https://shortcircuitcompany.com" target="_blank"><img src="assets/SClogo.svg" alt="this application is powered by Short Circuit Company"></a>
+    </div>
+    
+    <header>
+        <div class="header-wrap">
+            <a href="index.html"><img src="assets/logo.svg" aria-label="false" alt="Logo"></a>
+            <div class="contact">
+                <ul>
+                    <li><a href="mailto:contact@shortcircuitcompany.com" target="_blank">Contact us</a></li>
+                    <li><a href="https://facebook.com/shortcircuiteg" target="_blank"><img src="assets/facebook-logo.svg" aria-label="false" alt="facebook"></a></li>
+                    <li><a href="https://instagram.com/shortcircuiteg" target="_blank"><img src="assets/instagram-logo.svg" aria-label="false" alt="instagram"></a></li>
+                    <li><a href="https://www.linkedin.com/company/short-circuit-company" target="_blank"><img src="assets/linkedin-logo.svg" aria-label="false" alt="linkedin"></a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap">
+            <div class="hero">
+                <h1>DESIGN YOUR LIGHTING WITH AI</h1>
+                <p class="subheading">In few seconds, make the perfect design of your lighting with the Egyptian Lighting Code and even get an estimated BOQ</p>
+            </div>
+
+            <div class="form">
+                <div class="area">
+                    <h3>Define the surface area</h3>
+                    <p>Take a side measurement, then move clockwise. <span>(Measurements are in Meters)</span></p>
+
+                    <form action="">
+                        <div class="inputs">
+                            <div class="sides">
+                                <div class="side">
+                                    <label for="side-1">wdith 1</label>
+                                    <input type="number" id="a">
+                                </div>
+    
+                                <div class="side">
+                                    <label for="side-2">length 1</label>
+                                    <input type="number" id="b">
+                                </div>
+    
+                                <div class="side">
+                                    <label for="side-3">width 2</label>
+                                    <input type="number" id="c">
+                                </div>
+    
+                                <div class="side">
+                                    <label for="side-4">length 2</label>
+                                    <input type="number" id="d">
+                                </div>
+                            </div>
+    
+                            <div class="side">
+                                <label for="height">Height</label>
+                                <input type="number" id="height">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="area">
+                    <h3>Define the function</h3>
+                    <p>Choose the environment of the room from the following menu</p>
+
+                    <select id="place">
+                        <option value="Room">Room</option>
+                        <option value="Office">Office</option>
+                        <option value="Cafe">Cafe</option>
+                        <option value="Factory production line">Production line</option>
+                        <option value="Factory warehouse">Warehouse</option>
+                    </select>
+                </div>
+
+                <!-- <button popovertarget="popup">
+                    make lighting study with ai
+                </button> -->
+                <button onclick="calculate()">
+                    make lighting study with ai
+                </button>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="header-wrap">
+            <div class="copyrights">
+                <p>© 2025 <a href="index.html">LuxSCale</a>. All rights reserved.</p>
+                <p>This is a project of <a href="https://shortcircuitcompany.com" target="_blank">Short Circuit Company</a></p>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+
+    /** Local Flask API vs public PythonAnywhere — same-origin public sites use hosted API */
+    function getCalculateApiUrl() {
+        var h = window.location.hostname;
+        if (h === "localhost" || h === "127.0.0.1") {
+            return "http://127.0.0.1:5000/calculate";
+        }
+        return "https://mahamonir.pythonanywhere.com/calculate";
+    }
+
+    async function calculate() {
+
+        // const form = document.getElementById('popupForm');
+
+        // Run HTML5 validation first
+        // if (!form.checkValidity()) {
+        //     form.reportValidity();
+        //     return;
+        // }
+
+        let all_results = await getResults();
+        // document.cookie = `results=${JSON.stringify(all_results)}`;
+        results = all_results.map((result) => ({
+            ...result,
+            luminaire: result["Luminaire"],
+            power: result["Power (W)"],
+            efficacy: result["Efficacy (lm/W)"],
+            fixtures: result["Fixtures"],
+            spacing_x: result["Spacing X (m)"],
+            spacing_y: result["Spacing Y (m)"],
+            avg_lux: result["Average Lux"],
+            uniformity: result["Uniformity"],
+            total_power: result["Total Power (W/H)"]
+        }));
+
+        // const data = {
+        //     project_name: document.querySelector('[for="project-name"] + input').value,
+        //     name: document.querySelector('[for="client-name"] + input').value,
+        //     company: document.querySelector('[for="company"] + input').value,
+        //     phone: document.querySelector('[for="phone"] + input').value,
+        //     email: document.getElementById("email").value,
+        //     place: document.getElementById("place").value,
+        //     sides: [
+        //         parseFloat(document.getElementById("a").value),
+        //         parseFloat(document.getElementById("b").value),
+        //         parseFloat(document.getElementById("c").value),
+        //         parseFloat(document.getElementById("d").value),
+        //     ],
+        //     height: parseFloat(document.getElementById("height").value),
+        //     results: results // Include the results from the calculation
+        // };
+
+        const data = {
+            project_name: "SC-LUXSCALE LedEXPO",
+            name: "SC-LUXSCALE developer at" + new Date().toISOString() + "",
+            company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
+            phone: "01711223344",
+            email: "shortcircuitcompany@gmail.com",
+            place: document.getElementById("place").value,
+            sides: [
+                parseFloat(document.getElementById("a").value),
+                parseFloat(document.getElementById("b").value),
+                parseFloat(document.getElementById("c").value),
+                parseFloat(document.getElementById("d").value),
+            ],
+            height: parseFloat(document.getElementById("height").value),
+            results: results // Include the results from the calculation
+        };
+
+        // Check for equality
+        if (document.getElementById("a").value != document.getElementById("c").value || document.getElementById("b").value != document.getElementById("d").value) {
+            alert("Width 1 must equal Width 2 and Length 1 must equal Length 2 before proceeding.");
+            return; // stop execution
+        }
+
+        console.log("Submitting data:", data);
+        // Send the data to the server
+
+        const res = await fetch("http://localhost/sc-luxscaleai/api/submit.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+
+        console.log("Response from server:", json);
+
+        if (json.token) {
+            localStorage.setItem("user_token", json.token);
+            window.location.href = `results.html?token=${json.token}`;
+        } else {
+            alert("Error: " + json.error);
+        }
+    }
+
+    async function getResults() {
+        // const data = {
+        //     place: document.getElementById("place").value,
+        //     sides: [
+        //         parseFloat(document.getElementById("a").value),
+        //         parseFloat(document.getElementById("b").value),
+        //         parseFloat(document.getElementById("c").value),
+        //         parseFloat(document.getElementById("d").value),
+        //     ],
+        //     height: parseFloat(document.getElementById("height").value),
+        //     project_info: {
+        //         project_name: document.querySelector('[for="project-name"] + input').value,
+        //         name: document.querySelector('[for="client-name"] + input').value,
+        //         company: document.querySelector('[for="company"] + input').value,
+        //         phone: document.querySelector('[for="phone"] + input').value,
+        //         email: document.getElementById("email").value
+        //     }
+        // };
+
+        const data = {
+            place: document.getElementById("place").value,
+            sides: [
+                parseFloat(document.getElementById("a").value),
+                parseFloat(document.getElementById("b").value),
+                parseFloat(document.getElementById("c").value),
+                parseFloat(document.getElementById("d").value),
+            ],
+            height: parseFloat(document.getElementById("height").value),
+            project_info: {
+                project_name: "SC-LUXSCALE",
+                name: "SC-LUXSCALE developer at" + new Date().toISOString() + "",
+                company: "SC-LUXSCALE Short-Circuit Company at Middle-east LedEXPO",
+                phone: "01711223344",
+                email: "shortcircuitcompany@gmail.com"
+            }
+        };
+
+        console.log("Sending to API:", getCalculateApiUrl(), data);
+
+        const res = await fetch(getCalculateApiUrl(), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            console.error("API error:", errText);
+            throw new Error(`API returned ${res.status}`);
+            alert("Widthes and heights are not same");
+            return;
+        }
+
+        const json = await res.json();
+        if (!Array.isArray(json.results)) {
+            throw new Error("No results array in API response");
+        }
+
+        document.cookie = `results=${JSON.stringify(json.results)}`;
+        return json.results;
+    }
+
+    </script>
+
+</body>
+</html>

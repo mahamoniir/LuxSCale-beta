@@ -75,6 +75,44 @@ class IESParseError(Exception):
     pass
 
 
+# LM-63 photometric_type codes (data line right after TILT=, index [5]).
+#   1 = Type C  (most common — γ from nadir, C-plane azimuth 0–360°)
+#   2 = Type B  (lateral — β vertical, B horizontal −90…+90°)
+#   3 = Type A  (automotive — α elevation, A horizontal sweep)
+PHOTOMETRIC_TYPE_NAMES = {1: "C", 2: "B", 3: "A"}
+VERTICAL_ANGLE_LABELS = {
+    1: "gamma",
+    2: "beta",
+    3: "alpha",
+}
+HORIZONTAL_ANGLE_LABELS = {
+    1: "C",
+    2: "B",
+    3: "A",
+}
+
+
+def photometric_type_name(code) -> str:
+    try:
+        return PHOTOMETRIC_TYPE_NAMES.get(int(code), "Unknown")
+    except (TypeError, ValueError):
+        return "Unknown"
+
+
+def vertical_angle_label_for_type(code) -> str:
+    try:
+        return VERTICAL_ANGLE_LABELS.get(int(code), "gamma")
+    except (TypeError, ValueError):
+        return "gamma"
+
+
+def horizontal_angle_label_for_type(code) -> str:
+    try:
+        return HORIZONTAL_ANGLE_LABELS.get(int(code), "C")
+    except (TypeError, ValueError):
+        return "C"
+
+
 @dataclass
 class IESData:
     vertical_angles:   list
@@ -88,6 +126,11 @@ class IESData:
     length:            float
     height:            float
     shape:             str
+    # LM-63 photometric_type (1=C, 2=B, 3=A). Default keeps legacy constructors working.
+    photometric_type:      int  = 1
+    photometric_type_name: str  = "C"
+    vertical_angle_label:  str  = "gamma"
+    horizontal_angle_label: str = "C"
     header_lines:      list = field(default_factory=list)
     raw_text:          str  = ""
 
@@ -129,15 +172,21 @@ def _get_next_numbers(lines_iter, count):
 def parse_ies(text: str) -> IESData:
     lines = text.splitlines()
     tilt_idx = None
+    tilt_value = None
     header = []
     for i, ln in enumerate(lines):
         stripped = ln.strip()
         if stripped.startswith("TILT="):
             tilt_idx = i
+            tilt_value = stripped
             break
         header.append(ln)
     if tilt_idx is None:
         raise IESParseError("TILT= line not found — not a valid IES file")
+    if tilt_value != "TILT=NONE":
+        raise IESParseError(
+            f"Unsupported TILT value: {tilt_value} (only TILT=NONE is handled)"
+        )
 
     it = iter(lines[tilt_idx + 1:])
     nums = _get_next_numbers(it, 13)
@@ -146,7 +195,17 @@ def parse_ies(text: str) -> IESData:
     multiplier         = float(nums[2])
     num_vertical_ang   = int(float(nums[3]))
     num_horizontal_ang = int(float(nums[4]))
-    # nums[5] = photometric type (ignored)
+    # LM-63 photometric_type: 1=C, 2=B, 3=A. Needed so B/A files aren't silently
+    # treated as C (see documentation/ies_types.md).
+    try:
+        ptype_code = int(float(nums[5]))
+    except (TypeError, ValueError):
+        ptype_code = 1
+    if ptype_code not in (1, 2, 3):
+        ptype_code = 1
+    ptype_name = PHOTOMETRIC_TYPE_NAMES.get(ptype_code, "C")
+    vertical_angle_label = vertical_angle_label_for_type(ptype_code)
+    horizontal_angle_label = horizontal_angle_label_for_type(ptype_code)
     unit               = int(float(nums[6]))  # 1=feet 2=meters
     k = 1.0 if unit == 2 else 0.3048
     width  = abs(float(nums[7])) * k
@@ -195,19 +254,23 @@ def parse_ies(text: str) -> IESData:
         max_val = max_val * multiplier
 
     return IESData(
-        vertical_angles   = va,
-        horizontal_angles = ha,
-        candela_values    = cd_dict,
-        max_value         = max_val,
-        num_lamps         = num_lamps,
-        lumens_per_lamp   = lumens_per_lamp,
-        multiplier        = multiplier,
-        width             = width,
-        length            = length,
-        height            = height,
-        shape             = shape,
-        header_lines      = header,
-        raw_text          = text,
+        vertical_angles       = va,
+        horizontal_angles     = ha,
+        candela_values        = cd_dict,
+        max_value             = max_val,
+        num_lamps             = num_lamps,
+        lumens_per_lamp       = lumens_per_lamp,
+        multiplier            = multiplier,
+        width                 = width,
+        length                = length,
+        height                = height,
+        shape                 = shape,
+        photometric_type      = ptype_code,
+        photometric_type_name = ptype_name,
+        vertical_angle_label  = vertical_angle_label,
+        horizontal_angle_label = horizontal_angle_label,
+        header_lines          = header,
+        raw_text              = text,
     )
 
 
@@ -287,7 +350,24 @@ def estimate_lumens(ies: IESData) -> float:
 
     For full-azimuth files (last H < 360), the 360-wrap slice is added
     with the IES convention that the distribution at 360 equals that at 0.
+
+    NOTE:
+    This integration is exact for Type C photometry. Type B/A use different
+    coordinate systems (beta/alpha), so treating their raw grids as Type C
+    can introduce large flux errors. Until a full Type B/A solid-angle remap
+    is implemented, we conservatively fall back to header lumens for non-C.
     """
+    ptype = int(getattr(ies, "photometric_type", 1) or 1)
+    if ptype != 1:
+        # TODO: implement full Type B/Type A zonal integration by remapping
+        # vertical/horizontal axes to a consistent nadir-referenced system.
+        header_lm = (
+            float(ies.lumens_per_lamp)
+            * max(1, int(ies.num_lamps))
+            * float(ies.multiplier)
+        )
+        return max(0.0, header_lm)
+
     va_deg = np.array(ies.vertical_angles,   dtype=float)
     ha_deg = np.array(ies.horizontal_angles, dtype=float)
     va_rad = np.radians(va_deg)
@@ -353,6 +433,7 @@ def plot_polar(ies: IESData, metrics: dict, h_idx: int = 0,
         fig = ax.get_figure()
 
     h = ies.horizontal_angles[h_idx]
+    h_axis_label = getattr(ies, "horizontal_angle_label", "C")
     cd = np.array(ies.candela_values[h], dtype=float)
     va = np.array(ies.vertical_angles, dtype=float)
     peak = ies.max_value
@@ -368,7 +449,7 @@ def plot_polar(ies: IESData, metrics: dict, h_idx: int = 0,
 
     # Plot mirrored (symmetric display)
     ax.set_facecolor(DARK_SURF)
-    ax.plot(theta, cd_plot, color=BLUE, linewidth=2, label=f"H={h}°")
+    ax.plot(theta, cd_plot, color=BLUE, linewidth=2, label=f"{h_axis_label}={h}°")
     ax.plot(-theta, cd_plot, color=BLUE, linewidth=2)
     ax.fill_between(theta, 0, cd_plot, alpha=0.15, color=BLUE)
     ax.fill_between(-theta, 0, cd_plot, alpha=0.15, color=BLUE)
@@ -406,7 +487,12 @@ def plot_polar(ies: IESData, metrics: dict, h_idx: int = 0,
     ax.legend(loc="lower center", fontsize=7, facecolor=DARK_CARD,
               labelcolor=DARK_TEXT, framealpha=0.8, ncol=2,
               bbox_to_anchor=(0.5, -0.12))
-    ax.set_title(f"Polar — H={h}°  ({scale})", color=DARK_TEXT, fontsize=9, pad=10)
+    ax.set_title(
+        f"Polar — {h_axis_label}={h}°  ({scale})",
+        color=DARK_TEXT,
+        fontsize=9,
+        pad=10,
+    )
 
     if standalone:
         fig.tight_layout()
@@ -427,6 +513,8 @@ def plot_candela_profile(ies: IESData, metrics: dict, h_indices=None, ax=None) -
         h_indices = list(range(min(8, len(ies.horizontal_angles))))
 
     va = np.array(ies.vertical_angles, dtype=float)
+    v_axis_label = getattr(ies, "vertical_angle_label", "gamma")
+    h_axis_label = getattr(ies, "horizontal_angle_label", "C")
     peak = ies.max_value
 
     ax.set_facecolor(DARK_SURF)
@@ -436,7 +524,7 @@ def plot_candela_profile(ies: IESData, metrics: dict, h_indices=None, ax=None) -
         h = ies.horizontal_angles[idx]
         cd = np.array(ies.candela_values[h], dtype=float) / peak * 100
         lw = 2 if idx == 0 else 1.2
-        ax.plot(va, cd, color=col, lw=lw, label=f"H={h}°", zorder=3)
+        ax.plot(va, cd, color=col, lw=lw, label=f"{h_axis_label}={h}°", zorder=3)
 
     # 50% and 10% lines
     ax.axhline(50, color=RED,   ls="--", lw=1, alpha=0.7, label="50% (beam)")
@@ -448,7 +536,7 @@ def plot_candela_profile(ies: IESData, metrics: dict, h_indices=None, ax=None) -
     if fa: ax.axvspan(0, fa / 2, alpha=0.06, color=AMBER, zorder=1)
     if ba: ax.axvspan(0, ba / 2, alpha=0.10, color=RED, zorder=1)
 
-    ax.set_xlabel("Vertical angle (°)", color=DARK_TEXT, fontsize=8)
+    ax.set_xlabel(f"{v_axis_label} angle (°)", color=DARK_TEXT, fontsize=8)
     ax.set_ylabel("Intensity (% of peak)", color=DARK_TEXT, fontsize=8)
     ax.set_title("Candela vertical profiles", color=DARK_TEXT, fontsize=9)
     ax.tick_params(colors=DARK_TEXT, labelsize=7)
@@ -476,6 +564,8 @@ def plot_heatmap(ies: IESData, ax=None) -> plt.Figure:
     arr = ies.candela_array() / (ies.max_value or 1) * 100  # (nH, nV)
     va = ies.vertical_angles
     ha = ies.horizontal_angles
+    v_axis_label = getattr(ies, "vertical_angle_label", "gamma")
+    h_axis_label = getattr(ies, "horizontal_angle_label", "C")
 
     im = ax.imshow(arr, aspect="auto", origin="upper",
                    extent=[va[0], va[-1], ha[-1], ha[0]],
@@ -486,9 +576,13 @@ def plot_heatmap(ies: IESData, ax=None) -> plt.Figure:
     cbar.ax.tick_params(colors=DARK_TEXT, labelsize=7)
     cbar.outline.set_edgecolor(DARK_LINE)
 
-    ax.set_xlabel("Vertical angle (°)", color=DARK_TEXT, fontsize=8)
-    ax.set_ylabel("Horizontal angle (°)", color=DARK_TEXT, fontsize=8)
-    ax.set_title("Candela heat map (H × V)", color=DARK_TEXT, fontsize=9)
+    ax.set_xlabel(f"{v_axis_label} angle (°)", color=DARK_TEXT, fontsize=8)
+    ax.set_ylabel(f"{h_axis_label} angle (°)", color=DARK_TEXT, fontsize=8)
+    ax.set_title(
+        f"Candela heat map ({h_axis_label} × {v_axis_label})",
+        color=DARK_TEXT,
+        fontsize=9,
+    )
     ax.tick_params(colors=DARK_TEXT, labelsize=7)
     ax.spines[:].set_color(DARK_LINE)
     ax.set_facecolor(DARK_SURF)
@@ -576,6 +670,7 @@ def plot_beam_bar(ies: IESData, metrics: dict, ax=None) -> plt.Figure:
         fig = ax.get_figure()
 
     ha = ies.horizontal_angles
+    h_axis_label = getattr(ies, "horizontal_angle_label", "C")
     beams  = [metrics["per_h"][h]["beam"]  or 0 for h in ha]
     fields = [metrics["per_h"][h]["field"] or 0 for h in ha]
     x = np.arange(len(ha))
@@ -589,8 +684,12 @@ def plot_beam_bar(ies: IESData, metrics: dict, ax=None) -> plt.Figure:
     ax.set_xticks(x)
     ax.set_xticklabels([f"{h}°" for h in ha], color=DARK_TEXT, fontsize=7)
     ax.set_ylabel("Angle (°)", color=DARK_TEXT, fontsize=8)
-    ax.set_xlabel("Horizontal angle slice", color=DARK_TEXT, fontsize=8)
-    ax.set_title("Beam / field angle per horizontal slice", color=DARK_TEXT, fontsize=9)
+    ax.set_xlabel(f"{h_axis_label} angle slice", color=DARK_TEXT, fontsize=8)
+    ax.set_title(
+        f"Beam / field angle per {h_axis_label} slice",
+        color=DARK_TEXT,
+        fontsize=9,
+    )
     ax.tick_params(colors=DARK_TEXT, labelsize=7)
     ax.spines[:].set_color(DARK_LINE)
     ax.legend(loc="upper right", fontsize=7, facecolor=DARK_CARD,
@@ -611,6 +710,26 @@ def plot_flux_curve(ies: IESData, ax=None) -> plt.Figure:
     else:
         fig = ax.get_figure()
 
+    # Flux integration in this plot uses Type C geometry (gamma from nadir).
+    # For Type B/A, this curve is misleading; show a clear placeholder instead.
+    if int(getattr(ies, "photometric_type", 1) or 1) != 1:
+        ax.set_facecolor(DARK_SURF)
+        ptype_name = getattr(ies, "photometric_type_name", "?")
+        ax.text(
+            0.5,
+            0.5,
+            f"Flux curve not available\nfor Type {ptype_name} photometry",
+            ha="center",
+            va="center",
+            color=DARK_DIM,
+            fontsize=9,
+            transform=ax.transAxes,
+        )
+        ax.axis("off")
+        if standalone:
+            fig.tight_layout()
+        return fig
+
     va = np.radians(np.array(ies.vertical_angles, dtype=float))
     first_h = ies.horizontal_angles[0]
     cd = np.array(ies.candela_values[first_h], dtype=float)
@@ -627,9 +746,14 @@ def plot_flux_curve(ies: IESData, ax=None) -> plt.Figure:
     ax.axhline(50, color=RED,   ls="--", lw=1, alpha=0.7, label="50% flux")
     ax.axhline(90, color=AMBER, ls="--", lw=1, alpha=0.7, label="90% flux")
 
-    ax.set_xlabel("Vertical angle (°)", color=DARK_TEXT, fontsize=8)
+    v_axis_label = getattr(ies, "vertical_angle_label", "gamma")
+    ax.set_xlabel(f"{v_axis_label} angle (°)", color=DARK_TEXT, fontsize=8)
     ax.set_ylabel("Cumulative flux (%)", color=DARK_TEXT, fontsize=8)
-    ax.set_title("Cumulative flux vs vertical angle", color=DARK_TEXT, fontsize=9)
+    ax.set_title(
+        f"Cumulative flux vs {v_axis_label} angle",
+        color=DARK_TEXT,
+        fontsize=9,
+    )
     ax.tick_params(colors=DARK_TEXT, labelsize=7)
     ax.spines[:].set_color(DARK_LINE)
     ax.set_xlim(va_deg[0], va_deg[-1])
@@ -663,11 +787,12 @@ def plot_metrics_panel(ies: IESData, metrics: dict, filename: str, ax=None) -> p
 
     rows = [
         ("File", os.path.basename(filename)),
+        ("Photometric type", f"Type {ies.photometric_type_name}"),
         ("Shape", ies.shape),
         ("Symmetry", ies.symmetry_label()),
         ("Vertical span", ies.vertical_span_label()),
-        ("Vertical angles", str(ies.num_vertical)),
-        ("Horizontal angles", str(ies.num_horizontal)),
+        (f"Vertical angles ({ies.vertical_angle_label})", str(ies.num_vertical)),
+        (f"Horizontal angles ({ies.horizontal_angle_label})", str(ies.num_horizontal)),
         ("Peak candela", f"{ies.max_value:,.0f} cd"),
         ("Beam angle (50%)", fmt(metrics.get("beam_angle"), "°")),
         ("Field angle (10%)", fmt(metrics.get("field_angle"), "°")),
@@ -930,6 +1055,10 @@ def export_json(ies: IESData, metrics: dict, ies_path: str, out_dir: str) -> str
     out = {
         "file": os.path.basename(ies_path),
         "shape": ies.shape,
+        "photometric_type": ies.photometric_type,
+        "photometric_type_name": ies.photometric_type_name,
+        "vertical_angle_label": ies.vertical_angle_label,
+        "horizontal_angle_label": ies.horizontal_angle_label,
         "symmetry": ies.symmetry_label(),
         "vertical_span": ies.vertical_span_label(),
         "num_vertical_angles": ies.num_vertical,
@@ -972,11 +1101,14 @@ def write_ies(ies: IESData, out_path: str, header_override: list = None):
 
     nV = ies.num_vertical
     nH = ies.num_horizontal
-    unit = 2  # meters
+    unit = 2  # always write meters; parser normalizes all dimensions to metres on read
+    ptype = int(getattr(ies, "photometric_type", 1) or 1)
+    if ptype not in (1, 2, 3):
+        ptype = 1
 
     lines.append(
         f" {ies.num_lamps}  {ies.lumens_per_lamp:.4f}  {ies.multiplier:.4f}"
-        f"  {nV}  {nH}  1  {unit}"
+        f"  {nV}  {nH}  {ptype}  {unit}"
         f"  {ies.width:.4f}  {ies.length:.4f}  {ies.height:.4f}"
         f"  1  1  1"
     )
@@ -1195,10 +1327,14 @@ def print_report(ies: IESData, metrics: dict, ies_path: str):
     print("═" * W)
     print(f"\n  PHOTOMETRIC GEOMETRY")
     print(SEP)
+    row(
+        "Photometric type",
+        f"Type {ies.photometric_type_name} (LM-63 code {ies.photometric_type})",
+    )
     row("Symmetry",        ies.symmetry_label())
     row("Vertical span",   ies.vertical_span_label())
-    row("Vertical angles", str(ies.num_vertical))
-    row("Horizontal angles", str(ies.num_horizontal))
+    row(f"Vertical angles ({ies.vertical_angle_label})", str(ies.num_vertical))
+    row(f"Horizontal angles ({ies.horizontal_angle_label})", str(ies.num_horizontal))
     row("Shape",           ies.shape)
     row("Dimensions",      f"{ies.width:.4f}m × {ies.length:.4f}m × {ies.height:.4f}m")
 

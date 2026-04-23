@@ -68,6 +68,11 @@
 
 Returns JSON including **`ceiling_height_bounds`** (`interior_min_m`, `interior_max_m`, `exterior_max_m`) plus pagination settings. Used to align client **`validateCeilingHeightM`** with server **`validate_ceiling_height_m`**.
 
+For `result.html`, UI paging precedence is:
+1. `ui_settings` included in `GET /api/get` response
+2. static `assets/app_settings.json` (`ui.results_initial_count`, `ui.results_batch_size`)
+3. fallback `GET /api/ui-settings`
+
 ---
 
 ### 1.3 Places (optional, index3 standards bootstrap)
@@ -113,6 +118,7 @@ Returns stored payload for **`result.html`**.
 | `luxscale_result_links` | index2/index3 | “View last result” link list with TTL |
 | `luxscale_result_rows_{token}` | index2/index3 after submit | **result.html** — full calc rows if API strips fields |
 | `luxscale_result_request_{token}` | index3 | **result.html** — standard metadata if API incomplete |
+| `luxscale_result_meta_{token}` | index2/index3 | **result.html** — merge `calculation_meta` details (e.g., shortfall/fallback flags) |
 | `lightingModelData` | result.html | Optional handoff to 3D / CAD |
 
 **Important:** Stashes are **best-effort**; clearing site data breaks merge behavior — token URL still works if server stores full payload.
@@ -132,7 +138,7 @@ Returns stored payload for **`result.html`**.
 | Param | Page | Effect |
 |-------|------|--------|
 | `token` | `result.html` | Load study |
-| `fast` | `index3.html` | Adds `fast: 1` to calculate payload |
+| `fast` | `index2.html`, `index3.html` | Adds `fast: 1` to calculate payload |
 | `stored_at` | Generated links | TTL for saved result links |
 
 ---

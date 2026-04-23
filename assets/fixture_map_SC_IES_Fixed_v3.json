@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-04-02T11:45:40.076920+00:00",
+  "generated_at": "2026-04-20T11:39:47.991440+00:00",
   "generator": "luxscale.fixture_map_builder",
   "fixtures_base_url": "https://shortcircuit.company/assets/img/products/",
   "notes": {
@@ -16,7 +16,7 @@
     "website": "https://shortcircuit.company",
     "base_image_url": "https://shortcircuit.company/assets/img/products/",
     "generated_at": "2026-03-30",
-    "merged_at": "2026-04-02T11:45:40.076920+00:00"
+    "merged_at": "2026-04-20T11:39:47.991440+00:00"
   },
   "api_name_to_image_base": {
     "eco highbay": "ECO-HighBay",

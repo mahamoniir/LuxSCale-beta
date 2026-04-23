@@ -28,7 +28,8 @@ If **IES** parses successfully and lumens > 0, the row may show **IES lumens** i
 
 ## 3. Maintenance factor \(MF\)
 
-**`maintenance_factor = 0.63`** in **`constants.py`**.
+Runtime MF is loaded from **`luxscale/app_settings.get_maintenance_factor()`** (default **0.8**, clamped).  
+`constants.py` keeps `maintenance_factor = 0.63` as a legacy reference value.
 
 Interpretation: **effective** lumens after **dirt, depreciation, lamp lumen depreciation** (single lumped factor).
 
@@ -46,7 +47,7 @@ For **\(N\)** identical fixtures over floor area **\(A\)** (m²):
 E_\text{avg,lm} = \frac{N \cdot \Phi_\text{rated} \cdot MF}{A}
 \]
 
-Implementation: **`avg_lux = (num_fixtures * lumens * maintenance_factor) / area`** with **`lumens = power * efficacy`**.
+Implementation: **`avg_lux = (num_fixtures * lumens * mf) / area`** with **`lumens = power * efficacy`** and `mf = get_maintenance_factor()`.
 
 **Units:** lm/m² = lx when **A** is in m².
 
@@ -66,7 +67,7 @@ where \(E_m\) = **required_lux** (**Em,r**).
 N_\text{min} = \left\lfloor \frac{\Phi_\text{required}}{\Phi_\text{rated}} \right\rfloor + 1
 \]
 
-Code: **`min_fixtures = int(total_lumens_needed / lumens) + 1`** with **`total_lumens_needed = (required_lux * area) / maintenance_factor`**.
+Code: **`min_fixtures = int(total_lumens_needed / lumens) + 1`** with **`total_lumens_needed = (required_lux * area) / mf`**.
 
 ---
 
@@ -86,8 +87,10 @@ E_\text{avg,lm} \le 1.35 \times E_m
 
 The **IES grid** produces **\(E_\text{avg,grid}\)** (mean of sample points). Compliance uses:
 
-- **Lumen method** \(E_\text{avg,lm}\) vs **Em,r** for the **Lux gap**.
-- **U₀** uses **\(U_0\)** from ratios of **grid** values (not the lumen-method number).
+- **IES work-plane \(E_\text{avg,grid}\)** for lux when present (falls back to lumen method if no grid).
+- **U₀** from ratios of **grid** values.
+
+An optional inter-reflection estimate (`room_reflectance_preset`) scales grid illuminance by `(1+f)` for absolute lux reporting/compliance; U₀/U₁ ratios remain unchanged under this uniform scaling.
 
 If IES header lumens disagree with rated lm/W, **grid absolute lx** can follow **IES scale** via **`flux_scale`** in **`compute_uniformity_metrics`** — see [05-ies-photometry-and-inverse-square.md](./05-ies-photometry-and-inverse-square.md).
 

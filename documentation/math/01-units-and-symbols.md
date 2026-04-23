@@ -19,7 +19,7 @@
 |--------|---------|
 | \(E_{m,r}\) | Required **maintained average** illuminance from standard row (**`Em_r_lx`**) |
 | \(U_{0,\mathrm{req}}\) | Required uniformity ratio from standard row (**`Uo`**, e.g. 0.4) |
-| \(\mathrm{MF}\) | Maintenance factor (**`maintenance_factor`**, default **0.63**) |
+| \(\mathrm{MF}\) | Maintenance factor (runtime from `app_settings`, default **0.8**) |
 | \(\eta\) | LED efficacy (**lm/W**) |
 | \(P\) | Lamp / luminaire electrical power (**W**) |
 | \(N\) | Number of fixtures (integer) |

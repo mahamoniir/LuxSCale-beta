@@ -31,7 +31,7 @@ Effective flux (maintenance):
 \Phi_\mathrm{eff} = \Phi_\mathrm{rated} \cdot \mathrm{MF}.
 \]
 
-**Spatial average** (lumen method — used for **Average Lux** and lux compliance):
+**Spatial average** (lumen method — used for search sizing and as fallback compliance average):
 
 \[
 E_\mathrm{avg,lm} = \frac{N \cdot \Phi_\mathrm{rated} \cdot \mathrm{MF}}{A}.
@@ -50,13 +50,13 @@ N_\mathrm{min} = \left\lfloor \frac{\Phi_\mathrm{needed}}{\Phi_\mathrm{rated}} \
 
 ## 3. Spacing (rectangular grid)
 
-For integers \(n_x, n_y\) with \(n_x n_y \ge N\) chosen to balance centre-to-centre spacing:
+For integers \(n_x, n_y\) with \(n_x n_y = N\) chosen to balance centre-to-centre spacing:
 
 \[
 s_x = \frac{L}{n_x}, \quad s_y = \frac{W}{n_y}.
 \]
 
-**Minimum spacing constraint** (implementation): \(\min(s_x, s_y) \ge 0.8\ \mathrm{m}\) or the sweep **breaks**.
+**Minimum spacing constraint** (implementation): candidate pairs must satisfy \(\min(s_x, s_y) \ge 0.8\ \mathrm{m}\); fixture counts with no valid pairs are skipped.
 
 ---
 
@@ -111,7 +111,7 @@ They need **not** be equal:
 - **\(E_\mathrm{avg,lm}\)** uses **area** and **total installed effective lumens** (no angular distribution).
 - **\(E_\mathrm{avg,grid}\)** integrates **real photometry** and layout; scaling uses IES header lumens vs design lumens per slot.
 
-Both appear in result rows (**Average Lux** vs **E_avg_grid_lx**).
+Both appear in result rows (**Average Lux** vs **E_avg_grid_lx**). For lux compliance, implementation prefers **`E_avg_grid_lx`** when available.
 
 ---
 

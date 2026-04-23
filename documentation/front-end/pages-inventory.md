@@ -41,7 +41,7 @@ Paths are relative to the **repository root** unless noted. Each subsection list
 | **Scripts** | **`assets/standards-picker.js`** (must load before inline script); **`initStandardsPicker`** with `cleanedRows`, datalists `#dl-std-categories`, `#dl-std-tasks`, `onRowResolved` → `lastResolvedStandardRow`. |
 | **Standards loading** | `fetchStandardsJsonOk("standards/standards_cleaned.json")` with fallbacks for XAMPP path prefixes; optional merge from **`/places`** for category list. |
 | **Calculate payload** | `POST /calculate` with `sides`, `height`, `project_info` including **`standard_ref_no`**, `standard_lighting`, category/task strings; optional **`fast: 1`** from URL `?fast=1`. |
-| **Submit payload** | Adds `standard_ref_no`, `standard_category`, `standard_task_or_activity`, **`standard_lighting`** (full row clone); stashes **`luxscale_result_request_{token}`** (standard metadata) and **`luxscale_result_rows_{token}`**. |
+| **Submit payload** | Adds `standard_ref_no`, `standard_category`, `standard_task_or_activity`, **`standard_lighting`** (full row clone); stashes **`luxscale_result_request_{token}`**, **`luxscale_result_rows_{token}`**, and **`luxscale_result_meta_{token}`**. |
 | **Datalists** | Placed **outside** hidden panel (comment in file: some browsers skip suggestions when list is under `display:none`). |
 
 ---
@@ -50,11 +50,11 @@ Paths are relative to the **repository root** unless noted. Each subsection list
 
 | Aspect | Detail |
 |--------|--------|
-| **Purpose** | Loads a saved study by **`?token=`**, merges API payload with **localStorage** stashes, renders tables/cards, compliance, PDF export, optional standard block. |
-| **Libraries** | **Bootstrap 5** CSS/JS, **pdf-lib**; **`assets/standard-display.js`** for aliased labels (`aliases_upgraded.json`). |
+| **Purpose** | Loads a saved study by **`?token=`**, merges API payload with **localStorage** stashes, renders tables/cards, compliance/shortfall notes, PDF export, optional standard block. |
+| **Libraries** | **Bootstrap 5** CSS/JS; **`assets/standard-display.js`** for aliased labels (`aliases_upgraded.json`). PDF is generated server-side via `/api/report/...`. |
 | **Data flow** | `fetchResultsPayload(token)` tries Flask `/api/get` and PHP `get.php` candidates; **`mergeWithStashedStandard`** / **`mergeWithStashedResults`** reconcile incomplete API responses with what index2/3 saved. |
-| **Storage keys** | `luxscale_result_request_{token}`, `luxscale_result_rows_{token}`, `luxscale_result_links`, `lightingModelData` (3D-related handoff). |
-| **Features** | Fixture images from **`assets/fixture_map.json`** patterns; calculation meta (`calc_mode`, `no_compliant_options`, etc.); analysis text when zero solutions. |
+| **Storage keys** | `luxscale_result_request_{token}`, `luxscale_result_rows_{token}`, `luxscale_result_meta_{token}`, `luxscale_result_links`, `lightingModelData` (3D-related handoff). |
+| **Features** | Fixture images from `FIXTURE_MAP_ASSET` (default `assets/fixture_map_SC_IES_Fixed_v3.json`); calculation meta (`calc_mode`, `no_compliant_options`, fallback flags), compliance notes, fixture-family shortfall summaries. |
 
 ---
 
@@ -93,7 +93,7 @@ Keep behavior aligned with **`result.html`** when changing submit/get contracts.
 
 | Aspect | Detail |
 |--------|--------|
-| **Purpose** | Authenticated UI to edit **`assets/app_settings.json`** (max solutions, interior/exterior height bounds, UI batch sizes). |
+| **Purpose** | Authenticated UI to edit app settings (max solutions, height bounds, UI batch sizes, maintenance factor, reflectance preset) and fixture-map rows via API. |
 | **API** | Uses dashboard API base from **`.env`** / `LUXSCALE_DASHBOARD_API_BASE` for load/save settings. |
 | **Security** | Login flow; not intended for public internet without TLS and strong secrets. |
 

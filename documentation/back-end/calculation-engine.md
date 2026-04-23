@@ -40,9 +40,9 @@ Returns ordered list of **`(luminaire_name, [wattages])`** from **`catalog_lumin
 
 ## 3. Lumen method (average illuminance)
 
-Constants in **`luxscale/lighting_calc/constants.py`**:
+Runtime values come from defaults + app settings:
 
-- **`maintenance_factor = 0.63`**
+- **`maintenance_factor`** from **`luxscale/app_settings.get_maintenance_factor()`** (default **0.8**, clamped)
 - **`led_efficacy`** per zone
 - **`beam_angle`** nominal when IES missing
 
@@ -53,7 +53,7 @@ For each candidate:
 \]
 
 \[
-\text{Average lux} = \frac{N \times \text{lumens} \times \text{maintenance\_factor}}{\text{area (m}^2\text{)}}
+\text{Average lux} = \frac{N \times \text{lumens} \times \text{MF}}{\text{area (m}^2\text{)}}
 \]
 
 **Minimum fixture count:**
@@ -63,20 +63,27 @@ total_lumens_needed = (required_lux * area) / maintenance_factor
 min_fixtures = int(total_lumens_needed / lumens) + 1
 ```
 
+(`maintenance_factor` there is the runtime value loaded via app settings.)
+
 Search **`num_fixtures`** from **`min_fixtures`** upward in steps (**`fixture_step`**: 1 full, 2 in `fast` mode), up to **`max_fixtures`** (min + span).
 
 ---
 
-## 4. Spacing (`calculate_spacing`)
+## 4. Spacing (`spacing_factor_pairs` + `calculate_spacing`)
 
-**`luxscale/lighting_calc/geometry.py`** — integer grid **`best_x × best_y ≥ num_fixtures`** minimizing **|spacing_x − spacing_y|`** with:
+`geometry.py` exposes:
+
+- `spacing_factor_pairs(...)` for solver sweeps, requiring **`best_x × best_y == num_fixtures`**
+- `calculate_spacing(...)` as a single best-pair helper used in fallback/report paths
+
+Spacing uses:
 
 - `spacing_x = length / best_x`
 - `spacing_y = width / best_y`
 
-**Stop conditions:**
+**Sweep behavior:**
 
-- **`min(spacing_x, spacing_y) < min_spacing_m`** (default **0.8 m**) → break (too dense).
+- If no factor pairs satisfy **`min_spacing_m`** (default **0.8 m**), that fixture count is skipped.
 - **`avg_lux > max_avg_lux`** where **`max_avg_lux = required_lux * 1.35`** → break (over-lighting cap).
 
 ---
@@ -86,7 +93,7 @@ Search **`num_fixtures`** from **`min_fixtures`** upward in steps (**`fixture_st
 If **`resolve_ies_path(luminaire, power)`** finds a file and **`ies_params_for_file`** succeeds:
 
 - **`lumens_per_lamp`** from file (else rated lm).
-- **`beam_angle_deg`** from **`approx_beam_angle_deg`** (50% peak candela on vertical slice).
+- **`beam_angle_deg`** from `ies_params_for_file(...)` metadata (normalized non-negative in output rows).
 
 If IES lumens ≤ 0, code falls back to rated efficacy.
 

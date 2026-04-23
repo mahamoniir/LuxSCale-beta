@@ -49,7 +49,7 @@ There is **no** global SPA router; each HTML file owns its behavior.
 
 | Library | Delivery | Role |
 |---------|----------|------|
-| **pdf-lib** | jsDelivr CDN | Build PDF reports in-browser (result/spec flows) |
+| **pdf-lib** | jsDelivr CDN | Build PDFs on legacy/alternate pages (`results.html`, `spec.html`, `online-result.html`) |
 | **Bootstrap 5.3** | jsDelivr CDN | Grid, utilities, modals on report pages |
 | **Three.js** | Local `maha/js/three.min.js` | WebGL 3D room/fixture demos |
 | **OrbitControls** | Local `maha/js/OrbitControls.js` | Camera orbit (legacy global build) |
@@ -77,6 +77,7 @@ The front-end **does not** implement lighting physics; it sends **room geometry*
 | PHP (optional) | `/LuxScaleAI/api/submit.php`, `get.php` | Same contract where deployed |
 
 See [api-client-and-state.md](./api-client-and-state.md) for payloads and keys.
+Current primary `result.html` downloads server-generated PDFs from `/api/report/<token>/...`.
 
 ---
 

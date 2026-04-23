@@ -56,7 +56,7 @@ U_1 = \frac{E_\text{min}}{E_\text{max}}
 ## 5. Relation to average lux and height
 
 - **Lumen-method “Average Lux”** = spatial mean from **\(N \cdot \Phi \cdot MF / A\)** — **not** the same number as **E_avg** from the grid unless the distribution is perfectly uniform and scaling matches.
-- **Compliance** uses lumen-method average vs **Em,r**; **U₀** uses **grid** **E_min/E_avg**.
+- **Compliance** uses **grid** `E_avg_grid_lx` vs **Em,r** when the IES grid runs (fallback: lumen-method average); **U₀** uses **grid** **E_min/E_avg**.
 - **Ceiling height** enters **only** the **IES** path (distance **\(r\)** and angles). Raising the ceiling **without** changing lumens generally **lowers** illuminance and can **change** **U₀** (wider spacing of “pools” of light).
 
 ---
