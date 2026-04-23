@@ -1,0 +1,141 @@
+========================================================================
+LuxScaleAI calculation trace — POST /calculate
+Started (local): 2026-04-06T11:52:57
+========================================================================
+
+Step                                                delta_s      sum_s
+------------------------------------------------------------------------
+api_00_ready                                         0.0036     0.0036
+    fast: False
+    has_standard_row: True
+    height: 7.0
+    place: None
+    sides: [80, 70, 80, 70]
+    standard_ref_no: 6.17.4
+cl_01_calculate_lighting_enter                       0.0050     0.0086
+    fast: False
+    height: 7.0
+    place: None
+    sides: [80, 70, 80, 70]
+    standard_ref: 6.17.4
+cl_02_geometry_and_targets                           0.0352     0.0438
+    area_m2: 5600.0
+    length_m: 80
+    required_Uo: 0.6
+    required_lux: 500.0
+    width_m: 70
+    zone: exterior
+cl_03_options_and_uniformity_grid                    0.1202     0.1641
+    luminaire_options: 4
+    workplane_grid_n: 5
+cl_04_ies_resolve                                    0.1742     0.3383
+    ies_file: SC_HIGHBAY_100W.ies
+    ies_ok: True
+    luminaire: SC highbay
+    power_W: 100
+cl_05_lumen_search_and_uniformity                    0.4647     0.8030
+    efficacy_lm_per_W: 145
+    luminaire: SC highbay
+    max_fixtures: 270
+    min_fixtures: 242
+    power_W: 100
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.4356
+cl_05_lumen_search_and_uniformity                    1.0851     1.8880
+    efficacy_lm_per_W: 160
+    luminaire: SC highbay
+    max_fixtures: 247
+    min_fixtures: 219
+    power_W: 100
+    uniformity_evaluations: 3
+    uniformity_seconds: 1.0727
+cl_05_lumen_search_and_uniformity                    0.3209     2.2089
+    efficacy_lm_per_W: 200
+    luminaire: SC highbay
+    max_fixtures: 216
+    min_fixtures: 176
+    power_W: 100
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.2966
+cl_04_ies_resolve                                    0.0302     2.2391
+    ies_file: SC_HIGHBAY_150W.ies
+    ies_ok: True
+    luminaire: SC highbay
+    power_W: 150
+cl_05_lumen_search_and_uniformity                    0.2565     2.4956
+    efficacy_lm_per_W: 145
+    luminaire: SC highbay
+    max_fixtures: 201
+    min_fixtures: 161
+    power_W: 150
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.2511
+cl_05_lumen_search_and_uniformity                    0.7911     3.2867
+    efficacy_lm_per_W: 160
+    luminaire: SC highbay
+    max_fixtures: 186
+    min_fixtures: 146
+    power_W: 150
+    uniformity_evaluations: 3
+    uniformity_seconds: 0.7615
+cl_05_lumen_search_and_uniformity                    0.2187     3.5054
+    efficacy_lm_per_W: 200
+    luminaire: SC highbay
+    max_fixtures: 177
+    min_fixtures: 117
+    power_W: 150
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.1904
+cl_04_ies_resolve                                    0.0309     3.5363
+    ies_file: SC_HIGHBAY_200W.ies
+    ies_ok: True
+    luminaire: SC highbay
+    power_W: 200
+cl_05_lumen_search_and_uniformity                    0.2279     3.7642
+    efficacy_lm_per_W: 145
+    luminaire: SC highbay
+    max_fixtures: 161
+    min_fixtures: 121
+    power_W: 200
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.2189
+cl_05_lumen_search_and_uniformity                    0.1903     3.9545
+    efficacy_lm_per_W: 160
+    luminaire: SC highbay
+    max_fixtures: 170
+    min_fixtures: 110
+    power_W: 200
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.1769
+cl_05_lumen_search_and_uniformity                    0.1532     4.1077
+    efficacy_lm_per_W: 200
+    luminaire: SC highbay
+    max_fixtures: 148
+    min_fixtures: 88
+    power_W: 200
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.1437
+cl_04_ies_resolve                                    0.0276     4.1353
+    ies_file: SC_FLOOD_100W.ies
+    ies_ok: True
+    luminaire: SC flood light exterior
+    power_W: 100
+cl_05_lumen_search_and_uniformity                    0.4251     4.5604
+    efficacy_lm_per_W: 145
+    luminaire: SC flood light exterior
+    max_fixtures: 270
+    min_fixtures: 242
+    power_W: 100
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.4177
+cl_06_uniformity_report_txt                          0.0118     4.5722
+    path: C:\xampp\htdocs\LuxScaleAI\uniformity_reports\uniformity_calc_20260406_115301.txt
+cl_07_calculate_lighting_done                        0.0019     4.5742
+    fast: False
+    length_m: 80
+    result_rows: 10
+    width_m: 70
+api_01_calculate_lighting_returned                   0.0001     4.5743
+    result_rows: 10
+------------------------------------------------------------------------
+TOTAL (wall)                                         4.5920

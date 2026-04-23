@@ -1,0 +1,119 @@
+========================================================================
+LuxScaleAI calculation trace — POST /calculate
+Started (local): 2026-04-15T02:27:53
+========================================================================
+
+Step                                                delta_s      sum_s
+------------------------------------------------------------------------
+api_00_ready                                         0.0001     0.0001
+    fast: False
+    has_standard_row: True
+    height: 3.0
+    place: None
+    sides: [12, 12, 12, 12]
+    standard_ref_no: 6.48.1
+cl_01_calculate_lighting_enter                       0.0013     0.0014
+    fast: False
+    height: 3.0
+    place: None
+    sides: [12, 12, 12, 12]
+    standard_ref: 6.48.1
+cl_02_geometry_and_targets                           0.0016     0.0031
+    area_m2: 144.0
+    length_m: 12
+    required_Uo: 0.6
+    required_lux: 500.0
+    width_m: 12
+    zone: interior
+cl_03_options_and_uniformity_grid                    0.0133     0.0163
+    luminaire_options: 3
+    workplane_grid_n: 10
+cl_04_ies_resolve                                    0.0061     0.0224
+    ies_file: SC_TRIPROOF_36W.ies
+    ies_ok: True
+    luminaire: SC triproof
+    power_W: 30
+cl_05_lumen_search_and_uniformity                    7.9080     7.9304
+    efficacy_lm_per_W: 110
+    luminaire: SC triproof
+    max_fixtures: 49
+    min_fixtures: 28
+    power_W: 30
+    uniformity_evaluations: 21
+    uniformity_seconds: 7.8904
+cl_04_ies_resolve                                    0.0050     7.9354
+    ies_file: SC_TRIPROOF_36W.ies
+    ies_ok: True
+    luminaire: SC triproof
+    power_W: 40
+cl_05_lumen_search_and_uniformity                    4.5430    12.4784
+    efficacy_lm_per_W: 110
+    luminaire: SC triproof
+    max_fixtures: 36
+    min_fixtures: 21
+    power_W: 40
+    uniformity_evaluations: 15
+    uniformity_seconds: 4.5295
+cl_04_ies_resolve                                    0.0079    12.4863
+    ies_file: SC_SPOT_10W.ies
+    ies_ok: True
+    luminaire: SC downlight
+    power_W: 9
+cl_05_lumen_search_and_uniformity                    1.2595    13.7458
+    efficacy_lm_per_W: 110
+    luminaire: SC downlight
+    max_fixtures: 151
+    min_fixtures: 91
+    power_W: 9
+    uniformity_evaluations: 1
+    uniformity_seconds: 1.256
+cl_04_ies_resolve                                    0.0053    13.7511
+    ies_file: SC_SPOT_10W.ies
+    ies_ok: True
+    luminaire: SC downlight
+    power_W: 10
+cl_05_lumen_search_and_uniformity                    1.0907    14.8418
+    efficacy_lm_per_W: 110
+    luminaire: SC downlight
+    max_fixtures: 142
+    min_fixtures: 82
+    power_W: 10
+    uniformity_evaluations: 1
+    uniformity_seconds: 1.0851
+cl_04_ies_resolve                                    0.0054    14.8472
+    ies_file: SC_PANEL_36W.ies
+    ies_ok: True
+    luminaire: SC backlight
+    power_W: 32
+cl_05_lumen_search_and_uniformity                    6.4924    21.3395
+    efficacy_lm_per_W: 110
+    luminaire: SC backlight
+    max_fixtures: 45
+    min_fixtures: 26
+    power_W: 32
+    uniformity_evaluations: 18
+    uniformity_seconds: 6.4656
+cl_04_ies_resolve                                    0.0055    21.3450
+    ies_file: SC_PANEL_36W.ies
+    ies_ok: True
+    luminaire: SC backlight
+    power_W: 35
+cl_05_lumen_search_and_uniformity                    4.3594    25.7044
+    efficacy_lm_per_W: 110
+    luminaire: SC backlight
+    max_fixtures: 42
+    min_fixtures: 24
+    power_W: 35
+    uniformity_evaluations: 21
+    uniformity_seconds: 4.3414
+cl_06_uniformity_report_txt                          0.0025    25.7069
+    path: C:\xampp\htdocs\LuxScaleAI\uniformity_reports\uniformity_calc_20260415_022819.txt
+cl_07_calculate_lighting_done                        0.0003    25.7072
+    fast: False
+    length_m: 12
+    result_rows: 2
+    width_m: 12
+api_01_calculate_lighting_returned                   0.0001    25.7073
+    result_rows: 2
+------------------------------------------------------------------------
+TOTAL (wall)                                        25.7090

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxScale API Tester</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0a0c;
+    --surface:  #111114;
+    --border:   #1e1e24;
+    --border2:  #2a2a34;
+    --accent:   #f0b429;
+    --accent2:  #e8830a;
+    --green:    #22c55e;
+    --red:      #ef4444;
+    --blue:     #3b82f6;
+    --muted:    #555566;
+    --text:     #e8e8f0;
+    --text2:    #9090a8;
+    --mono:     'JetBrains Mono', monospace;
+    --sans:     'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: 14px;
+    color: #000;
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  header h1 span { color: var(--accent); }
+  .base-url-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex: 0 1 420px;
+  }
+  .base-label { color: var(--text2); font-size: 11px; white-space: nowrap; }
+  .base-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 10px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .base-input:focus { border-color: var(--accent); }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 1fr;
+    height: calc(100vh - 57px);
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+  .group-label {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 16px 6px;
+    margin-top: 6px;
+  }
+  .endpoint-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background .15s;
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .endpoint-btn:hover { background: rgba(255,255,255,.04); color: var(--text); }
+  .endpoint-btn.active { background: rgba(240,180,41,.07); color: var(--accent); }
+  .method-tag {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    min-width: 36px;
+    text-align: center;
+    letter-spacing: .03em;
+  }
+  .GET  { background: rgba(34,197,94,.15);  color: var(--green); }
+  .POST { background: rgba(59,130,246,.15); color: var(--blue); }
+  .PUT  { background: rgba(234,179,8,.15);  color: #eab308; }
+
+  /* ── PANELS ── */
+  .panel {
+    overflow-y: auto;
+    padding: 20px;
+    border-right: 1px solid var(--border);
+  }
+  .panel-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: 16px;
+  }
+
+  /* ── ENDPOINT INFO ── */
+  .ep-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .ep-method { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+  .ep-path { font-size: 15px; font-weight: 600; color: var(--text); }
+  .ep-desc { color: var(--text2); font-size: 12px; margin-bottom: 18px; line-height: 1.6; }
+
+  /* ── FORM FIELDS ── */
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--text2);
+    margin-bottom: 5px;
+    letter-spacing: .03em;
+  }
+  .field label .req { color: var(--accent); margin-left: 2px; }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color .2s;
+    resize: vertical;
+  }
+  .field textarea { min-height: 120px; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+  }
+  .field select option { background: var(--surface); }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+
+  .hint { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  /* ── SEND BUTTON ── */
+  .send-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 20px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    margin-top: 18px;
+  }
+  .send-btn:hover { background: var(--accent2); }
+  .send-btn:active { transform: scale(.97); }
+  .send-btn svg { width: 14px; height: 14px; }
+  .send-btn.loading { opacity: .7; pointer-events: none; }
+
+  /* ── RESPONSE PANEL ── */
+  .response-panel { overflow-y: auto; padding: 20px; background: var(--bg); }
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-dot.err { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .status-dot.idle { background: var(--muted); }
+  .status-code { font-weight: 700; }
+  .status-ok { color: var(--green); }
+  .status-err { color: var(--red); }
+  .status-time { color: var(--muted); margin-left: auto; }
+
+  .res-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .res-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 7px 14px;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+    letter-spacing: .03em;
+  }
+  .res-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--text);
+    overflow-x: auto;
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+  .json-key    { color: #93c5fd; }
+  .json-str    { color: #86efac; }
+  .json-num    { color: #fde68a; }
+  .json-bool   { color: #f9a8d4; }
+  .json-null   { color: var(--muted); }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+    color: var(--muted);
+    gap: 10px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .empty-state svg { opacity: .3; width: 40px; height: 40px; }
+
+  /* ── SCROLLBARS ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ── COPY BUTTON ── */
+  .copy-btn {
+    float: right;
+    background: var(--border2);
+    border: none;
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    transition: background .15s, color .15s;
+  }
+  .copy-btn:hover { background: var(--accent); color: #000; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* ── QUICK FILL ── */
+  .quick-fill {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .qf-btn {
+    background: var(--border);
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .qf-btn:hover { background: rgba(240,180,41,.1); border-color: var(--accent); color: var(--accent); }
+
+  .tag { display: inline-block; background: rgba(255,255,255,.05); border: 1px solid var(--border2); border-radius: 3px; font-size: 10px; padding: 1px 5px; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SC</div>
+  <h1>LuxScale <span>API</span> Tester</h1>
+  <div class="base-url-row">
+    <span class="base-label">BASE URL</span>
+    <input class="base-input" id="baseUrl" value="https://web-production-146d.up.railway.app" placeholder="https://your-app.railway.app">
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="group-label">Core</div>
+    <button class="endpoint-btn active" onclick="selectEndpoint('healthcheck')">
+      <span class="method-tag GET">GET</span> /
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('places')">
+      <span class="method-tag GET">GET</span> /places
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('uiSettings')">
+      <span class="method-tag GET">GET</span> /api/ui-settings
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('publicConfig')">
+      <span class="method-tag GET">GET</span> /api/public-config
+    </button>
+
+    <div class="group-label">Calculation</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('calculate')">
+      <span class="method-tag POST">POST</span> /calculate
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('pdf')">
+      <span class="method-tag POST">POST</span> /pdf
+    </button>
+
+    <div class="group-label">Standards</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('standardsResolve')">
+      <span class="method-tag POST">POST</span> /standards/resolve
+    </button>
+
+    <div class="group-label">Studies</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('studySubmit')">
+      <span class="method-tag POST">POST</span> /api/submit
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('studyGet')">
+      <span class="method-tag GET">GET</span> /api/get
+    </button>
+
+    <div class="group-label">Reports</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('reportFull')">
+      <span class="method-tag GET">GET</span> /api/report/:token/full
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('reportSolution')">
+      <span class="method-tag GET">GET</span> /api/report/:token/solution/:n
+    </button>
+
+    <div class="group-label">IES</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('iesUpload')">
+      <span class="method-tag POST">POST</span> /ies/upload
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('iesSpecs')">
+      <span class="method-tag GET">GET</span> /ies/specs
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('iesPolar')">
+      <span class="method-tag GET">GET</span> /ies/plot/polar
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('iesData')">
+      <span class="method-tag GET">GET</span> /ies/ies_data
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('iesPanorama')">
+      <span class="method-tag POST">POST</span> /ies/panorama
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('iesFloorplan')">
+      <span class="method-tag POST">POST</span> /ies/floorplan
+    </button>
+
+    <div class="group-label">AI</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('aiStatus')">
+      <span class="method-tag GET">GET</span> /api/ai/status
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('aiAnalyze')">
+      <span class="method-tag POST">POST</span> /api/ai/analyze
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('aiApproveFix')">
+      <span class="method-tag POST">POST</span> /api/ai/approve-fix
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('aiSnapshots')">
+      <span class="method-tag GET">GET</span> /api/ai/snapshots
+    </button>
+
+    <div class="group-label">Admin</div>
+    <button class="endpoint-btn" onclick="selectEndpoint('adminLogin')">
+      <span class="method-tag POST">POST</span> /api/admin/login
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('adminSettings')">
+      <span class="method-tag GET">GET</span> /api/admin/settings
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('adminFixtureMap')">
+      <span class="method-tag GET">GET</span> /api/admin/fixture-map
+    </button>
+    <button class="endpoint-btn" onclick="selectEndpoint('adminLogout')">
+      <span class="method-tag POST">POST</span> /api/admin/logout
+    </button>
+  </aside>
+
+  <!-- REQUEST PANEL -->
+  <div class="panel" id="requestPanel">
+    <div class="panel-title">Request</div>
+    <div id="endpointForm"></div>
+  </div>
+
+  <!-- RESPONSE PANEL -->
+  <div class="response-panel">
+    <div class="panel-title">Response</div>
+    <div id="statusBar" class="status-bar">
+      <div class="status-dot idle"></div>
+      <span style="color:var(--muted)">No request sent yet</span>
+    </div>
+    <div class="res-tabs">
+      <button class="res-tab active" onclick="switchTab('body')">Body</button>
+      <button class="res-tab" onclick="switchTab('headers')">Headers</button>
+      <button class="res-tab" onclick="switchTab('request')">Request Sent</button>
+    </div>
+    <div id="responseBody">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 7h18M3 12h18M3 17h12"/>
+        </svg>
+        <p>Select an endpoint and send a request</p>
+      </div>
+    </div>
+    <div id="responseHeaders" style="display:none"></div>
+    <div id="requestSent" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let lastResponse = null;
+let lastHeaders = null;
+let lastRequest = null;
+let adminToken = '';
+
+// ── ENDPOINT DEFINITIONS ──
+const ENDPOINTS = {
+
+  healthcheck: {
+    method: 'GET', path: '/',
+    label: 'Health Check',
+    desc: 'Returns a simple status to confirm the server is alive and responding.',
+    fields: [],
+  },
+
+  places: {
+    method: 'GET', path: '/places',
+    label: 'Get Places',
+    desc: 'Returns the list of room types / place definitions used for calculate presets.',
+    fields: [],
+  },
+
+  uiSettings: {
+    method: 'GET', path: '/api/ui-settings',
+    label: 'UI Settings (Public)',
+    desc: 'Returns public UI configuration (branding, feature flags, etc).',
+    fields: [],
+  },
+
+  publicConfig: {
+    method: 'GET', path: '/api/public-config',
+    label: 'Public Config',
+    desc: 'Returns the public app config JSON (API base, feature toggles).',
+    fields: [],
+  },
+
+  calculate: {
+    method: 'POST', path: '/calculate',
+    label: 'Calculate Lighting',
+    desc: 'Core calculation engine. Accepts room dimensions, ceiling height, optional standard ref and place. Returns fixture solutions with lux, uniformity, and IES data.',
+    quickFills: [
+      { label: '5×5 office (std 6.45.1)', payload: { sides:[5,5,5,5], height:3.0, standard_ref_no:'6.45.1' } },
+      { label: '10×8 warehouse (fast)', payload: { sides:[10,8,10,8], height:6.0, fast:true } },
+      { label: '20×15 factory', payload: { sides:[20,15,20,15], height:8.0, standard_ref_no:'6.20.1' } },
+    ],
+    fields: [
+      { id:'calc_sides', label:'Sides (4 numbers, W L W L in meters)', type:'text', req:true, placeholder:'5, 5, 5, 5', hint:'Rectangular room: width, length, width, length' },
+      { id:'calc_height', label:'Ceiling Height (m)', type:'number', req:true, placeholder:'3.0' },
+      { id:'calc_std', label:'Standard Ref No', type:'text', req:false, placeholder:'6.45.1', hint:'From standards_cleaned.json — leave blank to skip standard check' },
+      { id:'calc_place', label:'Place (optional)', type:'text', req:false, placeholder:'Office' },
+      { id:'calc_fast', label:'Fast Mode', type:'select', options:['false','true'], req:false },
+    ],
+    buildBody: () => {
+      const sides = document.getElementById('calc_sides').value
+        .split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+      const h = parseFloat(document.getElementById('calc_height').value);
+      const std = document.getElementById('calc_std').value.trim();
+      const place = document.getElementById('calc_place').value.trim();
+      const fast = document.getElementById('calc_fast').value === 'true';
+      const body = { sides, height: h };
+      if (std) body.standard_ref_no = std;
+      if (place) body.place = place;
+      if (fast) body.fast = true;
+      return body;
+    }
+  },
+
+  pdf: {
+    method: 'POST', path: '/pdf',
+    label: 'Generate PDF (inline)',
+    desc: 'Generates a PDF report inline from calculation results. Returns binary PDF.',
+    quickFills: [
+      { label: 'Minimal test payload', payload: { sides:[5,5,5,5], height:3.0, results:[] } },
+    ],
+    fields: [
+      { id:'pdf_body', label:'Request Body (JSON)', type:'textarea', req:true,
+        placeholder: JSON.stringify({ sides:[5,5,5,5], height:3.0, results:[] }, null, 2) },
+    ],
+    buildBody: () => JSON.parse(document.getElementById('pdf_body').value),
+  },
+
+  standardsResolve: {
+    method: 'POST', path: '/standards/resolve',
+    label: 'Resolve Standard',
+    desc: 'Look up a standard row by ref_no. Validates the ref exists in standards_cleaned.json.',
+    quickFills: [
+      { label: 'Office 6.45.1', payload: { ref_no: '6.45.1' } },
+      { label: 'Corridor 6.1.1', payload: { ref_no: '6.1.1' } },
+      { label: 'Staircase 6.1.2', payload: { ref_no: '6.1.2' } },
+    ],
+    fields: [
+      { id:'std_ref', label:'Standard Ref No', type:'text', req:true, placeholder:'6.45.1' },
+    ],
+    buildBody: () => ({ ref_no: document.getElementById('std_ref').value.trim() }),
+  },
+
+  studySubmit: {
+    method: 'POST', path: '/api/submit',
+    label: 'Submit Study',
+    desc: 'Persist a study JSON to disk. Returns a token you use to retrieve or generate reports.',
+    quickFills: [
+      { label: 'Sample study', payload: { sides:[5,5,5,5], height:3.0, results:[], project_info:{ name:'Test Room' } } },
+    ],
+    fields: [
+      { id:'submit_body', label:'Study Payload (JSON)', type:'textarea', req:true,
+        placeholder: JSON.stringify({ sides:[5,5,5,5], height:3.0, results:[], project_info:{ name:'Test Room' } }, null, 2) },
+    ],
+    buildBody: () => JSON.parse(document.getElementById('submit_body').value),
+  },
+
+  studyGet: {
+    method: 'GET', path: '/api/get',
+    label: 'Get Study',
+    desc: 'Retrieve a previously saved study by token. Token is a 32-char hex string returned from /api/submit.',
+    fields: [
+      { id:'get_token', label:'Token (32-char hex)', type:'text', req:true, placeholder:'abc123...32chars...' },
+    ],
+    buildQuery: () => ({ token: document.getElementById('get_token').value.trim() }),
+  },
+
+  reportFull: {
+    method: 'GET', path: '/api/report/:token/full',
+    label: 'Full Report PDF',
+    desc: 'Generate and stream a full PDF report for all solutions in a study. Returns binary PDF — will trigger download.',
+    fields: [
+      { id:'rep_token', label:'Token', type:'text', req:true, placeholder:'32-char hex token from /api/submit' },
+    ],
+    buildPath: () => `/api/report/${document.getElementById('rep_token').value.trim()}/full`,
+    isPdf: true,
+  },
+
+  reportSolution: {
+    method: 'GET', path: '/api/report/:token/solution/:n',
+    label: 'Solution PDF',
+    desc: 'Generate a single-solution PDF for a specific solution index (0-based).',
+    fields: [
+      { id:'rsol_token', label:'Token', type:'text', req:true, placeholder:'32-char hex token' },
+      { id:'rsol_idx', label:'Solution Index (0-based)', type:'number', req:true, placeholder:'0' },
+    ],
+    buildPath: () => `/api/report/${document.getElementById('rsol_token').value.trim()}/solution/${document.getElementById('rsol_idx').value.trim()}`,
+    isPdf: true,
+  },
+
+  iesUpload: {
+    method: 'POST', path: '/ies/upload',
+    label: 'Upload IES File',
+    desc: 'Upload a .ies file for photometric analysis. Returns a session ID and parsed photometric data.',
+    fields: [
+      { id:'ies_file', label:'IES File', type:'file', req:true, hint:'.ies files only' },
+    ],
+    isFile: true,
+    buildFormData: () => {
+      const f = document.getElementById('ies_file').files[0];
+      const fd = new FormData();
+      if (f) fd.append('file', f);
+      return fd;
+    }
+  },
+
+  iesSpecs: {
+    method: 'GET', path: '/ies/specs',
+    label: 'IES Specs',
+    desc: 'Get parsed IES specs for a session.',
+    fields: [
+      { id:'specs_sid', label:'Session ID (sid)', type:'text', req:true, placeholder:'session id from /ies/upload' },
+    ],
+    buildQuery: () => ({ sid: document.getElementById('specs_sid').value.trim() }),
+  },
+
+  iesPolar: {
+    method: 'GET', path: '/ies/plot/polar',
+    label: 'Polar Plot',
+    desc: 'Get a base64 polar plot image for an IES session.',
+    fields: [
+      { id:'polar_sid', label:'Session ID (sid)', type:'text', req:true, placeholder:'session id from /ies/upload' },
+    ],
+    buildQuery: () => ({ sid: document.getElementById('polar_sid').value.trim() }),
+  },
+
+  iesData: {
+    method: 'GET', path: '/ies/ies_data',
+    label: 'IES Data',
+    desc: 'Get raw parsed IES data for a session.',
+    fields: [
+      { id:'iesdata_sid', label:'Session ID (sid)', type:'text', req:true, placeholder:'session id from /ies/upload' },
+    ],
+    buildQuery: () => ({ sid: document.getElementById('iesdata_sid').value.trim() }),
+  },
+
+  iesPanorama: {
+    method: 'POST', path: '/ies/panorama',
+    label: 'IES Panorama Render',
+    desc: 'Render a 3D panoramic view of the IES distribution for a session.',
+    fields: [
+      { id:'pano_sid', label:'Session ID (sid)', type:'text', req:true, placeholder:'session id from /ies/upload' },
+    ],
+    buildBody: () => ({ sid: document.getElementById('pano_sid').value.trim() }),
+  },
+
+  iesFloorplan: {
+    method: 'POST', path: '/ies/floorplan',
+    label: 'IES Floorplan',
+    desc: 'Render a 2D floorplan lux distribution from an IES session with room dimensions.',
+    fields: [
+      { id:'fp_sid', label:'Session ID (sid)', type:'text', req:true, placeholder:'session id from /ies/upload' },
+      { id:'fp_w', label:'Room Width (m)', type:'number', req:false, placeholder:'10' },
+      { id:'fp_l', label:'Room Length (m)', type:'number', req:false, placeholder:'10' },
+      { id:'fp_h', label:'Mount Height (m)', type:'number', req:false, placeholder:'3' },
+    ],
+    buildBody: () => {
+      const b = { sid: document.getElementById('fp_sid').value.trim() };
+      const w = parseFloat(document.getElementById('fp_w').value);
+      const l = parseFloat(document.getElementById('fp_l').value);
+      const h = parseFloat(document.getElementById('fp_h').value);
+      if (!isNaN(w)) b.width = w;
+      if (!isNaN(l)) b.length = l;
+      if (!isNaN(h)) b.mount_height = h;
+      return b;
+    }
+  },
+
+  aiStatus: {
+    method: 'GET', path: '/api/ai/status',
+    label: 'AI Status',
+    desc: 'Get current AI provider status (OpenAI / Gemini / Ollama availability).',
+    fields: [],
+  },
+
+  aiAnalyze: {
+    method: 'POST', path: '/api/ai/analyze',
+    label: 'AI Analyze',
+    desc: 'Send calculation results to AI for intelligent analysis and recommendations.',
+    quickFills: [
+      { label: 'Sample analyze', payload: { sides:[5,5,5,5], height:3.0, results:[], query:'Analyze this room' } },
+    ],
+    fields: [
+      { id:'ai_body', label:'Request Body (JSON)', type:'textarea', req:true,
+        placeholder: JSON.stringify({ sides:[5,5,5,5], height:3.0, results:[], query:'Analyze this room' }, null, 2) },
+    ],
+    buildBody: () => JSON.parse(document.getElementById('ai_body').value),
+  },
+
+  aiApproveFix: {
+    method: 'POST', path: '/api/ai/approve-fix',
+    label: 'AI Approve Fix',
+    desc: 'Apply an AI-suggested fix to a study.',
+    fields: [
+      { id:'fix_body', label:'Request Body (JSON)', type:'textarea', req:true,
+        placeholder: JSON.stringify({ fix_id: 'fix_xxx', approved: true }, null, 2) },
+    ],
+    buildBody: () => JSON.parse(document.getElementById('fix_body').value),
+  },
+
+  aiSnapshots: {
+    method: 'GET', path: '/api/ai/snapshots',
+    label: 'AI Snapshots',
+    desc: 'List all AI analysis snapshots.',
+    fields: [],
+  },
+
+  adminLogin: {
+    method: 'POST', path: '/api/admin/login',
+    label: 'Admin Login',
+    desc: 'Login as admin. Default credentials: luxscale / LuxScaleAdmin2026. Returns a bearer token.',
+    quickFills: [
+      { label: 'Default credentials', payload: { username:'luxscale', password:'LuxScaleAdmin2026' } },
+    ],
+    fields: [
+      { id:'admin_user', label:'Username', type:'text', req:true, placeholder:'luxscale' },
+      { id:'admin_pass', label:'Password', type:'text', req:true, placeholder:'LuxScaleAdmin2026' },
+    ],
+    buildBody: () => ({
+      username: document.getElementById('admin_user').value,
+      password: document.getElementById('admin_pass').value,
+    }),
+    onSuccess: (data) => {
+      if (data.token) {
+        adminToken = data.token;
+        showNotice(`Admin token saved. Will be sent as X-Admin-Token on subsequent requests.`);
+      }
+    }
+  },
+
+  adminSettings: {
+    method: 'GET', path: '/api/admin/settings',
+    label: 'Admin Settings',
+    desc: 'Get current app settings (admin required). Login first to get the bearer token.',
+    fields: [],
+    requiresAdmin: true,
+  },
+
+  adminFixtureMap: {
+    method: 'GET', path: '/api/admin/fixture-map',
+    label: 'Admin Fixture Map',
+    desc: 'Get the current fixture map JSON (admin required).',
+    fields: [],
+    requiresAdmin: true,
+  },
+
+  adminLogout: {
+    method: 'POST', path: '/api/admin/logout',
+    label: 'Admin Logout',
+    desc: 'Revoke the current admin session token.',
+    fields: [],
+    requiresAdmin: true,
+  },
+};
+
+// ── CURRENT ENDPOINT ──
+let current = 'healthcheck';
+
+function selectEndpoint(id) {
+  current = id;
+  document.querySelectorAll('.endpoint-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderForm();
+}
+
+function renderForm() {
+  const ep = ENDPOINTS[current];
+  const panel = document.getElementById('endpointForm');
+
+  const methodClass = ep.method;
+  let html = `
+    <div class="ep-header">
+      <span class="method-tag ep-method ${methodClass}">${ep.method}</span>
+      <span class="ep-path">${ep.path}</span>
+    </div>
+    <p class="ep-desc">${ep.desc}</p>
+  `;
+
+  if (ep.requiresAdmin) {
+    html += `<div style="background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.2);border-radius:6px;padding:8px 12px;margin-bottom:14px;font-size:11px;color:var(--accent);">
+      🔐 Requires admin login. Use /api/admin/login first — token will be auto-attached.
+    </div>`;
+  }
+
+  if (ep.quickFills) {
+    html += `<div style="margin-bottom:14px">
+      <div style="font-size:10px;color:var(--text2);margin-bottom:6px;letter-spacing:.05em;">QUICK FILL</div>
+      <div class="quick-fill">
+        ${ep.quickFills.map((qf, i) =>
+          `<button class="qf-btn" onclick="quickFill(${i})">${qf.label}</button>`
+        ).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (ep.fields.length > 0) {
+    ep.fields.forEach(f => {
+      html += `<div class="field">
+        <label>${f.label}${f.req ? '<span class="req">*</span>' : ''}</label>`;
+      if (f.type === 'textarea') {
+        html += `<textarea id="${f.id}" placeholder="${f.placeholder || ''}">${f.placeholder || ''}</textarea>`;
+      } else if (f.type === 'select') {
+        html += `<select id="${f.id}">${f.options.map(o => `<option>${o}</option>`).join('')}</select>`;
+      } else if (f.type === 'file') {
+        html += `<input type="file" id="${f.id}" accept=".ies,.IES">`;
+      } else {
+        html += `<input type="${f.type}" id="${f.id}" placeholder="${f.placeholder || ''}">`;
+      }
+      if (f.hint) html += `<div class="hint">${f.hint}</div>`;
+      html += `</div>`;
+    });
+  }
+
+  html += `<button class="send-btn" id="sendBtn" onclick="sendRequest()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+    Send ${ep.method} Request
+  </button>`;
+
+  panel.innerHTML = html;
+}
+
+function quickFill(idx) {
+  const ep = ENDPOINTS[current];
+  const qf = ep.quickFills[idx];
+  if (!qf) return;
+
+  // Try to populate textarea bodies
+  const textareaIds = ['pdf_body','submit_body','ai_body','fix_body'];
+  for (const tid of textareaIds) {
+    const el = document.getElementById(tid);
+    if (el) { el.value = JSON.stringify(qf.payload, null, 2); return; }
+  }
+
+  // For calculate: populate individual fields
+  if (current === 'calculate') {
+    const p = qf.payload;
+    if (p.sides) document.getElementById('calc_sides').value = p.sides.join(', ');
+    if (p.height) document.getElementById('calc_height').value = p.height;
+    if (p.standard_ref_no) document.getElementById('calc_std').value = p.standard_ref_no;
+    if (p.fast) document.getElementById('calc_fast').value = 'true';
+    return;
+  }
+
+  if (current === 'standardsResolve') {
+    document.getElementById('std_ref').value = qf.payload.ref_no;
+    return;
+  }
+
+  if (current === 'adminLogin') {
+    document.getElementById('admin_user').value = qf.payload.username;
+    document.getElementById('admin_pass').value = qf.payload.password;
+    return;
+  }
+}
+
+async function sendRequest() {
+  const ep = ENDPOINTS[current];
+  const btn = document.getElementById('sendBtn');
+  btn.classList.add('loading');
+  btn.textContent = 'Sending…';
+
+  const base = document.getElementById('baseUrl').value.replace(/\/$/, '');
+  let path = ep.buildPath ? ep.buildPath() : ep.path;
+  let url = base + path;
+
+  const headers = { 'Accept': 'application/json' };
+  if (adminToken) headers['X-Admin-Token'] = adminToken;
+
+  let fetchOpts = { method: ep.method, headers, credentials: 'include' };
+
+  // Build query string for GET
+  if (ep.buildQuery) {
+    const params = ep.buildQuery();
+    const qs = Object.entries(params).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    url += '?' + qs;
+  }
+
+  // Build body
+  let sentBody = null;
+  if (ep.isFile && ep.buildFormData) {
+    const fd = ep.buildFormData();
+    fetchOpts.body = fd;
+    sentBody = '[FormData with file]';
+  } else if (ep.buildBody) {
+    try {
+      const body = ep.buildBody();
+      sentBody = JSON.stringify(body, null, 2);
+      fetchOpts.body = sentBody;
+      headers['Content-Type'] = 'application/json';
+    } catch(e) {
+      showError('JSON parse error: ' + e.message);
+      resetBtn();
+      return;
+    }
+  }
+
+  lastRequest = { method: ep.method, url, headers, body: sentBody };
+
+  const t0 = performance.now();
+  try {
+    const res = await fetch(url, fetchOpts);
+    const elapsed = Math.round(performance.now() - t0);
+
+    lastHeaders = {};
+    res.headers.forEach((v, k) => { lastHeaders[k] = v; });
+
+    const ct = res.headers.get('content-type') || '';
+    if (ep.isPdf || ct.includes('pdf')) {
+      const blob = await res.blob();
+      showPdfResult(res.status, elapsed, blob, url);
+    } else {
+      const text = await res.text();
+      let parsed = null;
+      try { parsed = JSON.parse(text); } catch(e) { parsed = text; }
+      lastResponse = parsed;
+
+      showResult(res.status, elapsed, parsed);
+
+      if (res.ok && ep.onSuccess) ep.onSuccess(parsed);
+    }
+  } catch(e) {
+    showError('Network error: ' + e.message + '\n\nCheck:\n• Base URL is correct\n• CORS is configured for this origin\n• App is running');
+  }
+
+  resetBtn();
+}
+
+function resetBtn() {
+  const btn = document.getElementById('sendBtn');
+  const ep = ENDPOINTS[current];
+  btn.classList.remove('loading');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Send ${ep.method} Request`;
+}
+
+function showResult(status, elapsed, data) {
+  const ok = status >= 200 && status < 300;
+  const bar = document.getElementById('statusBar');
+  bar.innerHTML = `
+    <div class="status-dot ${ok ? 'ok' : 'err'}"></div>
+    <span class="status-code ${ok ? 'status-ok' : 'status-err'}">${status}</span>
+    <span style="color:var(--text2)">${statusText(status)}</span>
+    <span class="status-time">${elapsed}ms</span>
+  `;
+
+  const body = document.getElementById('responseBody');
+  const pretty = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+  body.innerHTML = `
+    <button class="copy-btn" onclick="copyText(${JSON.stringify(pretty)})">Copy</button>
+    <div class="code-block">${syntaxHL(pretty)}</div>
+  `;
+
+  const headersDiv = document.getElementById('responseHeaders');
+  if (lastHeaders) {
+    headersDiv.innerHTML = `<div class="code-block">${syntaxHL(JSON.stringify(lastHeaders, null, 2))}</div>`;
+  }
+
+  const reqDiv = document.getElementById('requestSent');
+  if (lastRequest) {
+    reqDiv.innerHTML = `<div class="code-block">${syntaxHL(JSON.stringify(lastRequest, null, 2))}</div>`;
+  }
+}
+
+function showPdfResult(status, elapsed, blob, url) {
+  const ok = status >= 200 && status < 300;
+  const bar = document.getElementById('statusBar');
+  bar.innerHTML = `
+    <div class="status-dot ${ok ? 'ok' : 'err'}"></div>
+    <span class="status-code ${ok ? 'status-ok' : 'status-err'}">${status}</span>
+    <span style="color:var(--text2)">PDF Response · ${(blob.size/1024).toFixed(1)}KB</span>
+    <span class="status-time">${elapsed}ms</span>
+  `;
+
+  const objUrl = URL.createObjectURL(blob);
+  const body = document.getElementById('responseBody');
+  body.innerHTML = `
+    <div style="padding:20px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:12px;">📄</div>
+      <p style="color:var(--green);font-weight:700;margin-bottom:8px;">PDF Generated (${(blob.size/1024).toFixed(1)} KB)</p>
+      <a href="${objUrl}" download="report.pdf" style="display:inline-block;background:var(--accent);color:#000;font-family:var(--sans);font-weight:700;padding:10px 20px;border-radius:7px;text-decoration:none;margin-top:8px;">⬇ Download PDF</a>
+    </div>
+  `;
+}
+
+function showError(msg) {
+  const bar = document.getElementById('statusBar');
+  bar.innerHTML = `<div class="status-dot err"></div><span class="status-err">Error</span><span style="color:var(--text2);margin-left:6px">${msg.split('\n')[0]}</span>`;
+  const body = document.getElementById('responseBody');
+  body.innerHTML = `<div class="code-block" style="color:var(--red)">${msg}</div>`;
+}
+
+function showNotice(msg) {
+  const bar = document.getElementById('statusBar');
+  const existing = bar.innerHTML;
+  const notice = document.createElement('div');
+  notice.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--accent);color:#000;padding:10px 16px;border-radius:8px;font-family:var(--sans);font-size:12px;font-weight:700;z-index:9999;max-width:320px;';
+  notice.textContent = msg;
+  document.body.appendChild(notice);
+  setTimeout(() => notice.remove(), 3500);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.res-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['body','headers','request'][i] === tab);
+  });
+  document.getElementById('responseBody').style.display = tab === 'body' ? '' : 'none';
+  document.getElementById('responseHeaders').style.display = tab === 'headers' ? '' : 'none';
+  document.getElementById('requestSent').style.display = tab === 'request' ? '' : 'none';
+}
+
+function statusText(code) {
+  const m = {200:'OK',201:'Created',204:'No Content',400:'Bad Request',401:'Unauthorized',403:'Forbidden',404:'Not Found',422:'Unprocessable',500:'Internal Server Error',502:'Bad Gateway',503:'Service Unavailable'};
+  return m[code] || '';
+}
+
+function syntaxHL(json) {
+  return json
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+      let cls = 'json-num';
+      if (/^"/.test(match)) cls = /:$/.test(match) ? 'json-key' : 'json-str';
+      else if (/true|false/.test(match)) cls = 'json-bool';
+      else if (/null/.test(match)) cls = 'json-null';
+      return `<span class="${cls}">${match}</span>`;
+    });
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showNotice('Copied to clipboard'));
+}
+
+// ── INIT ──
+renderForm();
+</script>
+</body>
+</html>

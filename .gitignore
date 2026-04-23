@@ -4,36 +4,36 @@
 #  Place this file at the project root: LuxScaleAI/.gitignore
 # ================================================================
 
-luxscale_app.log
-uniformity_reports/
-calculation_logs/
-api/data/studies/*.json
+# luxscale_app.log
+# uniformity_reports/
+# calculation_logs/
+# api/data/studies/*.json
 
 # Local env (copy from .env.example)
-.env
+# .env
 # Add these lines to your existing .gitignore:
-gemini_config.json
-gemini_snapshot.json
+# gemini_config.json
+# gemini_snapshot.json
 
 # ────────────────────────────────────────────────────────────────
 #  STUDY DATA  (user-generated, never commit)
 # ────────────────────────────────────────────────────────────────
-api/data/studies/*.json
-api/data/studies/!.gitignore
+# api/data/studies/*.json
+# api/data/studies/!.gitignore
 
 # IES photometric files (large binaries, serve from storage)
-api/data/ies/
-ies/
-*.ies
-*.IES
+# api/data/ies/
+# ies/
+# *.ies
+# *.IES
 
 # Generated PDF reports
-*.pdf
-reports/
+# *.pdf
+# reports/
 
 # Generated exports
-*.dxf
-*.stl
+# *.dxf
+# *.stl
 
 
 # ────────────────────────────────────────────────────────────────
@@ -57,7 +57,7 @@ venv.bak/
 
 # Distribution / packaging
 dist/
-build/
+# build/
 *.egg-info/
 *.egg
 .eggs/
@@ -239,4 +239,4 @@ credentials.json
 !.env.example
 !assets/.gitkeep
 *.zip
-maha/
+# maha/

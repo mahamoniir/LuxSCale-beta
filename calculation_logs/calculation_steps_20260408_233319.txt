@@ -1,0 +1,128 @@
+========================================================================
+LuxScaleAI calculation trace — POST /calculate
+Started (local): 2026-04-08T23:33:13
+========================================================================
+
+Step                                                delta_s      sum_s
+------------------------------------------------------------------------
+api_00_ready                                         0.0000     0.0000
+    fast: False
+    has_standard_row: True
+    height: 8.0
+    place: None
+    sides: [90, 80, 90, 80]
+    standard_ref_no: 6.17.6
+cl_01_calculate_lighting_enter                       0.0007     0.0007
+    fast: False
+    height: 8.0
+    place: None
+    sides: [90, 80, 90, 80]
+    standard_ref: 6.17.6
+cl_02_geometry_and_targets                           0.0278     0.0286
+    area_m2: 7200.0
+    length_m: 90
+    required_Uo: 0.7
+    required_lux: 1000.0
+    width_m: 80
+    zone: exterior
+cl_03_options_and_uniformity_grid                    0.0159     0.0444
+    luminaire_options: 4
+    workplane_grid_n: 5
+cl_04_ies_resolve                                    0.0400     0.0844
+    ies_file: SC_HIGHBAY_100W.ies
+    ies_ok: True
+    luminaire: SC highbay
+    power_W: 100
+cl_05_lumen_search_and_uniformity                    0.9406     1.0250
+    efficacy_lm_per_W: 145
+    luminaire: SC highbay
+    max_fixtures: 649
+    min_fixtures: 621
+    power_W: 100
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.9187
+cl_05_lumen_search_and_uniformity                    0.8433     1.8683
+    efficacy_lm_per_W: 160
+    luminaire: SC highbay
+    max_fixtures: 591
+    min_fixtures: 563
+    power_W: 100
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.8314
+cl_05_lumen_search_and_uniformity                    0.6569     2.5252
+    efficacy_lm_per_W: 200
+    luminaire: SC highbay
+    max_fixtures: 479
+    min_fixtures: 451
+    power_W: 100
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.6354
+cl_04_ies_resolve                                    0.0251     2.5503
+    ies_file: SC_HIGHBAY_150W.ies
+    ies_ok: True
+    luminaire: SC highbay
+    power_W: 150
+cl_05_lumen_search_and_uniformity                    0.6081     3.1584
+    efficacy_lm_per_W: 145
+    luminaire: SC highbay
+    max_fixtures: 442
+    min_fixtures: 414
+    power_W: 150
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.5982
+cl_05_lumen_search_and_uniformity                    0.5532     3.7116
+    efficacy_lm_per_W: 160
+    luminaire: SC highbay
+    max_fixtures: 404
+    min_fixtures: 376
+    power_W: 150
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.5383
+cl_05_lumen_search_and_uniformity                    0.4727     4.1843
+    efficacy_lm_per_W: 200
+    luminaire: SC highbay
+    max_fixtures: 329
+    min_fixtures: 301
+    power_W: 150
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.4493
+cl_04_ies_resolve                                    0.0244     4.2087
+    ies_file: SC_HIGHBAY_200W.ies
+    ies_ok: True
+    luminaire: SC highbay
+    power_W: 200
+cl_05_lumen_search_and_uniformity                    0.4607     4.6694
+    efficacy_lm_per_W: 145
+    luminaire: SC highbay
+    max_fixtures: 339
+    min_fixtures: 311
+    power_W: 200
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.4532
+cl_05_lumen_search_and_uniformity                    0.4267     5.0961
+    efficacy_lm_per_W: 160
+    luminaire: SC highbay
+    max_fixtures: 310
+    min_fixtures: 282
+    power_W: 200
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.3872
+cl_05_lumen_search_and_uniformity                    0.3387     5.4349
+    efficacy_lm_per_W: 200
+    luminaire: SC highbay
+    max_fixtures: 254
+    min_fixtures: 226
+    power_W: 200
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.3323
+cl_06_uniformity_report_txt                          0.0147     5.4496
+    path: C:\xampp\htdocs\LuxScaleAI\uniformity_reports\uniformity_calc_20260408_233319.txt
+cl_07_calculate_lighting_done                        0.0012     5.4508
+    fast: False
+    length_m: 90
+    result_rows: 9
+    width_m: 80
+api_01_calculate_lighting_returned                   0.0001     5.4509
+    result_rows: 9
+------------------------------------------------------------------------
+TOTAL (wall)                                         5.4544

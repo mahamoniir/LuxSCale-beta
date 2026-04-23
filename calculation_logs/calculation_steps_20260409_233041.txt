@@ -1,0 +1,119 @@
+========================================================================
+LuxScaleAI calculation trace — POST /calculate
+Started (local): 2026-04-09T23:30:30
+========================================================================
+
+Step                                                delta_s      sum_s
+------------------------------------------------------------------------
+api_00_ready                                         0.0029     0.0029
+    fast: False
+    has_standard_row: True
+    height: 4.0
+    place: None
+    sides: [9, 4, 9, 4]
+    standard_ref_no: 6.48.1
+cl_01_calculate_lighting_enter                       0.0169     0.0198
+    fast: False
+    height: 4.0
+    place: None
+    sides: [9, 4, 9, 4]
+    standard_ref: 6.48.1
+cl_02_geometry_and_targets                           0.0365     0.0563
+    area_m2: 36.0
+    length_m: 9
+    required_Uo: 0.6
+    required_lux: 500.0
+    width_m: 4
+    zone: interior
+cl_03_options_and_uniformity_grid                    0.0733     0.1296
+    luminaire_options: 3
+    workplane_grid_n: 10
+cl_04_ies_resolve                                    0.1824     0.3120
+    ies_file: SC_TRIPROOF_36W.ies
+    ies_ok: True
+    luminaire: SC triproof
+    power_W: 30
+cl_05_lumen_search_and_uniformity                    0.8721     1.1840
+    efficacy_lm_per_W: 110
+    luminaire: SC triproof
+    max_fixtures: 22
+    min_fixtures: 7
+    power_W: 30
+    uniformity_evaluations: 2
+    uniformity_seconds: 0.7799
+cl_04_ies_resolve                                    0.0615     1.2456
+    ies_file: SC_TRIPROOF_36W.ies
+    ies_ok: True
+    luminaire: SC triproof
+    power_W: 40
+cl_05_lumen_search_and_uniformity                    0.2715     1.5171
+    efficacy_lm_per_W: 110
+    luminaire: SC triproof
+    max_fixtures: 21
+    min_fixtures: 6
+    power_W: 40
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.1843
+cl_04_ies_resolve                                    0.0687     1.5858
+    ies_file: SC_SPOT_10W.ies
+    ies_ok: True
+    luminaire: SC downlight
+    power_W: 9
+cl_05_lumen_search_and_uniformity                    4.7916     6.3774
+    efficacy_lm_per_W: 110
+    luminaire: SC downlight
+    max_fixtures: 40
+    min_fixtures: 23
+    power_W: 9
+    uniformity_evaluations: 7
+    uniformity_seconds: 4.7599
+cl_04_ies_resolve                                    0.0633     6.4406
+    ies_file: SC_SPOT_10W.ies
+    ies_ok: True
+    luminaire: SC downlight
+    power_W: 10
+cl_05_lumen_search_and_uniformity                    3.7179    10.1585
+    efficacy_lm_per_W: 110
+    luminaire: SC downlight
+    max_fixtures: 36
+    min_fixtures: 21
+    power_W: 10
+    uniformity_evaluations: 6
+    uniformity_seconds: 3.662
+cl_04_ies_resolve                                    0.1077    10.2662
+    ies_file: SC_PANEL_36W.ies
+    ies_ok: True
+    luminaire: SC backlight
+    power_W: 32
+cl_05_lumen_search_and_uniformity                    0.3975    10.6637
+    efficacy_lm_per_W: 110
+    luminaire: SC backlight
+    max_fixtures: 22
+    min_fixtures: 7
+    power_W: 32
+    uniformity_evaluations: 2
+    uniformity_seconds: 0.3223
+cl_04_ies_resolve                                    0.0502    10.7139
+    ies_file: SC_PANEL_36W.ies
+    ies_ok: True
+    luminaire: SC backlight
+    power_W: 35
+cl_05_lumen_search_and_uniformity                    0.1380    10.8518
+    efficacy_lm_per_W: 110
+    luminaire: SC backlight
+    max_fixtures: 21
+    min_fixtures: 6
+    power_W: 35
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.1109
+cl_06_uniformity_report_txt                          0.0411    10.8929
+    path: C:\xampp\htdocs\LuxScaleAI\uniformity_reports\uniformity_calc_20260409_233041.txt
+cl_07_calculate_lighting_done                        0.0313    10.9243
+    fast: False
+    length_m: 9
+    result_rows: 4
+    width_m: 4
+api_01_calculate_lighting_returned                   0.0003    10.9246
+    result_rows: 4
+------------------------------------------------------------------------
+TOTAL (wall)                                        10.9423

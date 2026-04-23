@@ -1,0 +1,119 @@
+========================================================================
+LuxScaleAI calculation trace — POST /calculate
+Started (local): 2026-04-11T21:23:17
+========================================================================
+
+Step                                                delta_s      sum_s
+------------------------------------------------------------------------
+api_00_ready                                         0.0001     0.0001
+    fast: False
+    has_standard_row: True
+    height: 3.0
+    place: None
+    sides: [3, 3, 3, 3]
+    standard_ref_no: 6.15.1
+cl_01_calculate_lighting_enter                       0.0023     0.0025
+    fast: False
+    height: 3.0
+    place: None
+    sides: [3, 3, 3, 3]
+    standard_ref: 6.15.1
+cl_02_geometry_and_targets                           0.0126     0.0151
+    area_m2: 9.0
+    length_m: 3
+    required_Uo: 0.7
+    required_lux: 1500.0
+    width_m: 3
+    zone: interior
+cl_03_options_and_uniformity_grid                    0.0390     0.0541
+    luminaire_options: 3
+    workplane_grid_n: 10
+cl_04_ies_resolve                                    0.0103     0.0644
+    ies_file: SC_TRIPROOF_36W.ies
+    ies_ok: True
+    luminaire: SC triproof
+    power_W: 30
+cl_05_lumen_search_and_uniformity                    0.1284     0.1928
+    efficacy_lm_per_W: 110
+    luminaire: SC triproof
+    max_fixtures: 21
+    min_fixtures: 6
+    power_W: 30
+    uniformity_evaluations: 2
+    uniformity_seconds: 0.1085
+cl_04_ies_resolve                                    0.0039     0.1967
+    ies_file: SC_TRIPROOF_36W.ies
+    ies_ok: True
+    luminaire: SC triproof
+    power_W: 40
+cl_05_lumen_search_and_uniformity                    0.0332     0.2299
+    efficacy_lm_per_W: 110
+    luminaire: SC triproof
+    max_fixtures: 19
+    min_fixtures: 4
+    power_W: 40
+    uniformity_evaluations: 1
+    uniformity_seconds: 0.025
+cl_04_ies_resolve                                    0.0043     0.2342
+    ies_file: SC_SPOT_10W.ies
+    ies_ok: True
+    luminaire: SC downlight
+    power_W: 9
+cl_05_lumen_search_and_uniformity                    0.0016     0.2358
+    efficacy_lm_per_W: 110
+    luminaire: SC downlight
+    max_fixtures: 33
+    min_fixtures: 18
+    power_W: 9
+    uniformity_evaluations: 0
+    uniformity_seconds: 0.0
+cl_04_ies_resolve                                    0.0095     0.2453
+    ies_file: SC_SPOT_10W.ies
+    ies_ok: True
+    luminaire: SC downlight
+    power_W: 10
+cl_05_lumen_search_and_uniformity                    0.0109     0.2562
+    efficacy_lm_per_W: 110
+    luminaire: SC downlight
+    max_fixtures: 31
+    min_fixtures: 16
+    power_W: 10
+    uniformity_evaluations: 0
+    uniformity_seconds: 0.0
+cl_04_ies_resolve                                    0.0039     0.2602
+    ies_file: SC_PANEL_36W.ies
+    ies_ok: True
+    luminaire: SC backlight
+    power_W: 32
+cl_05_lumen_search_and_uniformity                    0.0699     0.3301
+    efficacy_lm_per_W: 110
+    luminaire: SC backlight
+    max_fixtures: 20
+    min_fixtures: 5
+    power_W: 32
+    uniformity_evaluations: 2
+    uniformity_seconds: 0.0684
+cl_04_ies_resolve                                    0.0211     0.3512
+    ies_file: SC_PANEL_36W.ies
+    ies_ok: True
+    luminaire: SC backlight
+    power_W: 35
+cl_05_lumen_search_and_uniformity                    0.0016     0.3528
+    efficacy_lm_per_W: 110
+    luminaire: SC backlight
+    max_fixtures: 20
+    min_fixtures: 5
+    power_W: 35
+    uniformity_evaluations: 0
+    uniformity_seconds: 0.0
+cl_06_uniformity_report_txt                          0.3783     0.7310
+    path: C:\xampp\htdocs\LuxScaleAI\uniformity_reports\uniformity_calc_20260411_212318.txt
+cl_07_calculate_lighting_done                        0.0063     0.7373
+    fast: False
+    length_m: 3
+    result_rows: 3
+    width_m: 3
+api_01_calculate_lighting_returned                   0.0001     0.7375
+    result_rows: 3
+------------------------------------------------------------------------
+TOTAL (wall)                                         0.7506

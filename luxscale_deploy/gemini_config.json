@@ -1,0 +1,66 @@
+{
+  "accounts": [
+    {
+      "name": "account_1_free",
+      "api_key": "AIzaSyDU9-cbBigK77AQ1x6HbJL5YXTN6VPUM8g",
+      "daily_limit": 400,
+      "used_today": 4,
+      "reset_date": "",
+      "enabled": true,
+      "model": "gemini-3.1-flash-lite-preview",
+      "gmail": "ahmed.mo.abubakr@gmail.com"
+    },
+    {
+      "name": "account_2_free",
+      "api_key": "AIzaSyCkrMBXYwHNJfjpd4SDeptrYAsUiNs7o9w",
+      "daily_limit": 400,
+      "used_today": 0,
+      "reset_date": "",
+      "enabled": false,
+      "model": "gemini-3.1-flash-lite-preview",
+      "gmail": "ahhmedabubakr1482@gmail.com"
+    },
+    {
+      "name": "account_3_free",
+      "api_key": "AIzaSyDTbaaA8TQA80Z7KL_o65v7YxJQySBUqwQ",
+      "daily_limit": 400,
+      "used_today": 0,
+      "reset_date": "",
+      "enabled": false,
+      "model": "gemini-3.1-flash-lite-preview",
+      "gmail": "abubakr382000@gmail.com"
+    },
+    {
+      "name": "account_4_free",
+      "api_key": "AIzaSyBSkoYbqEUQBEJL_rEKXsW9hErXNHhqB9Y",
+      "daily_limit": 400,
+      "used_today": 0,
+      "reset_date": "",
+      "enabled": false,
+      "model": "gemini-3.1-flash-lite-preview",
+      "gmail": "ahmedabubakr148@gmail.com"
+    },
+    {
+      "name": "account_5_paid",
+      "api_key": "",
+      "daily_limit": 400,
+      "used_today": 0,
+      "reset_date": "",
+      "enabled": false,
+      "model": "gemini-3.1-flash-lite-preview",
+      "gmail": ""
+    },
+    {
+      "name": "account_6_backup",
+      "api_key": "",
+      "daily_limit": 400,
+      "used_today": 0,
+      "reset_date": "",
+      "enabled": false
+    }
+  ],
+  "model": "gemini-3.1-flash-lite-preview",
+  "min_confidence": 0.6,
+  "timeout_seconds": 15,
+  "ollama_priority": true
+}

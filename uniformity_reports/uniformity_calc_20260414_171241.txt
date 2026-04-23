@@ -1,0 +1,73 @@
+LuxScaleAI - Uniformity (point-by-point IES grid)
+Timestamp: 2026-04-14T17:12:41.285637
+Mode: FULL.
+Room length (m): 4, width (m): 5, ceiling height (m): 3.0
+Required lux: 100.0, Standard Uo: 0.6
+Maintenance factor (design): 0.8; room reflectance preset: Medium (ρ ≈ 0.7 / 0.5 / 0.2)
+Work plane z = 0.75 m; fixture grid symmetric on full floor (edge inset = half of centre-to-centre spacing); illuminance grid 10x10 same rule.
+
+========================================================================
+Option 1 — Uniformity (point-by-point, IES candela)
+========================================================================
+Luminaire: SC triproof
+Power (W): 30.0
+Standard Uo (required): 0.6
+IES file: C:\xampp\htdocs\LuxScaleAI\ies-render\examples\SC_IES_Fixed_v3\SC_TRIPROOF_36W.ies
+
+Method:
+  - Horizontal work plane at z = work_plane_height (m).
+  - Ceiling / luminaire height = room height (m).
+  - Grid: N x N points, symmetric on full floor (edge = half sample spacing).
+  - For each grid point: E = sum( I(theta,phi) * cos(i) / R^2 ),
+    I scaled by per-fixture lumens vs IES-rated lumens.
+  - U0 = E_min / E_avg,  U1 = E_min / E_max.
+  - Optional: total E ≈ direct E × (1 + f); f is a preset indirect fraction (not full radiosity).
+
+Candela scaling / scaling notes: IES header lumens; work-plane grid lx scaled to maintained E_m=132.00 lx (×1.4589); inter-reflection estimate ×(1+0.120) (Medium (ρ ≈ 0.7 / 0.5 / 0.2))
+  (φ for I/I_rated: 3960.00 lm; IES file header: 3960.00 lm)
+
+Parameters: grid_n=10, fixture spacing cc (m) x=4.0, y=5.0, edge half-spacing (m) x=2.0, y=2.5, work_plane_z_m=0.75, ceiling_z_m=3.0
+Layout fixtures (grid): 1, phi_each_lm=3300.00, phi_total_lm=3300.00
+
+Results:
+  E_min (lx): 48.643119
+  E_avg (lx): 147.840000
+  E_max (lx): 325.697032
+  U0 calculated (E_min/E_avg): 0.329025
+  U1 (E_min/E_max): 0.149351
+
+Fixture positions (x, y) m:
+  1: (2.0000, 2.5000)
+
+Fixture layout (plan view, 52×14 character grid; *=luminaire centre, . = empty):
+  (x → length, y ↑ width; origin bottom-left of room)
+  +----------------------------------------------------+
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |.........................*..........................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  |....................................................|
+  +----------------------------------------------------+
+
+Sample grid illuminance E (lx), row-major (first row = y min):
+     48.6431     67.2688     89.2800    110.5599    124.1721    124.1721    110.5599     89.2800     67.2688     48.6431
+     59.4911     85.4283    117.8882    151.0212    173.0880    173.0880    151.0212    117.8882     85.4283     59.4911
+     70.2011    104.3485    149.4392    197.9635    231.5967    231.5967    197.9635    149.4392    104.3485     70.2011
+     79.0355    120.6814    178.0788    242.5634    288.8022    288.8022    242.5634    178.0788    120.6814     79.0355
+     84.0890    130.3300    195.5891    270.7437    325.6970    325.6970    270.7437    195.5891    130.3300     84.0890
+     84.0890    130.3300    195.5891    270.7437    325.6970    325.6970    270.7437    195.5891    130.3300     84.0890
+     79.0355    120.6814    178.0788    242.5634    288.8022    288.8022    242.5634    178.0788    120.6814     79.0355
+     70.2011    104.3485    149.4392    197.9635    231.5967    231.5967    197.9635    149.4392    104.3485     70.2011
+     59.4911     85.4283    117.8882    151.0212    173.0880    173.0880    151.0212    117.8882     85.4283     59.4911
+     48.6431     67.2688     89.2800    110.5599    124.1721    124.1721    110.5599     89.2800     67.2688     48.6431
+
+========================================================================
